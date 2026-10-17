@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>小威的 3D 與專案總入口</title>
+<meta name="description" content="小威的 3D 模型庫、運動成長空間與智慧頸環專案總入口">
+<style>
+  :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font:16px/1.75 -apple-system,"PingFang TC","Noto Sans TC",system-ui,sans-serif;
+       min-height:100vh;padding:44px 18px 60px}
+  .wrap{max-width:720px;margin:0 auto}
+  .eb{font:600 10px/1 ui-monospace,Menlo,monospace;letter-spacing:2.6px;color:var(--acc);opacity:.9}
+  h1{font-size:31px;margin:10px 0 8px;letter-spacing:.5px}
+  .lead{color:var(--dim);font-size:14.5px;margin-bottom:26px}
+  .lead b{color:var(--fg)}
+  a.card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);
+         border-radius:16px;padding:20px 22px;margin-bottom:14px;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+  a.card:hover,a.card:focus{transform:translateY(-3px);border-color:var(--acc);box-shadow:0 12px 34px rgba(0,0,0,.45)}
+  a.card .tag{font:600 10px/1 ui-monospace,Menlo,monospace;letter-spacing:2px;color:var(--acc);opacity:.85}
+  a.card h2{font-size:20px;margin:7px 0 6px;display:flex;align-items:center;gap:9px}
+  a.card p{font-size:13.8px;color:var(--dim);margin:0}
+  a.card .url{font:500 11.5px/1 ui-monospace,Menlo,monospace;color:#6f7a8a;margin-top:9px;word-break:break-all}
+  .foot{margin-top:30px;font-size:12.5px;color:#6f7a8a;text-align:center;line-height:2}
+  .foot a{color:var(--acc);text-decoration:none}
+  #bar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--acc),#ffb27a);z-index:9}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div class="wrap">
+  <div class="eb">TSAITEPIAO-ALT · GITHUB PAGES</div>
+  <h1>小威的專案總入口</h1>
+  <p class="lead">所有網站都在 <b>子路徑</b> 底下。記不住網址就記這一個：<br>
+     <b>tsaitepiao-alt.github.io</b>（就是你在看的這頁）</p>
+
+  <a class="card" href="/3d-viewers/">
+    <div class="tag">3D MODEL LIBRARY</div>
+    <h2>🧊 小威 3D 模型庫</h2>
+    <p>智慧頸環／PawPulse／棒球等 3D 模型：可旋轉、可拆解、可看零件規格與尺寸。含電子元件仿真模型、開發板、外殼、接線圖、戰術小遊戲。</p>
+    <div class="url">tsaitepiao-alt.github.io/3d-viewers/</div>
+  </a>
+
+  <a class="card" href="/basenefit/">
+    <div class="tag">SPORTS GROWTH SPACE</div>
+    <h2>⚾ basenefit 運動成長空間</h2>
+    <p>棒球教學與訓練：3D 互動球場、滾動式 3D 球場、戰術小遊戲、動作解析、圖解教室、學員專區。</p>
+    <div class="url">tsaitepiao-alt.github.io/basenefit/</div>
+  </a>
+
+  <a class="card" href="https://github.com/tsaitepiao-alt/pawpulse-pet-smart-collar">
+    <div class="tag">SOFTWARE</div>
+    <h2>🐾 PawPulse 智慧頸環</h2>
+    <p>一體式貓咪智慧頸環專案原始碼與設計文件。</p>
+    <div class="url">github.com/tsaitepiao-alt/pawpulse-pet-smart-collar</div>
+  </a>
+
+  <div class="foot">
+    手機如果看到舊畫面 ✗ 把分頁關掉重開即可（快取）<br>
+    <a href="https://github.com/tsaitepiao-alt">GitHub · tsaitepiao-alt</a>
+  </div>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('bar'),m=1;
+  function mx(){m=Math.max(1,document.documentElement.scrollHeight-innerHeight)}
+  function on(){b.style.width=(Math.max(0,Math.min(1,scrollY/m))*100)+'%'}
+  addEventListener('scroll',on,{passive:true});addEventListener('resize',function(){mx();on()});mx();on();
+})();
+</script>
+</body>
+</html>

@@ -37,6 +37,15 @@
   .tag{display:inline-block;font:500 10.5px/1 var(--mono);letter-spacing:1px;border:1px solid var(--line);
        border-radius:999px;padding:4px 9px;color:var(--dim);margin:3px 4px 0 0}
   .hide{display:none}
+  .hide{display:none}
+  pre.tap,code.tap{cursor:pointer}
+  pre.tap:active,code.tap:active{opacity:.7}
+  .tag{cursor:pointer;transition:border-color .2s,color .2s}
+  .tag:hover,.tag:active{border-color:var(--lime);color:var(--lime)}
+  #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:#cbf24c;color:#0f1116;
+         font:600 13px/1.4 -apple-system,"PingFang TC",sans-serif;padding:11px 18px;border-radius:999px;
+         opacity:0;pointer-events:none;transition:opacity .22s,transform .22s;z-index:99;max-width:86vw;text-align:center}
+  #toast.on{opacity:1;transform:translate(-50%,0)}
   html{scroll-behavior:smooth}
   .card{scroll-margin-top:18px}
   a.jump{color:var(--lime);text-decoration:none;border-bottom:1px dotted rgba(203,242,76,.45)}
@@ -150,6 +159,7 @@
 
   <!-- 5 工具 -->
   <h2>⑤ 附帶工具（本機可跑）</h2>
+  <p class="hint">點框可複製指令；點標籤可篩選。</p>
 <pre><code># 布林式真值表 / 等價驗證
 cd ~/.hermes/skills/engineering/digital-logic
 python3 scripts/truth_table.py "A ^ B" --equiv "~A & B | A & ~B"
@@ -183,6 +193,7 @@ cd ~/products/text2part
     最後更新 2026-10-31 · 四本手冊由 Hermes Agent 維護
   </div>
 </div>
+<div id="toast"></div>
 
 <script>
 // 每張手冊卡自動加「回症狀表」連結
@@ -191,6 +202,42 @@ document.querySelectorAll('.card[id^="sk-"]').forEach(c => {
   p.className = 'hint';
   p.innerHTML = '<a class="jump" href="#sym">↑ 回症狀表</a>';
   c.appendChild(p);
+});
+
+
+// 點 code / pre 複製
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on');
+  clearTimeout(window.__tt); window.__tt=setTimeout(()=>t.classList.remove('on'),1600); }
+
+document.querySelectorAll('pre').forEach(pre => {
+  pre.classList.add('tap');
+  pre.title = '點一下複製指令';
+  pre.addEventListener('click', async () => {
+    const txt = pre.innerText;
+    try { await navigator.clipboard.writeText(txt); toast('已複製指令，貼到 Terminal 執行'); }
+    catch(e){ const r=document.createRange(); r.selectNodeContents(pre);
+      const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      toast('已選取，按 ⌘C 複製'); }
+  });
+});
+
+document.querySelectorAll('code').forEach(c => {
+  c.classList.add('tap'); c.title = '點一下複製';
+  c.addEventListener('click', async e => {
+    e.stopPropagation();
+    try { await navigator.clipboard.writeText(c.innerText); toast('已複製：' + c.innerText.slice(0,24)); }
+    catch(err){ toast('複製失敗，長按選取'); }
+  });
+});
+
+// 點標籤 → 填入搜尋並篩選
+document.querySelectorAll('.tag').forEach(t => {
+  t.addEventListener('click', () => {
+    const v = t.textContent.trim();
+    q.value = v; q.dispatchEvent(new Event('input'));
+    document.getElementById('sym').scrollIntoView({behavior:'smooth'});
+    toast('已篩選：' + v);
+  });
 });
 
 const q = document.getElementById('q');

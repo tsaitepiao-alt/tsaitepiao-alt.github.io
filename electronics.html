@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>電子／機電 四本手冊 · 速查索引</title>
+<meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
+<style>
+  :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font:16px/1.75 -apple-system,"PingFang TC","Noto Sans TC",system-ui,sans-serif;padding:36px 16px 70px}
+  .wrap{max-width:780px;margin:0 auto}
+  .eb{font:600 10px/1 var(--mono);letter-spacing:2.6px;color:var(--acc);opacity:.9}
+  h1{font-size:28px;margin:9px 0 6px;letter-spacing:.4px}
+  .lead{color:var(--dim);font-size:14px;margin-bottom:20px}
+  .lead b{color:var(--fg)}
+  input#q{width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--fg);
+          padding:13px 15px;font-size:15px;margin-bottom:22px;outline:none}
+  input#q:focus{border-color:var(--acc)}
+  h2{font-size:15px;letter-spacing:1.6px;color:var(--acc);font-family:var(--mono);margin:30px 0 12px;font-weight:600}
+  .grid{display:grid;gap:12px}
+  @media(min-width:640px){.grid.two{grid-template-columns:1fr 1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .card h3{font-size:17px;margin-bottom:4px}
+  .card .sub{font:500 11px/1 var(--mono);color:var(--acc);letter-spacing:1.4px;margin-bottom:8px}
+  .card p{font-size:13.6px;color:var(--dim)}
+  table{width:100%;border-collapse:collapse;font-size:13.6px}
+  th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--dim);font-weight:500;font-size:12px;letter-spacing:.6px}
+  td.k{color:var(--lime);font-family:var(--mono);font-size:12.8px;white-space:nowrap}
+  code{font-family:var(--mono);font-size:12.8px;background:#0b0e13;border:1px solid var(--line);border-radius:5px;padding:1px 5px;color:var(--lime)}
+  pre{background:#0b0e13;border:1px solid var(--line);border-radius:12px;padding:14px;overflow-x:auto;font-size:12.8px;line-height:1.85;margin:10px 0}
+  pre code{background:none;border:0;padding:0;color:#d7e0ea}
+  .hint{font-size:12.5px;color:#6f7a8a;margin-top:8px}
+  .foot{margin-top:34px;font-size:12px;color:#6f7a8a;text-align:center;line-height:2}
+  .foot a{color:var(--acc);text-decoration:none}
+  .tag{display:inline-block;font:500 10.5px/1 var(--mono);letter-spacing:1px;border:1px solid var(--line);
+       border-radius:999px;padding:4px 9px;color:var(--dim);margin:3px 4px 0 0}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-10-31</div>
+  <h1>電子電路與機電：四本手冊</h1>
+  <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
+
+  <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
+
+  <!-- 1 症狀 → 手冊 -->
+  <h2>① 我遇到什麼 → 看哪本</h2>
+  <table id="t-sym">
+    <thead><tr><th>症狀</th><th>先查</th></tr></thead>
+    <tbody>
+      <tr><td>元件發燙、燒掉</td><td class="k">electronics-fundamentals</td></tr>
+      <tr><td>電路不動、量到怪電壓</td><td class="k">electronics-fundamentals</td></tr>
+      <tr><td>3.3V 接 5V 會不會壞</td><td class="k">electronics-fundamentals</td></tr>
+      <tr><td>I²C 上不去 400kHz</td><td class="k">electronics-fundamentals</td></tr>
+      <tr><td>馬達要選哪一顆、夠不夠力</td><td class="k">motor-selection</td></tr>
+      <tr><td>馬達會失步、高速沒力</td><td class="k">motor-selection</td></tr>
+      <tr><td>要算扭矩、減速比、續航</td><td class="k">motor-selection</td></tr>
+      <tr><td>馬達抖、過衝、嗡嗡叫</td><td class="k">control-systems</td></tr>
+      <tr><td>PID 怎麼調、要不要加 D</td><td class="k">control-systems</td></tr>
+      <tr><td>要停準、要伺服定位</td><td class="k">control-systems</td></tr>
+      <tr><td>邏輯式化簡、真值表</td><td class="k">digital-logic</td></tr>
+      <tr><td>計數器亂跳、按鍵連發</td><td class="k">digital-logic</td></tr>
+      <tr><td>要不要用 74 系列還是 MCU</td><td class="k">digital-logic</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 2 四本 -->
+  <h2>② 四本手冊</h2>
+  <div class="grid two">
+    <div class="card">
+      <div class="sub">ANALOG</div>
+      <h3>electronics-fundamentals</h3>
+      <p>電源預算、電阻電容算法、去耦濾波、二極體保護、MOSFET 開關、BJT、運放五條、數位介面、量測、20 個常見錯誤。</p>
+      <div><span class="tag">什麼東西會燙</span><span class="tag">Rds(on)</span><span class="tag">上拉</span></div>
+    </div>
+    <div class="card">
+      <div class="sub">DIGITAL</div>
+      <h3>digital-logic</h3>
+      <p>數系與二補數、七個邏輯閘、布林化簡四步、組合積木、正反器、setup/hold 與 metastability、電氣規則。</p>
+      <div><span class="tag">真值表</span><span class="tag">卡諾圖</span><span class="tag">去抖</span></div>
+    </div>
+    <div class="card">
+      <div class="sub">MOTION</div>
+      <h3>motor-selection</h3>
+      <p>八種馬達比較、選型決策樹、Kt/Ke 公式、減速比與慣量折算、十個燒馬達的坑、驗證方式。</p>
+      <div><span class="tag">扭矩</span><span class="tag">BLDC</span><span class="tag">續航</span></div>
+    </div>
+    <div class="card">
+      <div class="sub">CONTROL</div>
+      <h3>control-systems</h3>
+      <p>閉環判斷、PID 三項、抗飽和、取樣率、級聯控制、編碼器解析度、故障對照表（震／過衝／爬行）。</p>
+      <div><span class="tag">調參</span><span class="tag">anti-windup</span><span class="tag">伺服</span></div>
+    </div>
+  </div>
+
+  <!-- 3 公式 -->
+  <h2>③ 公式速查</h2>
+  <table id="t-formula">
+    <thead><tr><th>主題</th><th>公式</th></tr></thead>
+    <tbody>
+      <tr><td>歐姆</td><td class="k">V = I·R</td></tr>
+      <tr><td>功率</td><td class="k">P = V·I = I²R = V²/R</td></tr>
+      <tr><td>分壓</td><td class="k">Vout = Vin·R2/(R1+R2)</td></tr>
+      <tr><td>LED 限流</td><td class="k">R = (Vs − Vf) / If</td></tr>
+      <tr><td>RC 截止</td><td class="k">fc = 1/(2πRC)</td></tr>
+      <tr><td>感抗／容抗</td><td class="k">XL = 2πfL　XC = 1/(2πfC)</td></tr>
+      <tr><td>LC 諧振</td><td class="k">f0 = 1/(2π√(LC))</td></tr>
+      <tr><td>電池壽命</td><td class="k">t = C[Ah]·0.8 / I[A]</td></tr>
+      <tr><td>LDO 損耗</td><td class="k">P = (Vin − Vout)·I</td></tr>
+      <tr><td>馬達功率</td><td class="k">P = T·ω　ω = 2πn/60</td></tr>
+      <tr><td>轉矩常數</td><td class="k">T = Kt·I　E = Ke·ω</td></tr>
+      <tr><td>BLDC 常數</td><td class="k">Kt[N·m/A] ≈ 9.5493 / KV[rpm/V]</td></tr>
+      <tr><td>減速機</td><td class="k">n₂ = n₁/i　T₂ = T₁·i·η</td></tr>
+      <tr><td>慣量折算</td><td class="k">J_ref = J_load / i²</td></tr>
+      <tr><td>螺桿推力</td><td class="k">F = 2πη·T / P_h</td></tr>
+      <tr><td>加速扭矩</td><td class="k">T = J·α + T_load</td></tr>
+      <tr><td>PID</td><td class="k">u = Kp·e + Ki∫e + Kd·de/dt</td></tr>
+      <tr><td>取樣率</td><td class="k">fs ≥ 頻寬 × 10~20</td></tr>
+      <tr><td>I²C 上拉上限</td><td class="k">Rp(max) = tr / (0.8473·Cbus)</td></tr>
+      <tr><td>走線載流（1oz）</td><td class="k">0.25mm ≈ 0.5A　0.5mm ≈ 1A</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 4 數字 -->
+  <h2>④ 直接拿去用的數字</h2>
+  <table id="t-num">
+    <thead><tr><th>項目</th><th>數值</th></tr></thead>
+    <tbody>
+      <tr><td>螺絲間隙孔（3D 列印）</td><td class="k">M1.6→1.8　M2→2.2　M3→3.2　M4→4.3　M5→5.3</td></tr>
+      <tr><td>攻牙鑽孔</td><td class="k">M1.6→1.25　M3→2.5　M4→3.3　M5→4.2</td></tr>
+      <tr><td>去耦</td><td class="k">100nF 貼腳 + 10µF 入口</td></tr>
+      <tr><td>馬達／繼電器</td><td class="k">獨立 100µF + 飛輪二極體</td></tr>
+      <tr><td>PWM 頻率</td><td class="k">&gt; 20kHz（避開人耳）</td></tr>
+      <tr><td>取樣率</td><td class="k">電流 10–20kHz／速度 1–2kHz／位置 100–500Hz</td></tr>
+      <tr><td>編碼器</td><td class="k">360 CPR × 4 = 1440 counts/rev ≈ 0.25°</td></tr>
+      <tr><td>3.3V 選 74 系列</td><td class="k">74HCT 或 74LVC（不要 74HC）</td></tr>
+      <tr><td>按鍵去抖</td><td class="k">10k + 100nF（約 1ms）＋軟體 20ms</td></tr>
+      <tr><td>ADC 分壓源阻抗</td><td class="k">≤ 10kΩ</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 5 工具 -->
+  <h2>⑤ 附帶工具（本機可跑）</h2>
+<pre><code># 布林式真值表 / 等價驗證
+cd ~/.hermes/skills/engineering/digital-logic
+python3 scripts/truth_table.py "A ^ B" --equiv "~A & B | A & ~B"
+
+# PID 模擬（P / PI / PI+抗飽和）
+cd ~/.hermes/skills/engineering/control-systems
+python3 scripts/pid_sim.py
+
+# 一句話生零件 → STEP / STL / 3mf
+cd ~/products/text2part
+./bin/t2p "墊圈 外徑30 內徑10 厚5，圓角0.5" --slice</code></pre>
+  <p class="hint">實測：<code>PI 無抗飽和 → 超調 23.7%</code>　<code>加上抗飽和 → 3.2%</code>（目標 150 rad/s、電流上限 2A、取樣 1 ms）</p>
+
+  <!-- 6 書 -->
+  <h2>⑥ 免費教材（已下載本機）</h2>
+  <table id="t-book">
+    <thead><tr><th>檔案</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr><td class="k">電學/DC.pdf（557 頁）</td><td>歐姆、串並聯、分壓、電池、電容、電感、RC 時間常數</td></tr>
+      <tr><td class="k">電學/AC.pdf（574 頁）</td><td>交流、複數、諧振、濾波、變壓器、功率因數、<b>交流馬達 p413</b></td></tr>
+      <tr><td class="k">電學/SEMI.pdf（535 頁）</td><td>二極體、BJT、運放、主動濾波、<b>直流馬達驅動 p471</b>、<b>變頻器 p475</b></td></tr>
+      <tr><td class="k">電學/DIGI.pdf（516 頁）</td><td>數系、邏輯閘、布林、卡諾圖、循序邏輯、記憶體</td></tr>
+      <tr><td class="k">NEETS/</td><td>美軍教材 24 模組：固態元件、放大器、伺服、發電機與馬達</td></tr>
+    </tbody>
+  </table>
+  <p class="hint">位置：<code>~/Documents/免費電子書/</code>　抽章節：<code>pdftotext -f 422 -l 429 -layout AC.pdf -</code><br>
+  ⚠ LEC 的 PDF 頁碼 = 印刷頁碼 + 9</p>
+
+  <div class="foot">
+    <a href="/">← 回總入口</a><br>
+    最後更新 2026-10-31 · 四本手冊由 Hermes Agent 維護
+  </div>
+</div>
+
+<script>
+const q = document.getElementById('q');
+const rows = [...document.querySelectorAll('tbody tr')];
+q.addEventListener('input', () => {
+  const v = q.value.trim().toLowerCase();
+  rows.forEach(r => r.classList.toggle('hide', v && !r.textContent.toLowerCase().includes(v)));
+});
+</script>
+</body>
+</html>

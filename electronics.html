@@ -37,6 +37,11 @@
   .tag{display:inline-block;font:500 10.5px/1 var(--mono);letter-spacing:1px;border:1px solid var(--line);
        border-radius:999px;padding:4px 9px;color:var(--dim);margin:3px 4px 0 0}
   .hide{display:none}
+  html{scroll-behavior:smooth}
+  .card{scroll-margin-top:18px}
+  a.jump{color:var(--lime);text-decoration:none;border-bottom:1px dotted rgba(203,242,76,.45)}
+  a.jump:active{opacity:.6}
+  .card:target{border-color:var(--lime);box-shadow:0 0 0 1px var(--lime),0 14px 36px rgba(203,242,76,.12)}
 </style>
 </head>
 <body>
@@ -48,48 +53,48 @@
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
 
   <!-- 1 症狀 → 手冊 -->
-  <h2>① 我遇到什麼 → 看哪本</h2>
+  <h2 id="sym">① 我遇到什麼 → 看哪本</h2>
   <table id="t-sym">
     <thead><tr><th>症狀</th><th>先查</th></tr></thead>
     <tbody>
-      <tr><td>元件發燙、燒掉</td><td class="k">electronics-fundamentals</td></tr>
-      <tr><td>電路不動、量到怪電壓</td><td class="k">electronics-fundamentals</td></tr>
-      <tr><td>3.3V 接 5V 會不會壞</td><td class="k">electronics-fundamentals</td></tr>
-      <tr><td>I²C 上不去 400kHz</td><td class="k">electronics-fundamentals</td></tr>
-      <tr><td>馬達要選哪一顆、夠不夠力</td><td class="k">motor-selection</td></tr>
-      <tr><td>馬達會失步、高速沒力</td><td class="k">motor-selection</td></tr>
-      <tr><td>要算扭矩、減速比、續航</td><td class="k">motor-selection</td></tr>
-      <tr><td>馬達抖、過衝、嗡嗡叫</td><td class="k">control-systems</td></tr>
-      <tr><td>PID 怎麼調、要不要加 D</td><td class="k">control-systems</td></tr>
-      <tr><td>要停準、要伺服定位</td><td class="k">control-systems</td></tr>
-      <tr><td>邏輯式化簡、真值表</td><td class="k">digital-logic</td></tr>
-      <tr><td>計數器亂跳、按鍵連發</td><td class="k">digital-logic</td></tr>
-      <tr><td>要不要用 74 系列還是 MCU</td><td class="k">digital-logic</td></tr>
+      <tr><td>元件發燙、燒掉</td><td class="k"><a class="jump" href="#sk-analog">electronics-fundamentals</a></td></tr>
+      <tr><td>電路不動、量到怪電壓</td><td class="k"><a class="jump" href="#sk-analog">electronics-fundamentals</a></td></tr>
+      <tr><td>3.3V 接 5V 會不會壞</td><td class="k"><a class="jump" href="#sk-analog">electronics-fundamentals</a></td></tr>
+      <tr><td>I²C 上不去 400kHz</td><td class="k"><a class="jump" href="#sk-analog">electronics-fundamentals</a></td></tr>
+      <tr><td>馬達要選哪一顆、夠不夠力</td><td class="k"><a class="jump" href="#sk-motor">motor-selection</a></td></tr>
+      <tr><td>馬達會失步、高速沒力</td><td class="k"><a class="jump" href="#sk-motor">motor-selection</a></td></tr>
+      <tr><td>要算扭矩、減速比、續航</td><td class="k"><a class="jump" href="#sk-motor">motor-selection</a></td></tr>
+      <tr><td>馬達抖、過衝、嗡嗡叫</td><td class="k"><a class="jump" href="#sk-control">control-systems</a></td></tr>
+      <tr><td>PID 怎麼調、要不要加 D</td><td class="k"><a class="jump" href="#sk-control">control-systems</a></td></tr>
+      <tr><td>要停準、要伺服定位</td><td class="k"><a class="jump" href="#sk-control">control-systems</a></td></tr>
+      <tr><td>邏輯式化簡、真值表</td><td class="k"><a class="jump" href="#sk-digital">digital-logic</a></td></tr>
+      <tr><td>計數器亂跳、按鍵連發</td><td class="k"><a class="jump" href="#sk-digital">digital-logic</a></td></tr>
+      <tr><td>要不要用 74 系列還是 MCU</td><td class="k"><a class="jump" href="#sk-digital">digital-logic</a></td></tr>
     </tbody>
   </table>
 
   <!-- 2 四本 -->
-  <h2>② 四本手冊</h2>
+  <h2 id="skills">② 四本手冊</h2>
   <div class="grid two">
-    <div class="card">
+    <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
       <h3>electronics-fundamentals</h3>
       <p>電源預算、電阻電容算法、去耦濾波、二極體保護、MOSFET 開關、BJT、運放五條、數位介面、量測、20 個常見錯誤。</p>
       <div><span class="tag">什麼東西會燙</span><span class="tag">Rds(on)</span><span class="tag">上拉</span></div>
     </div>
-    <div class="card">
+    <div class="card" id="sk-digital">
       <div class="sub">DIGITAL</div>
       <h3>digital-logic</h3>
       <p>數系與二補數、七個邏輯閘、布林化簡四步、組合積木、正反器、setup/hold 與 metastability、電氣規則。</p>
       <div><span class="tag">真值表</span><span class="tag">卡諾圖</span><span class="tag">去抖</span></div>
     </div>
-    <div class="card">
+    <div class="card" id="sk-motor">
       <div class="sub">MOTION</div>
       <h3>motor-selection</h3>
       <p>八種馬達比較、選型決策樹、Kt/Ke 公式、減速比與慣量折算、十個燒馬達的坑、驗證方式。</p>
       <div><span class="tag">扭矩</span><span class="tag">BLDC</span><span class="tag">續航</span></div>
     </div>
-    <div class="card">
+    <div class="card" id="sk-control">
       <div class="sub">CONTROL</div>
       <h3>control-systems</h3>
       <p>閉環判斷、PID 三項、抗飽和、取樣率、級聯控制、編碼器解析度、故障對照表（震／過衝／爬行）。</p>
@@ -180,6 +185,14 @@ cd ~/products/text2part
 </div>
 
 <script>
+// 每張手冊卡自動加「回症狀表」連結
+document.querySelectorAll('.card[id^="sk-"]').forEach(c => {
+  const p = document.createElement('p');
+  p.className = 'hint';
+  p.innerHTML = '<a class="jump" href="#sym">↑ 回症狀表</a>';
+  c.appendChild(p);
+});
+
 const q = document.getElementById('q');
 const rows = [...document.querySelectorAll('tbody tr')];
 q.addEventListener('input', () => {

@@ -230,13 +230,19 @@ document.querySelectorAll('code').forEach(c => {
   });
 });
 
-// 點標籤 → 填入搜尋並篩選
+// 點標籤 → 試著用它篩選；若沒有任何結果就還原（避免整頁變空）
 document.querySelectorAll('.tag').forEach(t => {
   t.addEventListener('click', () => {
     const v = t.textContent.trim();
     q.value = v; q.dispatchEvent(new Event('input'));
-    document.getElementById('sym').scrollIntoView({behavior:'smooth'});
-    toast('已篩選：' + v);
+    const n = [...document.querySelectorAll('tbody tr')].filter(r => !r.classList.contains('hide')).length;
+    if (n === 0) {
+      q.value = ''; q.dispatchEvent(new Event('input'));
+      toast('「' + v + '」在表格裡沒有對應項目');
+    } else {
+      document.getElementById('sym').scrollIntoView({behavior: 'smooth'});
+      toast('已篩選「' + v + '」：' + n + ' 筆');
+    }
   });
 });
 

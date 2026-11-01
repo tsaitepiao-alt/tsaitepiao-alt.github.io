@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>舊 iPad 面板</title>
+<style>
+  * { -webkit-box-sizing: border-box; box-sizing: border-box; }
+  html, body { margin:0; padding:0; height:100%; background:#0d0f13; color:#e9edf3;
+    font-family: -apple-system, "Helvetica Neue", "PingFang TC", sans-serif; }
+  .wrap { height:100%; padding:3vh 4vw; display:-webkit-box; display:-webkit-flex; display:flex;
+    -webkit-flex-direction:column; flex-direction:column; }
+  #clock { font-size:22vh; line-height:1; font-weight:200; letter-spacing:-0.02em; }
+  #clock .sec { font-size:6vh; color:#5b6675; font-weight:300; }
+  #date { font-size:4vh; color:#8b96a6; margin-top:1vh; }
+  #temp { font-size:3.4vh; color:#cbf24c; margin-top:1.2vh; }
+  .spacer { -webkit-flex:1; flex:1; }
+  .links { display:-webkit-flex; display:flex; -webkit-flex-wrap:wrap; flex-wrap:wrap; margin:0 -1vw; }
+  .links a { -webkit-flex:1 1 40%; flex:1 1 40%; margin:1vw; padding:2.6vh 2vw; text-align:center;
+    background:#161a21; border:1px solid #242a33; border-radius:14px; color:#e9edf3;
+    text-decoration:none; font-size:2.8vh; }
+  .links a:active { background:#1f2530; }
+  .links a b { display:block; font-size:3.4vh; margin-bottom:.6vh; font-weight:600; }
+  .hint { text-align:center; color:#3f4855; font-size:1.6vh; margin-top:1.6vh; }
+  /* 提詞機 */
+  #tele { display:none; height:100%; padding:4vh 5vw; }
+  #tele.on { display:block; }
+  #teleText { font-size:8vh; line-height:1.35; font-weight:600; color:#cbf24c; }
+  .telebar { position:fixed; bottom:0; left:0; right:0; padding:1.6vh 2vw; background:#0d0f13;
+    border-top:1px solid #242a33; text-align:center; }
+  .telebar button { font-size:2.6vh; padding:1.4vh 3vw; margin:0 .6vw; background:#1f2530;
+    color:#e9edf3; border:1px solid #2f3742; border-radius:10px; }
+</style>
+</head>
+<body>
+<div class="wrap" id="main">
+  <div id="clock">--:--<span class="sec">:--</span></div>
+  <div id="date">載入中</div>
+  <div id="temp">&nbsp;</div>
+  <div class="spacer"></div>
+  <div class="links">
+    <a href="/"><b>總入口</b>所有頁面</a>
+    <a href="/electronics.html"><b>電子手冊</b>四個 skill</a>
+    <a href="#" onclick="showTele();return false;"><b>提詞機</b>大字稿</a>
+    <a href="#" onclick="reloadPage();return false;"><b>重新整理</b>更新天氣</a>
+  </div>
+  <div class="hint">Safari → 分享 → 加入主畫面，可全螢幕</div>
+</div>
+
+<div id="tele">
+  <div id="teleText">在這裡貼上你的講稿。回到面板按「提詞機」旁的空白處可關閉。</div>
+  <div class="telebar">
+    <button onclick="fontSize(-1)">A−</button>
+    <button onclick="fontSize(1)">A＋</button>
+    <button onclick="editText()">換稿</button>
+    <button onclick="hideTele()">關閉</button>
+  </div>
+</div>
+
+<script>
+/* 舊版 iOS Safari 相容：只用 var / function / XMLHttpRequest */
+var fs = 8;
+
+function pad(n){ return n < 10 ? '0' + n : '' + n; }
+
+function tick(){
+  var d = new Date();
+  var h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
+  var ampm = h < 12 ? '上午' : '下午';
+  var h12 = h % 12; if (h12 === 0) h12 = 12;
+  document.getElementById('clock').innerHTML = h12 + ':' + pad(m) + '<span class="sec">:' + pad(s) + '</span>';
+  var wd = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][d.getDay()];
+  document.getElementById('date').innerHTML = (d.getMonth()+1) + ' 月 ' + d.getDate() + ' 日　' + wd + '　' + ampm;
+}
+
+function weather(){
+  var url = 'https://api.open-meteo.com/v1/forecast?latitude=24.757&longitude=121.753&current=temperature_2m,relative_humidity_2m,weather_code&timezone=Asia%2FTaipei';
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.onreadystatechange = function(){
+    if (xhr.readyState !== 4) return;
+    if (xhr.status !== 200) { document.getElementById('temp').innerHTML = '（無網路，天氣未更新）'; return; }
+    try {
+      var j = JSON.parse(xhr.responseText);
+      var c = j.current;
+      var codes = {0:'晴',1:'晴時多雲',2:'多雲',3:'陰',45:'霧',48:'霧凇',51:'毛毛雨',53:'小雨',55:'大雨',
+                   61:'小雨',63:'雨',65:'大雨',71:'小雪',73:'雪',75:'大雪',80:'陣雨',81:'強陣雨',82:'暴雨',
+                   95:'雷雨',96:'雷雨冰雹',99:'強雷雨'};
+      var w = codes[c.weather_code] || '';
+      document.getElementById('temp').innerHTML = '宜蘭 ' + Math.round(c.temperature_2m) + '°C　濕度 ' + c.relative_humidity_2m + '%　' + w;
+    } catch(e) { document.getElementById('temp').innerHTML = '（天氣讀取失敗）'; }
+  };
+  xhr.send();
+}
+
+function showTele(){
+  document.getElementById('tele').className = 'on';
+  document.getElementById('main').style.display = 'none';
+  var saved = localStorage.getItem('teleText');
+  if (saved) document.getElementById('teleText').innerHTML = saved;
+}
+function hideTele(){
+  document.getElementById('tele').className = '';
+  document.getElementById('main').style.display = '';
+}
+function fontSize(d){
+  fs = fs + d;
+  if (fs < 4) fs = 4;
+  if (fs > 16) fs = 16;
+  document.getElementById('teleText').style.fontSize = fs + 'vh';
+}
+function editText(){
+  var t = prompt('貼上或修改講稿：', document.getElementById('teleText').innerHTML);
+  if (t === null) return;
+  document.getElementById('teleText').innerHTML = t;
+  try { localStorage.setItem('teleText', t); } catch(e) {}
+}
+function reloadPage(){ weather(); }
+
+tick();
+setInterval(tick, 1000);
+weather();
+setInterval(weather, 900000);
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 四本手冊 · 速查索引</title>
+<title>電子／機電 六本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -55,8 +55,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-10-31</div>
-  <h1>電子電路與機電：四本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-02</div>
+  <h1>電子電路與機電：六本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -79,11 +79,16 @@
       <tr><td>邏輯式化簡、真值表</td><td class="k"><a class="jump" href="#sk-digital">digital-logic</a></td></tr>
       <tr><td>計數器亂跳、按鍵連發</td><td class="k"><a class="jump" href="#sk-digital">digital-logic</a></td></tr>
       <tr><td>要不要用 74 系列還是 MCU</td><td class="k"><a class="jump" href="#sk-digital">digital-logic</a></td></tr>
+      <tr><td>選 LDO 還是 Buck、LDO 發燙</td><td class="k"><a class="jump" href="#sk-power">ldo-vs-buck-which-to-use</a></td></tr>
+      <tr><td>電池很快沒電（待機偷吃電）</td><td class="k"><a class="jump" href="#sk-power">ldo-vs-buck-which-to-use</a></td></tr>
+      <tr><td>穩壓輸出抖、電容換了就振盪</td><td class="k"><a class="jump" href="#sk-power">ldo-vs-buck-which-to-use</a></td></tr>
+      <tr><td>馬達一動 MCU 就重啟</td><td class="k"><a class="jump" href="#sk-tree">power-tree-design</a></td></tr>
+      <tr><td>USB 插著電池還掉電</td><td class="k"><a class="jump" href="#sk-tree">power-tree-design</a></td></tr>
     </tbody>
   </table>
 
   <!-- 2 四本 -->
-  <h2 id="skills">② 四本手冊</h2>
+  <h2 id="skills">② 六本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -109,6 +114,18 @@
       <p>閉環判斷、PID 三項、抗飽和、取樣率、級聯控制、編碼器解析度、故障對照表（震／過衝／爬行）。</p>
       <div><span class="tag">調參</span><span class="tag">anti-windup</span><span class="tag">伺服</span></div>
     </div>
+    <div class="card" id="sk-power">
+      <div class="sub">POWER</div>
+      <h3>ldo-vs-buck-which-to-use</h3>
+      <p>壓差比判斷、效率實算（3.7→3.3V 時 LDO 贏 Buck）、Iq 吃電池對照、溫升門檻、ESR 振盪、反灌、選型速查與五分鐘決策樹。</p>
+      <div><span class="tag">Iq</span><span class="tag">dropout</span><span class="tag">ESR</span></div>
+    </div>
+    <div class="card" id="sk-tree">
+      <div class="sub">POWER TREE</div>
+      <h3>power-tree-design</h3>
+      <p>一顆電池怎麼分軌：四格表、三條硬規則、峰值靠電容、USB＋電池雙電源切換、上電順序、功耗預算範本。</p>
+      <div><span class="tag">brownout</span><span class="tag">load switch</span><span class="tag">反灌</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -125,6 +142,7 @@
       <tr><td>LC 諧振</td><td class="k">f0 = 1/(2π√(LC))</td></tr>
       <tr><td>電池壽命</td><td class="k">t = C[Ah]·0.8 / I[A]</td></tr>
       <tr><td>LDO 損耗</td><td class="k">P = (Vin − Vout)·I</td></tr>
+      <tr><td>LDO 效率</td><td class="k">η = Vout / Vin（小負載改 ÷(Vin·(I+Iq))）</td></tr>
       <tr><td>馬達功率</td><td class="k">P = T·ω　ω = 2πn/60</td></tr>
       <tr><td>轉矩常數</td><td class="k">T = Kt·I　E = Ke·ω</td></tr>
       <tr><td>BLDC 常數</td><td class="k">Kt[N·m/A] ≈ 9.5493 / KV[rpm/V]</td></tr>
@@ -147,6 +165,9 @@
       <tr><td>螺絲間隙孔（3D 列印）</td><td class="k">M1.6→1.8　M2→2.2　M3→3.2　M4→4.3　M5→5.3</td></tr>
       <tr><td>攻牙鑽孔</td><td class="k">M1.6→1.25　M3→2.5　M4→3.3　M5→4.2</td></tr>
       <tr><td>去耦</td><td class="k">100nF 貼腳 + 10µF 入口</td></tr>
+      <tr><td>選穩壓器</td><td class="k">電池→Iq&lt;100µA；壓差/Vin&lt;15%→LDO；&gt;40%→Buck</td></tr>
+      <tr><td>AMS1117 陷阱</td><td class="k">Iq 5mA → 1000mAh 只撐 8 天；輸出要 22µF 鉭（ESR 不對會振盪）</td></tr>
+      <tr><td>峰值電容（1ms 掉 0.3V）</td><td class="k">100µF→30mA　470µF→141mA　1000µF→300mA</td></tr>
       <tr><td>馬達／繼電器</td><td class="k">獨立 100µF + 飛輪二極體</td></tr>
       <tr><td>PWM 頻率</td><td class="k">&gt; 20kHz（避開人耳）</td></tr>
       <tr><td>取樣率</td><td class="k">電流 10–20kHz／速度 1–2kHz／位置 100–500Hz</td></tr>
@@ -190,7 +211,7 @@ cd ~/products/text2part
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-10-31 · 四本手冊由 Hermes Agent 維護
+    最後更新 2026-11-02 · 六本手冊由 Hermes Agent 維護
   </div>
 </div>
 <div id="toast"></div>

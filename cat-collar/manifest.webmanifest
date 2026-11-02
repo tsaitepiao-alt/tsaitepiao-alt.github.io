@@ -1,0 +1,39 @@
+{
+  "id": "./",
+  "name": "WPCD 貓咪日常",
+  "short_name": "WPCD",
+  "description": "從日常活動到照護紀錄，陪你多懂貓咪一點。",
+  "lang": "zh-Hant",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#183e35",
+  "background_color": "#f7f8f4",
+  "categories": [
+    "lifestyle",
+    "health",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

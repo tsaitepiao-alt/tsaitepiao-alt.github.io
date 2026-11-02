@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#183e35">
+  <meta name="description" content="WPCD 貓咪日常：從活動、休息到每一筆照護紀錄，用細心觀察陪伴貓咪。支援離線使用與可擴充頸圈串接。">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+  <title>WPCD · 貓咪日常</title>
+</head>
+<body>
+  <a class="skip" href="#main">跳至主要內容</a>
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="#overview" aria-label="WPCD 首頁"><span class="brand-mark"><svg viewBox="0 0 40 40" fill="none"><path d="M8 21V9l10 6h5l9-6v12c0 10-24 12-24 0Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="m16 23 4 3 4-3M12 21H6m28 0h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="15" cy="20" r="1.3" fill="currentColor"/><circle cx="25" cy="20" r="1.3" fill="currentColor"/></svg></span><span>WPCD<small>貓咪日常 · SMART COLLAR</small></span></a>
+    <div class="nav-label">陪伴的每一天</div>
+    <nav id="nav" aria-label="主要導覽"></nav>
+    <div class="sidebar-bottom"><div class="install-card"><span class="install-symbol">↗</span><strong>陪伴，隨時都在</strong><p>把貓咪日常放進手機，<br>離線也能好好記錄。</p><button class="install-button" data-action="install">安裝應用程式 <span>＋</span></button></div><a class="side-setting" href="#settings"><span data-icon="settings"></span> 設定與資料</a><div class="sidebar-foot">MADE FOR LITTLE PAWS <span>♡</span></div></div>
+  </aside>
+  <div class="app-shell"><header class="topbar"><button class="icon-button menu-toggle" data-action="menu" aria-label="開啟導覽"><span data-icon="menu"></span></button><div class="breadcrumb">我的貓咪 <span>/</span> <strong id="page-crumb">今日總覽</strong></div><div class="top-actions"><span id="network-status" class="network-status"><i></i> 可離線使用</span><button class="icon-button notification-button" data-action="notifications" aria-label="查看照護提醒"><span data-icon="bell"></span><i></i></button><button class="owner-avatar" data-action="profile" aria-label="編輯貓咪檔案">M</button></div></header><main id="main" tabindex="-1"></main><footer class="app-footer"><span>WPCD · 用觀察，累積更安心的陪伴。</span><span>日常趨勢不能取代獸醫診斷 <span class="footer-paw">✧</span></span></footer></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <dialog id="modal"><div id="modal-content"></div></dialog>
+  <div class="mobile-overlay" data-action="menu"></div>
+  <script type="module" src="./app.js"></script>
+  <noscript><p class="noscript">請啟用 JavaScript 使用照護紀錄。WPCD 用於日常觀察，不能取代獸醫診斷。</p></noscript>
+</body>
+</html>

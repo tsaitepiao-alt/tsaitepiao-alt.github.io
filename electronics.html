@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 六本手冊 · 速查索引</title>
+<title>電子／機電 八本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -55,8 +55,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-02</div>
-  <h1>電子電路與機電：六本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-03</div>
+  <h1>電子電路與機電：八本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -69,7 +69,10 @@
       <tr><td>元件發燙、燒掉</td><td class="k"><a class="jump" href="#sk-analog">electronics-fundamentals</a></td></tr>
       <tr><td>電路不動、量到怪電壓</td><td class="k"><a class="jump" href="#sk-analog">electronics-fundamentals</a></td></tr>
       <tr><td>3.3V 接 5V 會不會壞</td><td class="k"><a class="jump" href="#sk-analog">electronics-fundamentals</a></td></tr>
-      <tr><td>I²C 上不去 400kHz</td><td class="k"><a class="jump" href="#sk-analog">electronics-fundamentals</a></td></tr>
+      <tr><td>I²C 掃不到、偶爾成功、卡死</td><td class="k"><a class="jump" href="#sk-i2c">i2c-basics-and-bus-debug</a></td></tr>
+      <tr><td>上拉電阻要 1k／2.2k／4.7k／10k</td><td class="k"><a class="jump" href="#sk-i2c">i2c-basics-and-bus-debug</a></td></tr>
+      <tr><td>加速度計算活動量／步數／姿態</td><td class="k"><a class="jump" href="#sk-imu">imu-activity-from-accel</a></td></tr>
+      <tr><td>想用 IMU 量心跳、呼吸</td><td class="k"><a class="jump" href="#sk-imu">imu-activity-from-accel</a></td></tr>
       <tr><td>馬達要選哪一顆、夠不夠力</td><td class="k"><a class="jump" href="#sk-motor">motor-selection</a></td></tr>
       <tr><td>馬達會失步、高速沒力</td><td class="k"><a class="jump" href="#sk-motor">motor-selection</a></td></tr>
       <tr><td>要算扭矩、減速比、續航</td><td class="k"><a class="jump" href="#sk-motor">motor-selection</a></td></tr>
@@ -88,7 +91,7 @@
   </table>
 
   <!-- 2 四本 -->
-  <h2 id="skills">② 六本手冊</h2>
+  <h2 id="skills">② 八本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -120,6 +123,18 @@
       <p>壓差比判斷、效率實算（3.7→3.3V 時 LDO 贏 Buck）、Iq 吃電池對照、溫升門檻、ESR 振盪、反灌、選型速查與五分鐘決策樹。</p>
       <div><span class="tag">Iq</span><span class="tag">dropout</span><span class="tag">ESR</span></div>
     </div>
+    <div class="card" id="sk-i2c">
+      <div class="sub">I²C BUS</div>
+      <h3>i2c-basics-and-bus-debug</h3>
+      <p>為什麼要上拉、Rp 上下限實算表（4.7k 只撐 75pF@400kHz）、MCU 內建 45k 為何沒用、模組上拉並聯、位址 112 個、卡死 9 clock 復原、五步除錯。</p>
+      <div><span class="tag">pull-up</span><span class="tag">bus capacitance</span><span class="tag">ACK</span></div>
+    </div>
+    <div class="card" id="sk-imu">
+      <div class="sub">IMU</div>
+      <h3>imu-activity-from-accel</h3>
+      <p>mg/LSB 與偏移的差別、ODR 選法與耗電對照、FIFO 策略、活動量／姿態／抓癢怎麼算，以及為什麼項圈量不到心跳（含算式）。</p>
+      <div><span class="tag">LSM6DS3</span><span class="tag">ODR</span><span class="tag">FIFO</span></div>
+    </div>
     <div class="card" id="sk-tree">
       <div class="sub">POWER TREE</div>
       <h3>power-tree-design</h3>
@@ -143,6 +158,8 @@
       <tr><td>電池壽命</td><td class="k">t = C[Ah]·0.8 / I[A]</td></tr>
       <tr><td>LDO 損耗</td><td class="k">P = (Vin − Vout)·I</td></tr>
       <tr><td>LDO 效率</td><td class="k">η = Vout / Vin（小負載改 ÷(Vin·(I+Iq))）</td></tr>
+      <tr><td>I²C Rp 上限</td><td class="k">Rp(max) = tr / (0.8473·Cb)</td></tr>
+      <tr><td>I²C Rp 下限</td><td class="k">Rp(min) = (VDD − 0.4) / IOL</td></tr>
       <tr><td>馬達功率</td><td class="k">P = T·ω　ω = 2πn/60</td></tr>
       <tr><td>轉矩常數</td><td class="k">T = Kt·I　E = Ke·ω</td></tr>
       <tr><td>BLDC 常數</td><td class="k">Kt[N·m/A] ≈ 9.5493 / KV[rpm/V]</td></tr>
@@ -175,6 +192,13 @@
       <tr><td>3.3V 選 74 系列</td><td class="k">74HCT 或 74LVC（不要 74HC）</td></tr>
       <tr><td>按鍵去抖</td><td class="k">10k + 100nF（約 1ms）＋軟體 20ms</td></tr>
       <tr><td>ADC 分壓源阻抗</td><td class="k">≤ 10kΩ</td></tr>
+      <tr><td>I²C 上拉 4.7k</td><td class="k">100kHz 撐 251pF／400kHz 只撐 <b>75pF</b></td></tr>
+      <tr><td>I²C 上拉 2.2k</td><td class="k">100kHz 536pF／400kHz 161pF</td></tr>
+      <tr><td>I²C 每顆裝置</td><td class="k">約 20–30pF → 400pF 上限約 16 顆（不是 127）</td></tr>
+      <tr><td>ESP32 內建上拉</td><td class="k">45kΩ → 不能當 I²C 上拉（100pF 時上升 3.8µs）</td></tr>
+      <tr><td>示波器量 I²C 上升緣</td><td class="k">量 <b>30–70%</b>，不是預設 10–90%</td></tr>
+      <tr><td>IMU 耗電（LSM6DS3TR-C）</td><td class="k">9µA@12.5Hz／85µA@208Hz／150µA 高效能</td></tr>
+      <tr><td>IMU 量心跳</td><td class="k">不行：訊號 1~3mg vs 走路 500~2000mg</td></tr>
     </tbody>
   </table>
 
@@ -211,7 +235,7 @@ cd ~/products/text2part
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-02 · 六本手冊由 Hermes Agent 維護
+    最後更新 2026-11-03 · 八本手冊由 Hermes Agent 維護
   </div>
 </div>
 <div id="toast"></div>

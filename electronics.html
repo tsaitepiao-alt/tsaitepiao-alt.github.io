@@ -135,6 +135,24 @@
       <p>mg/LSB 與偏移的差別、ODR 選法與耗電對照、FIFO 策略、活動量／姿態／抓癢怎麼算，以及為什麼項圈量不到心跳（含算式）。</p>
       <div><span class="tag">LSM6DS3</span><span class="tag">ODR</span><span class="tag">FIFO</span></div>
     </div>
+    <div class="card" id="sk-rc">
+      <div class="sub">FILTER</div>
+      <h3>rc-filter-cutoff</h3>
+      <p>1k+100nF 為什麼是 1.6kHz、-3dB 是什麼、速算法 R[kΩ]×C[nF]=159/fc[kHz]、載入效應（掛 1k 負載 fc 翻倍）、兩級串接 -3dB 跑到 0.64fc、MLCC DC bias 掉容表。</p>
+      <div><span class="tag">-20dB/dec</span><span class="tag">載入效應</span><span class="tag">C0G vs X7R</span></div>
+    </div>
+    <div class="card" id="sk-adc">
+      <div class="sub">SAMPLING</div>
+      <h3>adc-sampling-and-aliasing</h3>
+      <p>Nyquist 與混疊公式、為什麼 44.1k 不是 40k、貓叫該用 16kHz、ESP32-S3 內建 ADC 的真實上限（611–83,333Hz、INL ±8LSB、ADC2 不能連續）、SAR 前端 12τ 規矩。</p>
+      <div><span class="tag">混疊</span><span class="tag">ESP32 ADC</span><span class="tag">100nF</span></div>
+    </div>
+    <div class="card" id="sk-mfcc">
+      <div class="sub">AUDIO FEATURES</div>
+      <h3>audio-features-mfcc</h3>
+      <p>聲音怎麼變 13 個數字：32ms/10ms 切框、Hamming 旁瓣 -42.7dB、mel 刻度、為什麼丟 c0、5 個驗證法（1kHz→bin 32）、9 個常見錯誤。</p>
+      <div><span class="tag">FFT 512</span><span class="tag">26 mel</span><span class="tag">librosa 對照</span></div>
+    </div>
     <div class="card" id="sk-tree">
       <div class="sub">POWER TREE</div>
       <h3>power-tree-design</h3>
@@ -152,7 +170,11 @@
       <tr><td>功率</td><td class="k">P = V·I = I²R = V²/R</td></tr>
       <tr><td>分壓</td><td class="k">Vout = Vin·R2/(R1+R2)</td></tr>
       <tr><td>LED 限流</td><td class="k">R = (Vs − Vf) / If</td></tr>
-      <tr><td>RC 截止</td><td class="k">fc = 1/(2πRC)</td></tr>
+      <tr><td>RC 截止</td><td class="k">fc = 1/(2πRC)　速算 R[kΩ]×C[nF] = 159/fc[kHz]</td></tr>
+      <tr><td>RC 兩級串接</td><td class="k">-3dB 點 ×0.64（有 buffer）</td></tr>
+      <tr><td>Nyquist</td><td class="k">fs &gt; 2·fmax</td></tr>
+      <tr><td>混疊</td><td class="k">f_alias = |f_in − n·fs|（落在 0~fs/2）</td></tr>
+      <tr><td>FFT 頻率解析</td><td class="k">Δf = fs / N（16k/512 = 31.25Hz）</td></tr>
       <tr><td>感抗／容抗</td><td class="k">XL = 2πfL　XC = 1/(2πfC)</td></tr>
       <tr><td>LC 諧振</td><td class="k">f0 = 1/(2π√(LC))</td></tr>
       <tr><td>電池壽命</td><td class="k">t = C[Ah]·0.8 / I[A]</td></tr>
@@ -199,6 +221,10 @@
       <tr><td>示波器量 I²C 上升緣</td><td class="k">量 <b>30–70%</b>，不是預設 10–90%</td></tr>
       <tr><td>IMU 耗電（LSM6DS3TR-C）</td><td class="k">9µA@12.5Hz／85µA@208Hz／150µA 高效能</td></tr>
       <tr><td>IMU 量心跳</td><td class="k">不行：訊號 1~3mg vs 走路 500~2000mg</td></tr>
+      <tr><td>ESP32-S3 ADC 上限</td><td class="k">連續模式 611–83,333Hz；INL ±8LSB；ADC2 不能連續讀</td></tr>
+      <tr><td>SAR ADC 前端</td><td class="k">ADC 腳 100nF＋來源 ≤10kΩ；t_ACQ = 12τ</td></tr>
+      <tr><td>貓叫取樣率</td><td class="k">F0 0.30–1.11kHz、諧波到 4kHz → 16kHz（研究用 48kHz）</td></tr>
+      <tr><td>MFCC 慣例</td><td class="k">512 點 / hop 160 / 26 mel / 13 維；1kHz → bin 32</td></tr>
     </tbody>
   </table>
 

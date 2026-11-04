@@ -87,11 +87,15 @@
       <tr><td>穩壓輸出抖、電容換了就振盪</td><td class="k"><a class="jump" href="#sk-power">ldo-vs-buck-which-to-use</a></td></tr>
       <tr><td>馬達一動 MCU 就重啟</td><td class="k"><a class="jump" href="#sk-tree">power-tree-design</a></td></tr>
       <tr><td>USB 插著電池還掉電</td><td class="k"><a class="jump" href="#sk-tree">power-tree-design</a></td></tr>
+      <tr><td>板子偶發當機、重啟、ADC 亂跳</td><td class="k"><a class="jump" href="#sk-decoup">decoupling-cap-placement</a></td></tr>
+      <tr><td>去耦電容要放多近、100nF+1nF 要不要並</td><td class="k"><a class="jump" href="#sk-decoup">decoupling-cap-placement</a></td></tr>
+      <tr><td>要不要切地、類比數位怎麼分</td><td class="k"><a class="jump" href="#sk-ground">pcb-ground-return-path</a></td></tr>
+      <tr><td>雜訊／EMI 壓不下去、屏蔽線沒效</td><td class="k"><a class="jump" href="#sk-ground">pcb-ground-return-path</a></td></tr>
     </tbody>
   </table>
 
   <!-- 2 四本 -->
-  <h2 id="skills">② 八本手冊</h2>
+  <h2 id="skills">② 十本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -159,6 +163,18 @@
       <p>一顆電池怎麼分軌：四格表、三條硬規則、峰值靠電容、USB＋電池雙電源切換、上電順序、功耗預算範本。</p>
       <div><span class="tag">brownout</span><span class="tag">load switch</span><span class="tag">反灌</span></div>
     </div>
+    <div class="card" id="sk-decoup">
+      <div class="sub">DECOUPLING</div>
+      <h3>decoupling-cap-placement</h3>
+      <p>「貼著腳放」只在用走線接時成立：有平面時 3.05 nH vs 3.25 nH（差 6%），走線 5 吋變 40 nH（差 12 倍）。via 1.27 nH 是 ESL 的 6.3 倍、100nF+1nF 會在 200MHz 反諧振、實際 SRF 只有 9MHz。</p>
+      <div><span class="tag">ESL 200pH</span><span class="tag">via</span><span class="tag">反諧振</span></div>
+    </div>
+    <div class="card" id="sk-ground">
+      <div class="sub">GROUND</div>
+      <h3>pcb-ground-return-path</h3>
+      <p>回流走訊號正下方的平面，切地＝逼它繞路＝天線。單點接地只適用 &lt;1MHz（Ott 2009），類比數位靠 20× 介質厚度隔開而不是切地，DC 0Ω 在 300MHz 可能是 18Ω。</p>
+      <div><span class="tag">回流路徑</span><span class="tag">不要切地</span><span class="tag">屏蔽</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -193,6 +209,9 @@
       <tr><td>取樣率</td><td class="k">fs ≥ 頻寬 × 10~20</td></tr>
       <tr><td>I²C 上拉上限</td><td class="k">Rp(max) = tr / (0.8473·Cbus)</td></tr>
       <tr><td>走線載流（1oz）</td><td class="k">0.25mm ≈ 0.5A　0.5mm ≈ 1A</td></tr>
+      <tr><td>電感阻抗</td><td class="k">Z = 2πfL　1nH @100MHz ≈ 0.63Ω</td></tr>
+      <tr><td>電容自共振 SRF</td><td class="k">f = 1/(2π√(L·C))　100nF+200pH → 35.6MHz；+3nH → 9.2MHz</td></tr>
+      <tr><td>平面 spreading</td><td class="k">≈100 pH/平方（4mil 介質）；平方數 = 長/寬</td></tr>
     </tbody>
   </table>
 
@@ -203,7 +222,13 @@
     <tbody>
       <tr><td>螺絲間隙孔（3D 列印）</td><td class="k">M1.6→1.8　M2→2.2　M3→3.2　M4→4.3　M5→5.3</td></tr>
       <tr><td>攻牙鑽孔</td><td class="k">M1.6→1.25　M3→2.5　M4→3.3　M5→4.2</td></tr>
-      <tr><td>去耦</td><td class="k">100nF 貼腳 + 10µF 入口</td></tr>
+      <tr><td>去耦</td><td class="k">100nF 貼腳 + 10µF 入口（bulk ≥ local 總和 ×10）</td></tr>
+      <tr><td>焊盤+ESL（0603）</td><td class="k">約 3 nH → 100nF 實際只護到 <b>9MHz</b></td></tr>
+      <tr><td>走線電感</td><td class="k">5 nH/吋（細線拉 5 吋 = 40 nH，比平面差 12 倍）</td></tr>
+      <tr><td>via 電感</td><td class="k">12mil 貫穿 1.6mm 板 1.27 nH；到 9mil 內層 0.096 nH；兩顆並聯 0.63 nH</td></tr>
+      <tr><td>接地方式</td><td class="k">&lt;1MHz 單點；&gt;10MHz 平面（Ott 2009）</td></tr>
+      <tr><td>類比／數位分區</td><td class="k">距離 ≥ 20× 介質厚度（0.2mm → 4mm）；要跨界串 1–2kΩ</td></tr>
+      <tr><td>2 吋走線的地阻抗</td><td class="k">DC 0Ω；300MHz 是 <b>18Ω</b>（屏蔽線這樣接等於沒接）</td></tr>
       <tr><td>選穩壓器</td><td class="k">電池→Iq&lt;100µA；壓差/Vin&lt;15%→LDO；&gt;40%→Buck</td></tr>
       <tr><td>AMS1117 陷阱</td><td class="k">Iq 5mA → 1000mAh 只撐 8 天；輸出要 22µF 鉭（ESR 不對會振盪）</td></tr>
       <tr><td>峰值電容（1ms 掉 0.3V）</td><td class="k">100µF→30mA　470µF→141mA　1000µF→300mA</td></tr>

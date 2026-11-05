@@ -296,7 +296,11 @@ python3 scripts/pid_sim.py
 
 # 一句話生零件 → STEP / STL / 3mf
 cd ~/products/text2part
-./bin/t2p "墊圈 外徑30 內徑10 厚5，圓角0.5" --slice</code></pre>
+./bin/t2p "墊圈 外徑30 內徑10 厚5，圓角0.5" --slice
+
+# 電池續航試算（每天 mAh → 天數，含打折與 LED 佔比）
+cd ~/.hermes/profiles/wechat/skills/engineering/battery-life-budget/scripts
+python3 battery_budget.py --capacity 1000 --demo</code></pre>
   <p class="hint">實測：<code>PI 無抗飽和 → 超調 23.7%</code>　<code>加上抗飽和 → 3.2%</code>（目標 150 rad/s、電流上限 2A、取樣 1 ms）</p>
 
   <!-- 6 書 -->

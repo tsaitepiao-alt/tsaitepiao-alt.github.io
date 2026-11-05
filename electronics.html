@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 八本手冊 · 速查索引</title>
+<title>電子／機電 十五本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -55,8 +55,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-03</div>
-  <h1>電子電路與機電：八本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-06</div>
+  <h1>電子電路與機電：十五本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -84,6 +84,10 @@
       <tr><td>要不要用 74 系列還是 MCU</td><td class="k"><a class="jump" href="#sk-digital">digital-logic</a></td></tr>
       <tr><td>選 LDO 還是 Buck、LDO 發燙</td><td class="k"><a class="jump" href="#sk-power">ldo-vs-buck-which-to-use</a></td></tr>
       <tr><td>電池很快沒電（待機偷吃電）</td><td class="k"><a class="jump" href="#sk-power">ldo-vs-buck-which-to-use</a></td></tr>
+      <tr><td>這顆電池能撐幾天、續航怎麼估</td><td class="k"><a class="jump" href="#sk-batt">battery-life-budget</a></td></tr>
+      <tr><td>低溫／大電流為什麼續航大打折</td><td class="k"><a class="jump" href="#sk-batt">battery-life-budget</a></td></tr>
+      <tr><td>深睡了還是吃幾百 µA、量不到 5µA</td><td class="k"><a class="jump" href="#sk-sleep">sleep-current-measurement</a></td></tr>
+      <tr><td>電表一接上去板子就重開</td><td class="k"><a class="jump" href="#sk-sleep">sleep-current-measurement</a></td></tr>
       <tr><td>穩壓輸出抖、電容換了就振盪</td><td class="k"><a class="jump" href="#sk-power">ldo-vs-buck-which-to-use</a></td></tr>
       <tr><td>馬達一動 MCU 就重啟</td><td class="k"><a class="jump" href="#sk-tree">power-tree-design</a></td></tr>
       <tr><td>USB 插著電池還掉電</td><td class="k"><a class="jump" href="#sk-tree">power-tree-design</a></td></tr>
@@ -95,7 +99,7 @@
   </table>
 
   <!-- 2 四本 -->
-  <h2 id="skills">② 十本手冊</h2>
+  <h2 id="skills">② 十五本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -175,6 +179,18 @@
       <p>回流走訊號正下方的平面，切地＝逼它繞路＝天線。單點接地只適用 &lt;1MHz（Ott 2009），類比數位靠 20× 介質厚度隔開而不是切地，DC 0Ω 在 300MHz 可能是 18Ω。</p>
       <div><span class="tag">回流路徑</span><span class="tag">不要切地</span><span class="tag">屏蔽</span></div>
     </div>
+    <div class="card" id="sk-batt">
+      <div class="sub">RUNTIME</div>
+      <h3>battery-life-budget</h3>
+      <p>續航＝可用容量÷平均電流：每天 mAh 表、三段打折（截止電壓／溫度／放電率／自放電 ≈0.65）、AA 鹼性 −15°C 只剩 33%、500mA 時只剩 60%、鋰電自放電 1–2%/月＋保護板 3%/月。含貓項圈實算（53 天 vs 加一顆 LED 變 11 天）。</p>
+      <div><span class="tag">duty cycle</span><span class="tag">derating</span><span class="tag">mAh/天</span></div>
+    </div>
+    <div class="card" id="sk-sleep">
+      <div class="sub">MEASUREMENT</div>
+      <h3>sleep-current-measurement</h3>
+      <p>量不到 µA 不是電表爛，是 burden voltage：Fluke 87V mA 檔 1.8mV/mA，500mA 峰值掉 1V → brownout。旁路開關 0 元、µCurrent 10µV/µA、電容積分 I=C·ΔV/Δt、暗電清單 9 條（LED／分壓／AMS1117 5mA／非 RTC 腳 hold 461µA）。</p>
+      <div><span class="tag">burden voltage</span><span class="tag">µCurrent</span><span class="tag">C·dV/dt</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -193,7 +209,12 @@
       <tr><td>FFT 頻率解析</td><td class="k">Δf = fs / N（16k/512 = 31.25Hz）</td></tr>
       <tr><td>感抗／容抗</td><td class="k">XL = 2πfL　XC = 1/(2πfC)</td></tr>
       <tr><td>LC 諧振</td><td class="k">f0 = 1/(2π√(LC))</td></tr>
-      <tr><td>電池壽命</td><td class="k">t = C[Ah]·0.8 / I[A]</td></tr>
+      <tr><td>電池壽命（粗估）</td><td class="k">t = C[Ah]·0.8 / I[A]</td></tr>
+      <tr><td>電池壽命（準）</td><td class="k">t = 可用mAh ÷ I_avg　可用 ≈ 標稱×0.65</td></tr>
+      <tr><td>每天消耗</td><td class="k">mAh/天 = mA × 秒 ÷ 3600 × 次數</td></tr>
+      <tr><td>平均電流</td><td class="k">I_avg = 每天 mAh ÷ 24</td></tr>
+      <tr><td>電容積分法量電流</td><td class="k">I = C·ΔV/Δt　（1000µF、100mV/60s → 1.67µA）</td></tr>
+      <tr><td>電容撐住峰值</td><td class="k">ΔV = I·t/C　（100µF、20mA、1.5ms → 0.3V）</td></tr>
       <tr><td>LDO 損耗</td><td class="k">P = (Vin − Vout)·I</td></tr>
       <tr><td>LDO 效率</td><td class="k">η = Vout / Vin（小負載改 ÷(Vin·(I+Iq))）</td></tr>
       <tr><td>I²C Rp 上限</td><td class="k">Rp(max) = tr / (0.8473·Cb)</td></tr>
@@ -231,6 +252,15 @@
       <tr><td>2 吋走線的地阻抗</td><td class="k">DC 0Ω；300MHz 是 <b>18Ω</b>（屏蔽線這樣接等於沒接）</td></tr>
       <tr><td>選穩壓器</td><td class="k">電池→Iq&lt;100µA；壓差/Vin&lt;15%→LDO；&gt;40%→Buck</td></tr>
       <tr><td>AMS1117 陷阱</td><td class="k">Iq 5mA → 1000mAh 只撐 8 天；輸出要 22µF 鉭（ESR 不對會振盪）</td></tr>
+      <tr><td>深睡實測（XIAO）</td><td class="k">S3 13.4µA／C3 41.6µA／C6 16.9µA（晶片規格 7／5／7µA）</td></tr>
+      <tr><td>GPIO hold 用錯腳</td><td class="k">461µA（C3 只有 GPIO0–5 是 RTC 域，其他腳 hold 會漏電且不報錯）</td></tr>
+      <tr><td>超低 Iq LDO</td><td class="k">TPS7A02 25nA（shutdown 3nA）／MCP1700 1.6µA／AMS1117 5mA</td></tr>
+      <tr><td>電表負擔電壓</td><td class="k">Fluke 87V mA 1.8mV/mA、µA 100µV/µA → 500mA 掉 0.9V</td></tr>
+      <tr><td>待機暗電</td><td class="k">電源 LED 1.5mA（1kΩ）／100k+100k 分壓 21µA／上拉 10k 330µA</td></tr>
+      <tr><td>鹼性 AA 低溫</td><td class="k">22°C 2181mAh → −15°C 728mAh（<b>33%</b>）；鋰鐵仍有 97%</td></tr>
+      <tr><td>鹼性 AA 大電流</td><td class="k">100mA 2608mAh → 500mA 1575mAh（60%）；鋰鐵 93%</td></tr>
+      <tr><td>鋰電自放電</td><td class="k">1–2%/月 ＋ 保護板 3%/月（鹼性只有 2–3%/年）</td></tr>
+      <tr><td>量測儀器撐峰值</td><td class="k">並 100µF → 20mA 可撐 1.5ms（掉 0.3V）</td></tr>
       <tr><td>峰值電容（1ms 掉 0.3V）</td><td class="k">100µF→30mA　470µF→141mA　1000µF→300mA</td></tr>
       <tr><td>馬達／繼電器</td><td class="k">獨立 100µF + 飛輪二極體</td></tr>
       <tr><td>PWM 頻率</td><td class="k">&gt; 20kHz（避開人耳）</td></tr>
@@ -286,7 +316,7 @@ cd ~/products/text2part
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-03 · 八本手冊由 Hermes Agent 維護
+    最後更新 2026-11-06 · 十五本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

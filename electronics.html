@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 十八本手冊 · 速查索引</title>
+<title>電子／機電 二十本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -56,7 +56,7 @@
 <body>
 <div class="wrap">
   <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-06</div>
-  <h1>電子電路與機電：十八本手冊</h1>
+  <h1>電子電路與機電：二十本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -105,11 +105,16 @@
       <tr><td>打件要多少錢、5 片還是 50 片</td><td class="k"><a class="jump" href="#sk-pcba">pcba-small-batch-cost</a></td></tr>
       <tr><td>只有 10 片，自己焊還是送打件</td><td class="k"><a class="jump" href="#sk-pcba">pcba-small-batch-cost</a></td></tr>
       <tr><td>報價單的工程費、鋼網、上料費看不懂</td><td class="k"><a class="jump" href="#sk-pcba">pcba-small-batch-cost</a></td></tr>
+      <tr><td>電池充一整天燈都不熄、充不飽</td><td class="k"><a class="jump" href="#sk-charge">li-ion-charging-and-power-path</a></td></tr>
+      <tr><td>邊充邊用、插著電電量還是掉</td><td class="k"><a class="jump" href="#sk-charge">li-ion-charging-and-power-path</a></td></tr>
+      <tr><td>充電 IC 好燙、1A 充不到</td><td class="k"><a class="jump" href="#sk-charge">li-ion-charging-and-power-path</a></td></tr>
+      <tr><td>USB-C 插 C-to-C 線沒反應、A-to-C 才通</td><td class="k"><a class="jump" href="#sk-usbc">usb-c-5v-power-input</a></td></tr>
+      <tr><td>USB-C 只拿 5V 要怎麼接、要不要 PD</td><td class="k"><a class="jump" href="#sk-usbc">usb-c-5v-power-input</a></td></tr>
     </tbody>
   </table>
 
   <!-- 2 四本 -->
-  <h2 id="skills">② 十八本手冊</h2>
+  <h2 id="skills">② 二十本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -219,6 +224,18 @@
       <p>打件的錢 63% 是元件、18% 是一次性（工程 $8.18＋鋼網 $1.53＋手焊 $3.58＋上料 $3.07/種擴展料），焊點費 $0.0016/點等於免費。實算 5／10／50／100 片（NT$545→290/片）、三個切換點、省錢六順序、進口 NT$2,000 免稅但半年 6 次的坑、推翻「月銷&lt;100 台不要自製 PCBA」。</p>
       <div><span class="tag">setup fee</span><span class="tag">擴展料</span><span class="tag">CPL 對位</span></div>
     </div>
+    <div class="card" id="sk-charge">
+      <div class="sub">CHARGING / POWER PATH</div>
+      <h3>li-ion-charging-and-power-path</h3>
+      <p>邊充邊用為什麼電池永遠充不飽：充電 IC 靠「電流掉到 1/10」判充滿，負載掛在電池上就永遠降不下來 → 整晚 4.2V 浮充。三解法（P-MOS 斷負載／蕭特基旁路／BQ24074 power path）、TP4056「1A 是標好玩的」實算（1A→1.3W→接面 187°C）、RPROG 各廠差 45%。</p>
+      <div><span class="tag">C/10</span><span class="tag">浮充</span><span class="tag">TP4056 熱限</span></div>
+    </div>
+    <div class="card" id="sk-usbc">
+      <div class="sub">USB-C INPUT</div>
+      <h3>usb-c-5v-power-input</h3>
+      <p>CC1／CC2 各一顆 5.1k 到地，少一顆 C-to-C 線就 0V（A-to-C 卻能動）。兩顆不可短路（Pi 4 的錯→ e-marker 線給 0V）、只接 5.1k 最多 3A 視 source、要 9V 以上必須 PD、VBUS 電容別超過 10µF。</p>
+      <div><span class="tag">5.1k Rd</span><span class="tag">e-marker</span><span class="tag">inrush</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -266,6 +283,10 @@
       <tr><td>烙鐵設定</td><td class="k">熔點 + 130~180°C：有鉛 183→315–343°C；無鉛 217→371–400°C</td></tr>
       <tr><td>打件總價</td><td class="k">板費 + 工程 + 鋼網 + 手焊 + 上料×料種 + 焊點費×點×片 + 元件×片 + 運費 + 稅</td></tr>
       <tr><td>一次性攤提</td><td class="k">US$22.5 ÷ 片數（5片→NT$148／10片→74／50片→15／100片→7）</td></tr>
+      <tr><td>充電時間</td><td class="k">t = 容量 ÷ 充電電流 ÷ 0.85（500mAh@250mA → 2.4h）</td></tr>
+      <tr><td>TP4056 充電電流</td><td class="k">IBAT ≈ K/RPROG　K=1000~1450（看廠牌）；量 PROG 腳：恆流 1.0V、涓流 0.1V</td></tr>
+      <tr><td>充滿判定</td><td class="k">電流降到設定值的 1/10（TP4056）／7.5%（MCP73831）</td></tr>
+      <tr><td>充電 IC 耗散</td><td class="k">P = (Vin − Vbat)·I　Tj = 室溫 + P×θJA（ESOP8 ≈125°C/W）</td></tr>
     </tbody>
   </table>
 
@@ -284,6 +305,12 @@
       <tr><td>類比／數位分區</td><td class="k">距離 ≥ 20× 介質厚度（0.2mm → 4mm）；要跨界串 1–2kΩ</td></tr>
       <tr><td>2 吋走線的地阻抗</td><td class="k">DC 0Ω；300MHz 是 <b>18Ω</b>（屏蔽線這樣接等於沒接）</td></tr>
       <tr><td>選穩壓器</td><td class="k">電池→Iq&lt;100µA；壓差/Vin&lt;15%→LDO；&gt;40%→Buck</td></tr>
+      <tr><td>TP4056 熱實算（5V 進）</td><td class="k">250mA→66°C　500mA→106°C　800mA→<b>150°C</b>（自動降流）→ 實用天花板 500mA</td></tr>
+      <tr><td>TP4056 RPROG=1.2k 實際電流</td><td class="k">833mA（XBLW）～1208mA（EVVO）＝差 <b>45%</b>，別信「1.2k=1A」</td></tr>
+      <tr><td>鋰電舒服充電電流</td><td class="k">0.5C~1C（500mAh → 250~500mA）；涓流門檻 2.9V；回充 4.05~4.12V</td></tr>
+      <tr><td>USB-C 5V 握手</td><td class="k">CC1/CC2 各 5.1k→GND（±20%）；CC1–CC2 量到 10.2k 才對</td></tr>
+      <tr><td>只接 5.1k 能拿多少</td><td class="k">500mA（A-to-C 2.0）／900mA（3.0）／1.5A／3A（看 source 的 Rp）；9V 以上要 PD</td></tr>
+      <tr><td>蕭特基旁路壓降</td><td class="k">實測 0.3V → 負載看到 4.7V；P-MOS body diode 倒灌 −0.5V</td></tr>
       <tr><td>AMS1117 陷阱</td><td class="k">Iq 5mA → 1000mAh 只撐 8 天；輸出要 22µF 鉭（ESR 不對會振盪）</td></tr>
       <tr><td>深睡實測（XIAO）</td><td class="k">S3 13.4µA／C3 41.6µA／C6 16.9µA（晶片規格 7／5／7µA）</td></tr>
       <tr><td>GPIO hold 用錯腳</td><td class="k">461µA（C3 只有 GPIO0–5 是 RTC 域，其他腳 hold 會漏電且不報錯）</td></tr>
@@ -367,7 +394,7 @@ python3 battery_budget.py --capacity 1000 --demo</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-08 · 十八本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-09 · 二十本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

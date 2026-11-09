@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 二十本手冊 · 速查索引</title>
+<title>電子／機電 二十二本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -55,8 +55,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-06</div>
-  <h1>電子電路與機電：二十本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-10</div>
+  <h1>電子電路與機電：二十二本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -110,11 +110,17 @@
       <tr><td>充電 IC 好燙、1A 充不到</td><td class="k"><a class="jump" href="#sk-charge">li-ion-charging-and-power-path</a></td></tr>
       <tr><td>USB-C 插 C-to-C 線沒反應、A-to-C 才通</td><td class="k"><a class="jump" href="#sk-usbc">usb-c-5v-power-input</a></td></tr>
       <tr><td>USB-C 只拿 5V 要怎麼接、要不要 PD</td><td class="k"><a class="jump" href="#sk-usbc">usb-c-5v-power-input</a></td></tr>
+      <tr><td>datasheet 寫 16 位元，卻量不出小變化</td><td class="k"><a class="jump" href="#sk-noise">sensor-noise-floor</a></td></tr>
+      <tr><td>我這個訊號到底看不看得到（SNR 夠不夠）</td><td class="k"><a class="jump" href="#sk-noise">sensor-noise-floor</a></td></tr>
+      <tr><td>要選 ADC：ESP32 內建還是 ADS1115</td><td class="k"><a class="jump" href="#sk-noise">sensor-noise-floor</a></td></tr>
+      <tr><td>感測器讀值亂跳、要不要加平均</td><td class="k"><a class="jump" href="#sk-filter">sensor-software-filtering</a></td></tr>
+      <tr><td>濾波後反應變慢、門檻抓不到</td><td class="k"><a class="jump" href="#sk-filter">sensor-software-filtering</a></td></tr>
+      <tr><td>改了取樣率，濾波行為就跑掉</td><td class="k"><a class="jump" href="#sk-filter">sensor-software-filtering</a></td></tr>
     </tbody>
   </table>
 
   <!-- 2 四本 -->
-  <h2 id="skills">② 二十本手冊</h2>
+  <h2 id="skills">② 二十二本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -236,6 +242,18 @@
       <p>CC1／CC2 各一顆 5.1k 到地，少一顆 C-to-C 線就 0V（A-to-C 卻能動）。兩顆不可短路（Pi 4 的錯→ e-marker 線給 0V）、只接 5.1k 最多 3A 視 source、要 9V 以上必須 PD、VBUS 電容別超過 10µF。</p>
       <div><span class="tag">5.1k Rd</span><span class="tag">e-marker</span><span class="tag">inrush</span></div>
     </div>
+    <div class="card" id="sk-noise">
+      <div class="sub">SENSOR NOISE</div>
+      <h3>sensor-noise-floor</h3>
+      <p>解析度 ≠ 準確度 ≠ 雜訊：0.061 mg/LSB 的 IMU 抖動是刻度的 28 倍。雜訊密度→RMS（√(Kn×BW)、Kn=1.57、峰值 ×6.6）、四顆實算（LSM6DS3 0.41mg@26Hz／MPU-6050 11.2mg＝有效僅 7.5 位／ADS1115 860SPS 只剩 15.07 位／ESP32 ADC Vref ±9.1%）、過取樣 4 倍 +1 位元、SNR 預算表（比值 &lt;1 就是不可能）。</p>
+      <div><span class="tag">µg/√Hz</span><span class="tag">有效位元</span><span class="tag">過取樣</span></div>
+    </div>
+    <div class="card" id="sk-filter">
+      <div class="sub">FILTERING</div>
+      <h3>sensor-software-filtering</h3>
+      <p>平滑是拿反應速度換的：移動平均／中值／EMA 各對付什麼、α 對應的雜訊縮小與 90% 響應表（α=0.4 → 剩 50%、4.5 筆、0.45s@10Hz）、換取樣率的 α 換算、中值殺單點尖刺、濾波救不了偏移與混疊、正確資料流順序（無效值別填 0）。</p>
+      <div><span class="tag">EMA</span><span class="tag">中值</span><span class="tag">延遲</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -287,6 +305,14 @@
       <tr><td>TP4056 充電電流</td><td class="k">IBAT ≈ K/RPROG　K=1000~1450（看廠牌）；量 PROG 腳：恆流 1.0V、涓流 0.1V</td></tr>
       <tr><td>充滿判定</td><td class="k">電流降到設定值的 1/10（TP4056）／7.5%（MCP73831）</td></tr>
       <tr><td>充電 IC 耗散</td><td class="k">P = (Vin − Vbat)·I　Tj = 室溫 + P×θJA（ESOP8 ≈125°C/W）</td></tr>
+      <tr><td>雜訊密度→RMS</td><td class="k">RMS = 密度 × √(Kn·BW)　Kn = 1.57／1.22／1.16（1/2/3 階）</td></tr>
+      <tr><td>雜訊峰值</td><td class="k">Vpp ≈ RMS × 6.6（±3.3σ，含 99.9%）</td></tr>
+      <tr><td>平均降噪</td><td class="k">平均 N 筆 → 雜訊 ÷√N；4 倍 +1 位元（+6.02dB）、16 倍 +2 位元</td></tr>
+      <tr><td>有效位元 ENOB</td><td class="k">ENOB = (SNR − 1.76) / 6.02</td></tr>
+      <tr><td>EMA 更新</td><td class="k">est += α(new − est)　α = 1 − e^(−dt/τ)（時間常數寫法）</td></tr>
+      <tr><td>EMA 雜訊縮小</td><td class="k">σ_out/σ_in = √(α/(2−α))　α=0.4 → 50%</td></tr>
+      <tr><td>EMA 90% 響應</td><td class="k">n = ln0.1 / ln(1−α)　α=0.4 → 4.5 筆</td></tr>
+      <tr><td>換取樣率改 α</td><td class="k">α_new = 1 − √(1 − α_old)（取樣率變 2 倍時）</td></tr>
     </tbody>
   </table>
 
@@ -354,6 +380,12 @@
       <tr><td>手焊 vs 打件切換點</td><td class="k">≥8~10 片送打件（手焊 10 片＝<b>6.7~15 小時</b>，時薪300＝NT$2,000~4,500）</td></tr>
       <tr><td>Standard 型（雙面必要時）</td><td class="k">setup $51.12＋鋼網 $16.42＋治具 $8.21×2 → 經濟型的 <b>3 倍</b></td></tr>
       <tr><td>進口免稅門檻</td><td class="k">完稅價 NT$2,000 以下免稅；同人半年逾 <b>6 次</b>，第 7 次起照課</td></tr>
+      <tr><td>LSM6DS3TR-C 雜訊地板</td><td class="k">90µg/√Hz → 0.41mg@26Hz／1.63mg@416Hz／4.6mg@6.6kHz；低功耗固定 <b>1.7mg</b>（ST 2017）</td></tr>
+      <tr><td>MPU-6050 雜訊</td><td class="k">400µg/√Hz → <b>11.2mg</b>（184 LSB，有效僅 ~7.5 位）；是 LSM6DS3 的 <b>27 倍</b></td></tr>
+      <tr><td>ADS1115 有效位元</td><td class="k">860SPS → 15.07 位（62.5µV＝1 LSB）；8SPS → 16 位；速度換位元</td></tr>
+      <tr><td>ESP32 內建 ADC</td><td class="k">0.806mV/LSB（12 位）；Vref 1000–1200mV（<b>±9.1%</b>）；&lt;0.15V 非線性嚴重</td></tr>
+      <tr><td>雜訊頻寬係數 Kn</td><td class="k">1.57（1 階）／1.22／1.16／1.13 → 階數越高越接近 1</td></tr>
+      <tr><td>可用最小訊號</td><td class="k">≥ 雜訊 RMS × 3（比值 &lt;1 不可能、3~10 要濾波、&gt;10 舒服）</td></tr>
     </tbody>
   </table>
 
@@ -394,7 +426,7 @@ python3 battery_budget.py --capacity 1000 --demo</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-09 · 二十本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-10 · 二十二本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 二十二本手冊 · 速查索引</title>
+<title>電子／機電 二十四本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -55,8 +55,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-10</div>
-  <h1>電子電路與機電：二十二本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-11</div>
+  <h1>電子電路與機電：二十四本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -116,11 +116,17 @@
       <tr><td>感測器讀值亂跳、要不要加平均</td><td class="k"><a class="jump" href="#sk-filter">sensor-software-filtering</a></td></tr>
       <tr><td>濾波後反應變慢、門檻抓不到</td><td class="k"><a class="jump" href="#sk-filter">sensor-software-filtering</a></td></tr>
       <tr><td>改了取樣率，濾波行為就跑掉</td><td class="k"><a class="jump" href="#sk-filter">sensor-software-filtering</a></td></tr>
+      <tr><td>量到的電壓比算出來低、接上去就掉</td><td class="k"><a class="jump" href="#sk-imped">signal-impedance-and-loading</a></td></tr>
+      <tr><td>探棒一碰波形變小、變慢、電路就當</td><td class="k"><a class="jump" href="#sk-imped">signal-impedance-and-loading</a></td></tr>
+      <tr><td>分壓給 ADC 讀值偏低、串到隔壁通道</td><td class="k"><a class="jump" href="#sk-imped">signal-impedance-and-loading</a></td></tr>
+      <tr><td>感測器阻抗高，要不要加 buffer</td><td class="k"><a class="jump" href="#sk-opamp">opamp-buffer-basics</a></td></tr>
+      <tr><td>LM358 能不能用、op-amp 怎麼挑</td><td class="k"><a class="jump" href="#sk-opamp">opamp-buffer-basics</a></td></tr>
+      <tr><td>加了 op-amp 反而振盪、輸出撞邊</td><td class="k"><a class="jump" href="#sk-opamp">opamp-buffer-basics</a></td></tr>
     </tbody>
   </table>
 
   <!-- 2 四本 -->
-  <h2 id="skills">② 二十二本手冊</h2>
+  <h2 id="skills">② 二十四本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -254,6 +260,18 @@
       <p>平滑是拿反應速度換的：移動平均／中值／EMA 各對付什麼、α 對應的雜訊縮小與 90% 響應表（α=0.4 → 剩 50%、4.5 筆、0.45s@10Hz）、換取樣率的 α 換算、中值殺單點尖刺、濾波救不了偏移與混疊、正確資料流順序（無效值別填 0）。</p>
       <div><span class="tag">EMA</span><span class="tag">中值</span><span class="tag">延遲</span></div>
     </div>
+    <div class="card" id="sk-imped">
+      <div class="sub">IMPEDANCE</div>
+      <h3>signal-impedance-and-loading</h3>
+      <p>為什麼「接上去量」電路就變了：分壓源阻抗是 R1∥R2 不是 R1+R2；「10 倍負載」其實還有 −9.1%（要 1% 得 100 倍）；電表 10MΩ∥100pF 會把 1M/1M 分壓從 1.65V 讀成 1.571V；1× 探棒量 1MΩ 節點只讀到 50%（10× 讀 90.9%）；ADS1115 量程切到 ±0.256V 時輸入阻抗只剩 710kΩ（100k 源 → 12.35% 誤差）。</p>
+      <div><span class="tag">載入效應</span><span class="tag">1× vs 10×</span><span class="tag">戴維寧</span></div>
+    </div>
+    <div class="card" id="sk-opamp">
+      <div class="sub">OP-AMP</div>
+      <h3>opamp-buffer-basics</h3>
+      <p>buffer 就是「加壓馬達」：虛短讓 Vout=Vin，虛斷讓上游幾乎不被抽水。LM358 的偏壓電流 250nA 在 1MΩ 上等於 <b>250mV 誤差</b>，MCP6002 只有 1pA；GBW 1MHz 放大 ×11 只剩 91kHz；直接推 500pF 相位裕度剩 45°（要串 50–100Ω）；rail-to-rail 也不是真的到軌。</p>
+      <div><span class="tag">unity gain</span><span class="tag">Ib×R</span><span class="tag">GBW</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -313,6 +331,12 @@
       <tr><td>EMA 雜訊縮小</td><td class="k">σ_out/σ_in = √(α/(2−α))　α=0.4 → 50%</td></tr>
       <tr><td>EMA 90% 響應</td><td class="k">n = ln0.1 / ln(1−α)　α=0.4 → 4.5 筆</td></tr>
       <tr><td>換取樣率改 α</td><td class="k">α_new = 1 − √(1 − α_old)（取樣率變 2 倍時）</td></tr>
+      <tr><td>載入後實得電壓</td><td class="k">Vout = Vin · Rin/(Rout+Rin)　Rin=Rout → 掉 50%</td></tr>
+      <tr><td>10 倍規則的誤差</td><td class="k">Rin=10×Rout → −9.1%；100× → −1.0%（不是 0）</td></tr>
+      <tr><td>分壓的源阻抗</td><td class="k">Rth = R1 ∥ R2（不是 R1+R2）</td></tr>
+      <tr><td>ADC 取樣建立</td><td class="k">t_ACQ ≥ k·τ　τ=Rth·C_sample；12-bit k≈9（TI 用 11 留餘裕）</td></tr>
+      <tr><td>偏壓電流造成的誤差</td><td class="k">V_err = Ib × Rsource　250nA×1MΩ = 250mV</td></tr>
+      <tr><td>op-amp 可用頻寬</td><td class="k">f = GBW / 增益　1MHz/11 = 91kHz</td></tr>
     </tbody>
   </table>
 
@@ -386,6 +410,15 @@
       <tr><td>ESP32 內建 ADC</td><td class="k">0.806mV/LSB（12 位）；Vref 1000–1200mV（<b>±9.1%</b>）；&lt;0.15V 非線性嚴重</td></tr>
       <tr><td>雜訊頻寬係數 Kn</td><td class="k">1.57（1 階）／1.22／1.16／1.13 → 階數越高越接近 1</td></tr>
       <tr><td>可用最小訊號</td><td class="k">≥ 雜訊 RMS × 3（比值 &lt;1 不可能、3~10 要濾波、&gt;10 舒服）</td></tr>
+      <tr><td>電表輸入阻抗</td><td class="k">10MΩ ∥ &lt;100pF（Fluke 87V）；源 ≤10kΩ 時誤差 ≤0.1%</td></tr>
+      <tr><td>示波器探棒載入</td><td class="k">1× = 1MΩ∥50~100pF；10× = 10MΩ∥10~15pF</td></tr>
+      <tr><td>1MΩ 源配探棒</td><td class="k">1× 讀 <b>50%</b>；10× 讀 90.9%（都不是 100%）</td></tr>
+      <tr><td>探棒造成上升時間</td><td class="k">tr ≈ 2.2RC：100k+110pF → 24.2µs；100k+17pF → 3.74µs</td></tr>
+      <tr><td>ADS1115 輸入阻抗</td><td class="k">±6.144V→22MΩ／±4.096V→15MΩ／±2.048V→4.9MΩ／±1.024V→2.4MΩ／±0.256V→<b>710kΩ</b></td></tr>
+      <tr><td>ADS1115 小量程代價</td><td class="k">±0.256V + 100kΩ 源 → 載入誤差 <b>12.35%</b>（＝31.6mV）</td></tr>
+      <tr><td>LM358 偏壓電流</td><td class="k">45nA typ／<b>250nA max</b> → 1MΩ 上 250mV；Vos 2mV typ／7mV max</td></tr>
+      <tr><td>MCP6002 規格</td><td class="k">Ib 1pA／Vos ±4.5mV max／GBW 1MHz／Iq 100µA／1.8–6V RRIO</td></tr>
+      <tr><td>op-amp 推電容</td><td class="k">直接掛 500pF 相位裕度剩 45° → 輸出串 50–100Ω</td></tr>
     </tbody>
   </table>
 
@@ -426,7 +459,7 @@ python3 battery_budget.py --capacity 1000 --demo</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-10 · 二十二本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-11 · 二十四本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

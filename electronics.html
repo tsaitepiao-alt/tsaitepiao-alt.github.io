@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 二十四本手冊 · 速查索引</title>
+<title>電子／機電 二十六本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -55,8 +55,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-11</div>
-  <h1>電子電路與機電：二十四本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-12</div>
+  <h1>電子電路與機電：二十六本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -122,11 +122,18 @@
       <tr><td>感測器阻抗高，要不要加 buffer</td><td class="k"><a class="jump" href="#sk-opamp">opamp-buffer-basics</a></td></tr>
       <tr><td>LM358 能不能用、op-amp 怎麼挑</td><td class="k"><a class="jump" href="#sk-opamp">opamp-buffer-basics</a></td></tr>
       <tr><td>加了 op-amp 反而振盪、輸出撞邊</td><td class="k"><a class="jump" href="#sk-opamp">opamp-buffer-basics</a></td></tr>
+      <tr><td>走線要多寬、這條能不能過 2A</td><td class="k"><a class="jump" href="#sk-trace">pcb-trace-width-and-current</a></td></tr>
+      <tr><td>換層要幾顆 via、via 夠不夠載</td><td class="k"><a class="jump" href="#sk-trace">pcb-trace-width-and-current</a></td></tr>
+      <tr><td>接上負載電壓就掉、負載一動就重啟</td><td class="k"><a class="jump" href="#sk-trace">pcb-trace-width-and-current</a></td></tr>
+      <tr><td>板子某條線發燙、發黃、有味道</td><td class="k"><a class="jump" href="#sk-trace">pcb-trace-width-and-current</a></td></tr>
+      <tr><td>大銅箔焊不上去、錫怎麼都不熔</td><td class="k"><a class="jump" href="#sk-thermal">pcb-thermal-relief-and-copper</a></td></tr>
+      <tr><td>要不要開 thermal relief、開了又難焊</td><td class="k"><a class="jump" href="#sk-thermal">pcb-thermal-relief-and-copper</a></td></tr>
+      <tr><td>QFN 散熱墊要幾顆 via、鋪銅要多大</td><td class="k"><a class="jump" href="#sk-thermal">pcb-thermal-relief-and-copper</a></td></tr>
     </tbody>
   </table>
 
   <!-- 2 四本 -->
-  <h2 id="skills">② 二十四本手冊</h2>
+  <h2 id="skills">② 二十六本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -272,6 +279,18 @@
       <p>buffer 就是「加壓馬達」：虛短讓 Vout=Vin，虛斷讓上游幾乎不被抽水。LM358 的偏壓電流 250nA 在 1MΩ 上等於 <b>250mV 誤差</b>，MCP6002 只有 1pA；GBW 1MHz 放大 ×11 只剩 91kHz；直接推 500pF 相位裕度剩 45°（要串 50–100Ω）；rail-to-rail 也不是真的到軌。</p>
       <div><span class="tag">unity gain</span><span class="tag">Ib×R</span><span class="tag">GBW</span></div>
     </div>
+    <div class="card" id="sk-trace">
+      <div class="sub">TRACE / VIA</div>
+      <h3>pcb-trace-width-and-current</h3>
+      <p>走線就是一段電阻，要算兩件獨立的事：會不會燙（I²R 溫升）、壓降多少（3.3V 掉 100mV 就是 3%）。1 oz 銅：10 mil(0.25mm) 只載 <b>0.89A</b>、20 mil 1.46A、1mm 2.39A；同一條 100 mil 三個標準給 <b>2.35／3.28／4.70A</b>（差兩倍）。寬度不是線性：電流 ×2 要寬度 ×2.6。壓降：0.25mm 寬、100mm 長、3A → 掉 <b>0.59V</b>。0.3mm via 銅環 39.6 mil² ≈ 0.7mm 走線，實務 1A／顆，3A 換層要 3~4 顆。</p>
+      <div><span class="tag">IPC-2152</span><span class="tag">壓降</span><span class="tag">via 載流</span></div>
+    </div>
+    <div class="card" id="sk-thermal">
+      <div class="sub">THERMAL / COPPER</div>
+      <h3>pcb-thermal-relief-and-copper</h3>
+      <p>銅是散熱器（導熱是 FR4 的 1400 倍）：焊盤接上大片銅，350°C 烙鐵也熔不了錫 → 手焊要 <b>thermal relief</b>（4 支 0.3–0.5mm 橋，間隙別用 4 mil 蝕刻極限）。反過來電源與散熱墊要 solid＋via 陣列。2W 焊盤：裸 FR4 <b>90°C</b>、有地平面 <b>45°C</b>、再加 2 顆 via 只降 1°C；散熱 3×3 via ≈35°C/W、5×5 ≈14°C/W；1 in² 1 oz 銅 ≈53~125°C/W。</p>
+      <div><span class="tag">thermal relief</span><span class="tag">散熱 via</span><span class="tag">立碑</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -310,7 +329,15 @@
       <tr><td>PID</td><td class="k">u = Kp·e + Ki∫e + Kd·de/dt</td></tr>
       <tr><td>取樣率</td><td class="k">fs ≥ 頻寬 × 10~20</td></tr>
       <tr><td>I²C 上拉上限</td><td class="k">Rp(max) = tr / (0.8473·Cbus)</td></tr>
-      <tr><td>走線載流（1oz）</td><td class="k">0.25mm ≈ 0.5A　0.5mm ≈ 1A</td></tr>
+      <tr><td>走線載流（1oz、10°C、外層）</td><td class="k">10mil(0.25mm) 0.89A／20mil(0.51mm) 1.46A／1mm 2.39A</td></tr>
+      <tr><td>走線載流（IPC-2221）</td><td class="k">I = k·ΔT^0.44·A^0.725　A 用 mil²，k=0.048 外／0.024 內</td></tr>
+      <tr><td>走線電阻</td><td class="k">R = ρ·L/(W·t)　ρ=1.72e-8；0.25mm/100mm/1oz = 197mΩ</td></tr>
+      <tr><td>走線壓降</td><td class="k">V = I·R　3A × 197mΩ = 0.59V（去程＋回程要各算一次）</td></tr>
+      <tr><td>via 銅環截面</td><td class="k">A = π(d+t)·t　0.3mm/25µm → 39.6 mil²（≈0.7mm 走線）</td></tr>
+      <tr><td>via 顆數</td><td class="k">0.3mm ≈1A／顆：3A → 3~4 顆；5A → 6 顆</td></tr>
+      <tr><td>銅箔橫向熱阻</td><td class="k">≈74 K/W 每平方（1oz）；2oz 減半；R_th = L/(k·A)</td></tr>
+      <tr><td>溫升估算</td><td class="k">ΔT = P × R_th　1W × 53 = +53°C（1 in² 1oz）</td></tr>
+      <tr><td>thermal spoke 熱阻</td><td class="k">4 支 0.3×0.5mm ≈31 K/W（solid 約 74 K/W 起）</td></tr>
       <tr><td>電感阻抗</td><td class="k">Z = 2πfL　1nH @100MHz ≈ 0.63Ω</td></tr>
       <tr><td>電容自共振 SRF</td><td class="k">f = 1/(2π√(L·C))　100nF+200pH → 35.6MHz；+3nH → 9.2MHz</td></tr>
       <tr><td>平面 spreading</td><td class="k">≈100 pH/平方（4mil 介質）；平方數 = 長/寬</td></tr>
@@ -419,6 +446,18 @@
       <tr><td>LM358 偏壓電流</td><td class="k">45nA typ／<b>250nA max</b> → 1MΩ 上 250mV；Vos 2mV typ／7mV max</td></tr>
       <tr><td>MCP6002 規格</td><td class="k">Ib 1pA／Vos ±4.5mV max／GBW 1MHz／Iq 100µA／1.8–6V RRIO</td></tr>
       <tr><td>op-amp 推電容</td><td class="k">直接掛 500pF 相位裕度剩 45° → 輸出串 50–100Ω</td></tr>
+      <tr><td>銅厚換算</td><td class="k">1 oz = 35µm = 1.37 mil；2 oz 70µm；0.5 oz 17.5µm（便宜 4 層板內層常是 0.5oz）</td></tr>
+      <tr><td>100 mil 走線（1oz、10°C）</td><td class="k">IPC-2221 <b>4.70A</b>／Saturn(2152) <b>3.28A</b>／2152 保守圖 <b>2.35A</b></td></tr>
+      <tr><td>1 吋寬走線（1oz、10°C）</td><td class="k">2221 24.96A／Saturn 12.67A ＝ 不能按面積線性放大（A^0.725）</td></tr>
+      <tr><td>電流 ×2 要寬度</td><td class="k">×2.6（不是 ×2）</td></tr>
+      <tr><td>0.3mm via（25µm 電鍍）</td><td class="k">39.6 mil²；計算 1.90A @10°C、實務 <b>1A</b>；電阻 1.6mm 板 ≈1.14mΩ</td></tr>
+      <tr><td>導熱係數</td><td class="k">銅 355–400 W/(m·K)／FR4 0.25–0.3 → 差 <b>1400 倍</b></td></tr>
+      <tr><td>2W 焊盤溫升</td><td class="k">裸 FR4 <b>90°C</b>；有 GND 平面 <b>45°C</b>；+2 via 只降 <b>1°C</b>（Altium 2025）</td></tr>
+      <tr><td>散熱 via 陣列</td><td class="k">單顆 0.3mm ≈163 K/W（算）／12mil 261°C/W（TI）；3×3 ≈35、4×4 ≈20、5×5 ≈14 °C/W</td></tr>
+      <tr><td>鋪銅散熱（1oz）</td><td class="k">10mm 163／25.4mm 53／50mm 32 °C/W；TI 老規矩 1 in² 2oz = +100°C</td></tr>
+      <tr><td>thermal relief 參數</td><td class="k">spoke 0.2–0.5mm（訊號地 0.25–0.3、電源 0.38–0.5）；KiCad 預設 gap/spoke 0.5mm、最多 4 支 90°</td></tr>
+      <tr><td>thermal 間隙下限</td><td class="k">別用 4 mil（0.1mm）＝蝕刻極限；用 8–10 mil</td></tr>
+      <tr><td>大銅面手焊</td><td class="k">預熱 100–150°C、無鉛 371–400°C、大頭＋助焊劑、5 秒不熔就停</td></tr>
     </tbody>
   </table>
 
@@ -459,7 +498,7 @@ python3 battery_budget.py --capacity 1000 --demo</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-11 · 二十四本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-12 · 二十六本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

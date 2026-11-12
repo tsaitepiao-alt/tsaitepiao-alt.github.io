@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 二十六本手冊 · 速查索引</title>
+<title>電子／機電 二十八本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -56,7 +56,7 @@
 <body>
 <div class="wrap">
   <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-12</div>
-  <h1>電子電路與機電：二十六本手冊</h1>
+  <h1>電子電路與機電：二十八本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -88,6 +88,11 @@
       <tr><td>低溫／大電流為什麼續航大打折</td><td class="k"><a class="jump" href="#sk-batt">battery-life-budget</a></td></tr>
       <tr><td>深睡了還是吃幾百 µA、量不到 5µA</td><td class="k"><a class="jump" href="#sk-sleep">sleep-current-measurement</a></td></tr>
       <tr><td>電表一接上去板子就重開</td><td class="k"><a class="jump" href="#sk-sleep">sleep-current-measurement</a></td></tr>
+      <tr><td>斷電了那條軌還有 2.6V</td><td class="k"><a class="jump" href="#sk-gating">peripheral-power-gating</a></td></tr>
+      <tr><td>加一顆感測器，待機電流翻十倍</td><td class="k"><a class="jump" href="#sk-gating">peripheral-power-gating</a></td></tr>
+      <tr><td>週邊電源要切：P-MOS 還是負載開關</td><td class="k"><a class="jump" href="#sk-gating">peripheral-power-gating</a></td></tr>
+      <tr><td>deep 還是 light sleep、醒來划不划算</td><td class="k"><a class="jump" href="#sk-sleepmode">sleep-mode-selection</a></td></tr>
+      <tr><td>每 10 秒醒一次，電池幾天就沒</td><td class="k"><a class="jump" href="#sk-sleepmode">sleep-mode-selection</a></td></tr>
       <tr><td>穩壓輸出抖、電容換了就振盪</td><td class="k"><a class="jump" href="#sk-power">ldo-vs-buck-which-to-use</a></td></tr>
       <tr><td>馬達一動 MCU 就重啟</td><td class="k"><a class="jump" href="#sk-tree">power-tree-design</a></td></tr>
       <tr><td>USB 插著電池還掉電</td><td class="k"><a class="jump" href="#sk-tree">power-tree-design</a></td></tr>
@@ -133,7 +138,7 @@
   </table>
 
   <!-- 2 四本 -->
-  <h2 id="skills">② 二十六本手冊</h2>
+  <h2 id="skills">② 二十八本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -225,6 +230,18 @@
       <p>量不到 µA 不是電表爛，是 burden voltage：Fluke 87V mA 檔 1.8mV/mA，500mA 峰值掉 1V → brownout。旁路開關 0 元、µCurrent 10µV/µA、電容積分 I=C·ΔV/Δt、暗電清單 9 條（LED／分壓／AMS1117 5mA／非 RTC 腳 hold 461µA）。</p>
       <div><span class="tag">burden voltage</span><span class="tag">µCurrent</span><span class="tag">C·dV/dt</span></div>
     </div>
+    <div class="card" id="sk-gating">
+      <div class="sub">POWER GATING</div>
+      <h3>peripheral-power-gating</h3>
+      <p>省電 90% 不是叫 MCU 睡，是把旁邊的東西斷電：MCU 睡 7µA，但 AMS1117 靜態 5mA（714 倍）、麥克風 sleep 12µA、MPU6050 idle 5µA。三種切法（GPIO 直供／P-MOS AO3401A 60mΩ@−4.5V／TPS22916 Iq 0.5µA・off 10nA・60mΩ）、back-powering 判斷法（斷電軌讀到 IO 電壓 −0.5〜0.7V 就是中了；TI 說 GPIO >0.3V 就可能反供）、順序口訣（斷電先關 IO 再切電）、ICS-43434 的 WS 被拉高偷 33µA。</p>
+      <div><span class="tag">P-MOS</span><span class="tag">back-powering</span><span class="tag">load switch</span></div>
+    </div>
+    <div class="card" id="sk-sleepmode">
+      <div class="sub">SLEEP MODES</div>
+      <h3>sleep-mode-selection</h3>
+      <p>選睡眠不是選最省，是選「省的電 &gt; 醒來的代價」：S3 light 240µA／deep 7µA（datasheet v2.2），但 deep 醒來要重跑開機＋連 WiFi（1–5s、80–240mA）。醒來 → wake stub 官方實測 2.657ms、麥克風起振 10.7ms。deep/light 交叉點：只醒 0.5s → 64 秒、含 WiFi → 472 秒、醒 5s → 1287 秒。貓項圈 53 天 → 131 天（醒 4s＋每 20 分鐘）。</p>
+      <div><span class="tag">duty cycle</span><span class="tag">wake cost</span><span class="tag">RTC_DATA_ATTR</span></div>
+    </div>
     <div class="card" id="sk-solder">
       <div class="sub">SOLDERING</div>
       <h3>soldering-joint-diagnosis</h3>
@@ -313,6 +330,9 @@
       <tr><td>電池壽命（準）</td><td class="k">t = 可用mAh ÷ I_avg　可用 ≈ 標稱×0.65</td></tr>
       <tr><td>每天消耗</td><td class="k">mAh/天 = mA × 秒 ÷ 3600 × 次數</td></tr>
       <tr><td>平均電流</td><td class="k">I_avg = 每天 mAh ÷ 24</td></tr>
+      <tr><td>平均電流（含睡眠）</td><td class="k">I_avg = (I_sleep·T_sleep + I_awake·T_awake) ÷ T</td></tr>
+      <tr><td>deep／light 交叉點</td><td class="k">T = 每次重開電荷 ÷ (240µA − 7µA)　（S3）</td></tr>
+      <tr><td>負載開關耗損</td><td class="k">P = I²·Rds(on)　（1A 過 60mΩ = 60mW）</td></tr>
       <tr><td>電容積分法量電流</td><td class="k">I = C·ΔV/Δt　（1000µF、100mV/60s → 1.67µA）</td></tr>
       <tr><td>電容撐住峰值</td><td class="k">ΔV = I·t/C　（100µF、20mA、1.5ms → 0.3V）</td></tr>
       <tr><td>LDO 損耗</td><td class="k">P = (Vin − Vout)·I</td></tr>
@@ -458,6 +478,13 @@
       <tr><td>thermal relief 參數</td><td class="k">spoke 0.2–0.5mm（訊號地 0.25–0.3、電源 0.38–0.5）；KiCad 預設 gap/spoke 0.5mm、最多 4 支 90°</td></tr>
       <tr><td>thermal 間隙下限</td><td class="k">別用 4 mil（0.1mm）＝蝕刻極限；用 8–10 mil</td></tr>
       <tr><td>大銅面手焊</td><td class="k">預熱 100–150°C、無鉛 371–400°C、大頭＋助焊劑、5 秒不熔就停</td></tr>
+      <tr><td>ESP32-S3 睡眠（v2.2）</td><td class="k">light <b>240µA</b>／deep <b>7µA</b>／ULP-FSM 170µA／ULP-RISC-V 190µA／RTC only 7µA、periph 8µA</td></tr>
+      <tr><td>ESP32-C3 睡眠</td><td class="k">light 130µA／deep <b>5µA</b>（Espressif Techpedia）</td></tr>
+      <tr><td>醒來要多久</td><td class="k">→ wake stub <b>2.657ms</b>（Espressif 實測；另一例 12.734ms 含初始化）；麥克風 ICS-43434 <b>10.7ms</b>；SPH0645 ≤50ms</td></tr>
+      <tr><td>負載開關規格</td><td class="k">TPS22916：ON 0.5µA／OFF <b>10nA</b>／60mΩ@5V；AO3401A：60mΩ@−4.5V、85mΩ@−2.5V、Vth −0.5〜−1.3V</td></tr>
+      <tr><td>back-powering 判斷</td><td class="k">斷電軌 ≈ IO 電壓 −0.5〜0.7V（一個二極體壓降）＝中了；TI SLAAG89B：GPIO &gt;0.3V 就可能反向供電</td></tr>
+      <tr><td>沒在用時的耗電</td><td class="k">AMS1117 5mA／LED 1.5mA／MPU6050 5µA／ICS-43434 12µA／SPH0645 3µA／SD idle 0.1–2mA</td></tr>
+      <tr><td>貓項圈續航階梯</td><td class="k">醒5s/10分 <b>53天</b> → 醒4s/10分 67天 → 醒5s/20分 105天 → 兩者都做 <b>131天</b>（1000mAh×0.65）</td></tr>
     </tbody>
   </table>
 
@@ -478,7 +505,12 @@ cd ~/products/text2part
 
 # 電池續航試算（每天 mAh → 天數，含打折與 LED 佔比）
 cd ~/.hermes/profiles/wechat/skills/engineering/battery-life-budget/scripts
-python3 battery_budget.py --capacity 1000 --demo</code></pre>
+python3 battery_budget.py --capacity 1000 --demo
+
+# 睡眠策略：平均電流、續航、deep/light 交叉點
+cd ~/.hermes/profiles/wechat/skills/engineering/sleep-mode-selection/scripts
+python3 sleep_budget.py --period 600 --awake-s 5 --awake-ma 60
+python3 sleep_budget.py --period 60 --awake-s 1 --wifi-s 1 --wifi-ma 80</code></pre>
   <p class="hint">實測：<code>PI 無抗飽和 → 超調 23.7%</code>　<code>加上抗飽和 → 3.2%</code>（目標 150 rad/s、電流上限 2A、取樣 1 ms）</p>
 
   <!-- 6 書 -->
@@ -498,7 +530,7 @@ python3 battery_budget.py --capacity 1000 --demo</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-12 · 二十六本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-13 · 二十八本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

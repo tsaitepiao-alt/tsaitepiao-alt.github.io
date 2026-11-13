@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 二十八本手冊 · 速查索引</title>
+<title>電子／機電 三十本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -55,8 +55,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-12</div>
-  <h1>電子電路與機電：二十八本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-14</div>
+  <h1>電子電路與機電：三十本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -134,11 +134,19 @@
       <tr><td>大銅箔焊不上去、錫怎麼都不熔</td><td class="k"><a class="jump" href="#sk-thermal">pcb-thermal-relief-and-copper</a></td></tr>
       <tr><td>要不要開 thermal relief、開了又難焊</td><td class="k"><a class="jump" href="#sk-thermal">pcb-thermal-relief-and-copper</a></td></tr>
       <tr><td>QFN 散熱墊要幾顆 via、鋪銅要多大</td><td class="k"><a class="jump" href="#sk-thermal">pcb-thermal-relief-and-copper</a></td></tr>
+      <tr><td>修東西要判斷這條軌是不是短路</td><td class="k"><a class="jump" href="#sk-meter">multimeter-how-to-measure</a></td></tr>
+      <tr><td>紅黑線插哪、怕插錯燒掉電表</td><td class="k"><a class="jump" href="#sk-meter">multimeter-how-to-measure</a></td></tr>
+      <tr><td>量到負電阻／0Ω／跳成 MΩ</td><td class="k"><a class="jump" href="#sk-meter">multimeter-how-to-measure</a></td></tr>
+      <tr><td>板子不亮，不知道從哪開始量</td><td class="k"><a class="jump" href="#sk-meter">multimeter-how-to-measure</a></td></tr>
+      <tr><td>測試點要留多大、能不能用 via</td><td class="k"><a class="jump" href="#sk-testpoint">production-test-points</a></td></tr>
+      <tr><td>30 台要怎麼一台一台驗、要不要抽樣</td><td class="k"><a class="jump" href="#sk-testpoint">production-test-points</a></td></tr>
+      <tr><td>要自己做 pogo 治具／bed-of-nails</td><td class="k"><a class="jump" href="#sk-testpoint">production-test-points</a></td></tr>
+      <tr><td>客人回報壞掉，查不到出廠數據</td><td class="k"><a class="jump" href="#sk-testpoint">production-test-points</a></td></tr>
     </tbody>
   </table>
 
   <!-- 2 四本 -->
-  <h2 id="skills">② 二十八本手冊</h2>
+  <h2 id="skills">② 三十本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -308,6 +316,18 @@
       <p>銅是散熱器（導熱是 FR4 的 1400 倍）：焊盤接上大片銅，350°C 烙鐵也熔不了錫 → 手焊要 <b>thermal relief</b>（4 支 0.3–0.5mm 橋，間隙別用 4 mil 蝕刻極限）。反過來電源與散熱墊要 solid＋via 陣列。2W 焊盤：裸 FR4 <b>90°C</b>、有地平面 <b>45°C</b>、再加 2 顆 via 只降 1°C；散熱 3×3 via ≈35°C/W、5×5 ≈14°C/W；1 in² 1 oz 銅 ≈53~125°C/W。</p>
       <div><span class="tag">thermal relief</span><span class="tag">散熱 via</span><span class="tag">立碑</span></div>
     </div>
+    <div class="card" id="sk-meter">
+      <div class="sub">MEASUREMENT</div>
+      <h3>multimeter-how-to-measure</h3>
+      <p>電表不是在「看」電，是在電路裡塞東西：電壓<b>並聯</b>（10MΩ，480V 只抽 48nA）、電流<b>串聯</b>（mA 檔 1.8mV/mA、<b>µA 檔等於串 100Ω</b>、10A 端子 0.01Ω）、電阻<b>必須斷電</b>（歐姆檔自己送 2.8〜7.3V，EEVblog 實測 → 超過 0.6V 就把板上二極體打開，才是在電路中量不準的真正原因）。找短路 SOP（&lt;10Ω 判定；3.3V/5Ω ＝ 2.2W 摸得到燙）、看到<b>負電阻就是量錯</b>、十個常見錯誤、30 秒檢查表。</p>
+      <div><span class="tag">burden voltage</span><span class="tag">找短路</span><span class="tag">CAT 等級</span></div>
+    </div>
+    <div class="card" id="sk-testpoint">
+      <div class="sub">PRODUCTION TEST</div>
+      <h3>production-test-points</h3>
+      <p>量產不是「焊得出來」，是「每片都量過」：測試點 pad 訊號 <b>≥0.8mm</b>（建議 1.0〜1.27）、電源/地 1.5〜2.0、間距 2.54、離板邊 3.2〜3.8；<b>via 與 SMT 焊盤不可當測試點</b>、表面用 ENIG 別用 HASL、座標要鎖。三層（ICT → 燒錄序號 → FCT）、30 台 100% 測只要 <b>1 小時</b>、抽 5 台全過機率 <b>85.9%</b>、pogo 治具 NT$1,740（每台攤 58）、FAI 只證明「照文件做出來」不保證整批（PCBCart 2025）。</p>
+      <div><span class="tag">pogo pin</span><span class="tag">100% FCT</span><span class="tag">FAI</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -384,6 +404,10 @@
       <tr><td>ADC 取樣建立</td><td class="k">t_ACQ ≥ k·τ　τ=Rth·C_sample；12-bit k≈9（TI 用 11 留餘裕）</td></tr>
       <tr><td>偏壓電流造成的誤差</td><td class="k">V_err = Ib × Rsource　250nA×1MΩ = 250mV</td></tr>
       <tr><td>op-amp 可用頻寬</td><td class="k">f = GBW / 增益　1MHz/11 = 91kHz</td></tr>
+      <tr><td>電表 burden 壓降</td><td class="k">V_drop = I × 1.8mV/mA（mA 檔）／µA 檔 ×100mV/mA　500mA → 0.9V</td></tr>
+      <tr><td>短路在故障點的瓦數</td><td class="k">P = I²·R_short　3.3V/5Ω → 0.66A → 2.2W（集中在一個點）</td></tr>
+      <tr><td>抽樣全過機率</td><td class="k">P = (1−p)^n　p=3%、n=5 → 85.9%（等於白抽）</td></tr>
+      <tr><td>治具攤提</td><td class="k">(探針數×單價 + 加工) ÷ 台數　12×45+1200 → 30 台 = 58/台</td></tr>
     </tbody>
   </table>
 
@@ -485,6 +509,17 @@
       <tr><td>back-powering 判斷</td><td class="k">斷電軌 ≈ IO 電壓 −0.5〜0.7V（一個二極體壓降）＝中了；TI SLAAG89B：GPIO &gt;0.3V 就可能反向供電</td></tr>
       <tr><td>沒在用時的耗電</td><td class="k">AMS1117 5mA／LED 1.5mA／MPU6050 5µA／ICS-43434 12µA／SPH0645 3µA／SD idle 0.1–2mA</td></tr>
       <tr><td>貓項圈續航階梯</td><td class="k">醒5s/10分 <b>53天</b> → 醒4s/10分 67天 → 醒5s/20分 105天 → 兩者都做 <b>131天</b>（1000mAh×0.65）</td></tr>
+      <tr><td>歐姆檔自己送多少電壓</td><td class="k">同一台 Fluke 各檔位 <b>2.8／7.3／3.5／5.6V</b>（EEVblog 1622, 2024）→ 半導體 0.6V 就通</td></tr>
+      <tr><td>87V 各檔內阻</td><td class="k">V 10MΩ／mA 1.8mV/mA（1.8Ω）／µA 100µV/µA（<b>100Ω</b>）／10A 0.03V/A（30mΩ；Fluke 應用書 0.01Ω）</td></tr>
+      <tr><td>二極體檔</td><td class="k">87V 3.000V 檔、解析 1mV；矽 0.6〜0.7V／蕭特基 0.2〜0.4／紅光 LED 1.8〜2.0</td></tr>
+      <tr><td>電表準確度（87V）</td><td class="k">DCV ±(0.05%+1)／R ±(0.2%+1)／6000 counts（高解析 19,999）</td></tr>
+      <tr><td>CAT 等級測什麼</td><td class="k">CAT II 600V 擋 4000V/12Ω；CAT III 600V 擋 <b>6000V/2Ω</b>（IEC 61010-1）</td></tr>
+      <tr><td>測試點 pad</td><td class="k">訊號 <b>0.8mm 最小／1.0–1.27 建議</b>；電源地 1.5–2.0；間距 2.54；離板邊 3.2–3.8（JLCPCB 2025）</td></tr>
+      <tr><td>測試點禁區</td><td class="k">不用 via、不打 SMT 焊盤、不印錫膏、表面 ENIG（HASL 凸起會滑針）</td></tr>
+      <tr><td>pogo pin 規格</td><td class="k">1–3A／58–200gf／行程 1.83–6.0mm／&lt;20–185mΩ／3,000–200,000 次（Promax 2025）</td></tr>
+      <tr><td>每支探針載流</td><td class="k">≈<b>2A</b>（要 4A 就打兩對；GND 每 5 顆 IC 一個）</td></tr>
+      <tr><td>該不該全測</td><td class="k">50–200 台做 100% FCT 仍划算；200–500 台才轉 AQL 0.65（huaxingpcba 2025）</td></tr>
+      <tr><td>貓項圈測試工時</td><td class="k">每台 125 秒（探針20＋燒錄15＋功能60＋外觀30）→ 30 台 ≈1 小時</td></tr>
     </tbody>
   </table>
 
@@ -510,7 +545,17 @@ python3 battery_budget.py --capacity 1000 --demo
 # 睡眠策略：平均電流、續航、deep/light 交叉點
 cd ~/.hermes/profiles/wechat/skills/engineering/sleep-mode-selection/scripts
 python3 sleep_budget.py --period 600 --awake-s 5 --awake-ma 60
-python3 sleep_budget.py --period 60 --awake-s 1 --wifi-s 1 --wifi-ma 80</code></pre>
+python3 sleep_budget.py --period 60 --awake-s 1 --wifi-s 1 --wifi-ma 80
+
+# 電表：burden 壓降（會不會 brownout）、短路瓦數（摸不摸得到燙）
+cd ~/.hermes/profiles/wechat/skills/engineering/multimeter-how-to-measure/scripts
+python3 meter_calc.py burden --range mA --current 500 --rail 3.3
+python3 meter_calc.py short --rail 3.3 --ohm 5 --limit 1.0
+
+# 量產：治具攤提、抽樣抓不到的機率
+cd ~/.hermes/profiles/wechat/skills/engineering/production-test-points/scripts
+python3 fixture_cost.py --probes 12 --probe-price 45 --fab 1200 --units 30
+python3 fixture_cost.py --defect 0.03 --sample 5</code></pre>
   <p class="hint">實測：<code>PI 無抗飽和 → 超調 23.7%</code>　<code>加上抗飽和 → 3.2%</code>（目標 150 rad/s、電流上限 2A、取樣 1 ms）</p>
 
   <!-- 6 書 -->
@@ -530,7 +575,7 @@ python3 sleep_budget.py --period 60 --awake-s 1 --wifi-s 1 --wifi-ma 80</code></
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-13 · 二十八本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-14 · 三十本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

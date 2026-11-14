@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 三十本手冊 · 速查索引</title>
+<title>電子／機電 三十一本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -56,7 +56,7 @@
 <body>
 <div class="wrap">
   <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-14</div>
-  <h1>電子電路與機電：三十本手冊</h1>
+  <h1>電子電路與機電：三十一本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -70,7 +70,8 @@
       <tr><td>電路不動、量到怪電壓</td><td class="k"><a class="jump" href="#sk-analog">electronics-fundamentals</a></td></tr>
       <tr><td>3.3V 接 5V 會不會壞</td><td class="k"><a class="jump" href="#sk-analog">electronics-fundamentals</a></td></tr>
       <tr><td>I²C 掃不到、偶爾成功、卡死</td><td class="k"><a class="jump" href="#sk-i2c">i2c-basics-and-bus-debug</a></td></tr>
-      <tr><td>上拉電阻要 1k／2.2k／4.7k／10k</td><td class="k"><a class="jump" href="#sk-i2c">i2c-basics-and-bus-debug</a></td></tr>
+      <tr><td>上拉／下拉要多大、為什麼非有不可</td><td class="k"><a class="jump" href="#sk-pullup">pull-up-resistor-why</a></td></tr>
+      <tr><td>沒用到的腳可以放著不管嗎（floating）</td><td class="k"><a class="jump" href="#sk-pullup">pull-up-resistor-why</a></td></tr>
       <tr><td>加速度計算活動量／步數／姿態</td><td class="k"><a class="jump" href="#sk-imu">imu-activity-from-accel</a></td></tr>
       <tr><td>想用 IMU 量心跳、呼吸</td><td class="k"><a class="jump" href="#sk-imu">imu-activity-from-accel</a></td></tr>
       <tr><td>馬達要選哪一顆、夠不夠力</td><td class="k"><a class="jump" href="#sk-motor">motor-selection</a></td></tr>
@@ -146,7 +147,7 @@
   </table>
 
   <!-- 2 四本 -->
-  <h2 id="skills">② 三十本手冊</h2>
+  <h2 id="skills">② 三十一本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -322,6 +323,12 @@
       <p>電表不是在「看」電，是在電路裡塞東西：電壓<b>並聯</b>（10MΩ，480V 只抽 48nA）、電流<b>串聯</b>（mA 檔 1.8mV/mA、<b>µA 檔等於串 100Ω</b>、10A 端子 0.01Ω）、電阻<b>必須斷電</b>（歐姆檔自己送 2.8〜7.3V，EEVblog 實測 → 超過 0.6V 就把板上二極體打開，才是在電路中量不準的真正原因）。找短路 SOP（&lt;10Ω 判定；3.3V/5Ω ＝ 2.2W 摸得到燙）、看到<b>負電阻就是量錯</b>、十個常見錯誤、30 秒檢查表。</p>
       <div><span class="tag">burden voltage</span><span class="tag">找短路</span><span class="tag">CAT 等級</span></div>
     </div>
+    <div class="card" id="sk-pullup">
+      <div class="sub">BASICS</div>
+      <h3>pull-up-resistor-why</h3>
+      <p>晶片只會<b>拉低</b>、不會<b>推高</b>（開汲極）：上拉電阻就是那根把線灌回 1 的細水管。沒有它，線浮在 1.0~2.3V 之間誰都不知道（&lt;30%／&gt;70% VDD 才算 0／1）。ESP32 內建約 <b>45kΩ</b> 太弱 — 100pF 要 3.8µs，規範只給 300ns。Rp 下限 (VDD−0.4)/3mA = <b>967Ω</b>、上限 tr/(0.8473·Cb)：200pF → 1.5~1.7k，400pF 上限 885Ω <b>比下限還小，根本跑不到 400kHz</b>。未用的控制腳（EN／SEL／ADDR）不可懸空，NC 腳與未用訊號腳可以（TI）。</p>
+      <div><span class="tag">open-drain</span><span class="tag">floating pin</span><span class="tag">Rp min/max</span></div>
+    </div>
     <div class="card" id="sk-testpoint">
       <div class="sub">PRODUCTION TEST</div>
       <h3>production-test-points</h3>
@@ -359,6 +366,7 @@
       <tr><td>LDO 效率</td><td class="k">η = Vout / Vin（小負載改 ÷(Vin·(I+Iq))）</td></tr>
       <tr><td>I²C Rp 上限</td><td class="k">Rp(max) = tr / (0.8473·Cb)</td></tr>
       <tr><td>I²C Rp 下限</td><td class="k">Rp(min) = (VDD − 0.4) / IOL</td></tr>
+      <tr><td>I²C 上升時間</td><td class="k">tr = 0.8473·Rp·Cb　（2.2k × 100pF = 186ns）</td></tr>
       <tr><td>馬達功率</td><td class="k">P = T·ω　ω = 2πn/60</td></tr>
       <tr><td>轉矩常數</td><td class="k">T = Kt·I　E = Ke·ω</td></tr>
       <tr><td>BLDC 常數</td><td class="k">Kt[N·m/A] ≈ 9.5493 / KV[rpm/V]</td></tr>
@@ -520,6 +528,11 @@
       <tr><td>每支探針載流</td><td class="k">≈<b>2A</b>（要 4A 就打兩對；GND 每 5 顆 IC 一個）</td></tr>
       <tr><td>該不該全測</td><td class="k">50–200 台做 100% FCT 仍划算；200–500 台才轉 AQL 0.65（huaxingpcba 2025）</td></tr>
       <tr><td>貓項圈測試工時</td><td class="k">每台 125 秒（探針20＋燒錄15＋功能60＋外觀30）→ 30 台 ≈1 小時</td></tr>
+      <tr><td>ESP32 內建上拉</td><td class="k">≈<b>45kΩ</b>（I²C 教學 2026）→ 100pF 線上升 3.8µs，規範 300ns（慢 12 倍）</td></tr>
+      <tr><td>數位腳 0/1 門檻</td><td class="k">&lt;30% VDD = 0／&gt;70% = 1；3.3V → &lt;1.0V／&gt;2.3V，中間是 floating 沒人知道</td></tr>
+      <tr><td>I²C 上拉可用範圍</td><td class="k">下限 967Ω（3.3V/3mA）；上限 50pF 7.1k／100pF 3.5k／200pF 1.77k／400pF <b>885Ω — 低於下限，跑不到 400kHz</b></td></tr>
+      <tr><td>原廠建議上拉</td><td class="k">Infineon EZI2C（Cb&lt;200pF）：Std 4.7k／Fast 1.74k／Fast+ 620Ω</td></tr>
+      <tr><td>貓用項圈重量預算</td><td class="k">業界通則 ≤ 體重 <b>3~5%</b>（非獸醫標準）；8 磅貓 ≈36g；實務抓 30g 以下；現有最輕有 GPS <b>17.6g</b>（Pawfit Lite 2026）</td></tr>
     </tbody>
   </table>
 
@@ -575,7 +588,7 @@ python3 fixture_cost.py --defect 0.03 --sample 5</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-14 · 三十本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-15 · 三十一本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 三十三本手冊 · 速查索引</title>
+<title>電子／機電 三十五本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -58,8 +58,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-14</div>
-  <h1>電子電路與機電：三十三本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-17</div>
+  <h1>電子電路與機電：三十五本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -156,11 +156,21 @@
       <tr><td>30 台要怎麼一台一台驗、要不要抽樣</td><td class="k"><a class="jump" href="#sk-testpoint">production-test-points</a></td></tr>
       <tr><td>要自己做 pogo 治具／bed-of-nails</td><td class="k"><a class="jump" href="#sk-testpoint">production-test-points</a></td></tr>
       <tr><td>客人回報壞掉，查不到出廠數據</td><td class="k"><a class="jump" href="#sk-testpoint">production-test-points</a></td></tr>
+      <tr><td>溫度讀值不對、一直偏高 0.3~0.7°C</td><td class="k"><a class="jump" href="#sk-temp">temperature-sensing-ntc</a></td></tr>
+      <tr><td>NTC 要配幾歐姆、B 值 3435 還是 3950</td><td class="k"><a class="jump" href="#sk-temp">temperature-sensing-ntc</a></td></tr>
+      <tr><td>充電 IC 的 TS／TEMP 腳要接什麼</td><td class="k"><a class="jump" href="#sk-temp">temperature-sensing-ntc</a></td></tr>
+      <tr><td>夏天電池充不進去、充電燈一直亮</td><td class="k"><a class="jump" href="#sk-temp">temperature-sensing-ntc</a></td></tr>
+      <tr><td>DS18B20 / TMP117 / NTC 選哪個</td><td class="k"><a class="jump" href="#sk-temp">temperature-sensing-ntc</a></td></tr>
+      <tr><td>貓在做什麼、行為辨識怎麼做</td><td class="k"><a class="jump" href="#sk-behavior">cat-behavior-classification</a></td></tr>
+      <tr><td>論文寫 98.9%，我做得出來嗎</td><td class="k"><a class="jump" href="#sk-behavior">cat-behavior-classification</a></td></tr>
+      <tr><td>行為分類要分幾類、epoch 多長</td><td class="k"><a class="jump" href="#sk-behavior">cat-behavior-classification</a></td></tr>
+      <tr><td>貓叫情緒／翻譯貓語可不可行</td><td class="k"><a class="jump" href="#sk-behavior">cat-behavior-classification</a></td></tr>
+      <tr><td>模型很準但換一隻貓就爛掉</td><td class="k"><a class="jump" href="#sk-behavior">cat-behavior-classification</a></td></tr>
     </tbody>
   </table>
 
-  <!-- 2 三十三本 -->
-  <h2 id="skills">② 三十三本手冊</h2>
+  <!-- 2 三十五本 -->
+  <h2 id="skills">② 三十五本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -360,6 +370,18 @@
       <p>升壓是<b>水錘</b>：電感憋住再放，用反彈的電壓尖峰疊上去。公式只有三條：<b>D = 1 − Vin/Vout</b>、<b>Iin ≈ Vout·Iout/(η·Vin)</b>、<b>ΔV = Iout·D/(f·C)</b>。3.7V→5V @0.5A 要從電池抽 <b>0.79A（1.6C）</b>，500mAh 撐不到 30 分鐘。三個致命點：輸入比輸出高會<b>直通</b>、輸出短路等於<b>燒輸入</b>（二極體沒有斷路）、<b>沒有 EN 腳就永遠關不掉</b>。MT3608 標 2A，實際 1A 內才舒服。</p>
       <div><span class="tag">D = 1−Vin/Vout</span><span class="tag">buck-boost</span><span class="tag">MT3608</span><span class="tag">inrush</span></div>
     </div>
+    <div class="card" id="sk-temp">
+      <div class="sub">SENSOR / TEMPERATURE</div>
+      <h3>temperature-sensing-ntc</h3>
+      <p>NTC 是<b>越熱電阻越小的電阻</b>，不是溫度計：你量的是分壓，溫度靠公式反推。10k B3950＋10k、3.3V 的實算：25°C 輸出 <b>1650mV</b>、斜率 <b>−37mV/°C</b>、12-bit 只要 0.022°C/LSB，但 165µA 會讓它自熱 <b>+0.27°C</b>；加上 1% 容差，現實精度是 <b>±0.5~0.7°C 且一直偏高</b>。TP4056 的 TEMP 腳比 45%／80% Vcc，配 10k/10k 等於<b>只准 −7~+30°C 充電</b> —— 台灣夏天下午就充不進去。項圈量體溫不可行，量環境溫濕度（SHT40）才誠實。</p>
+      <div><span class="tag">Beta 公式</span><span class="tag">自熱</span><span class="tag">DS18B20</span><span class="tag">TP4056 TEMP</span><span class="tag">SHT40</span></div>
+    </div>
+    <div class="card" id="sk-behavior">
+      <div class="sub">SENSOR / BEHAVIOUR</div>
+      <h3>cat-behavior-classification</h3>
+      <p>準確率不是模型的功勞，是<b>類別數 × 同不同批貓 × 掛法</b>決定的：同一批 10 隻貓、5 類、100Hz 的 1D-CNN 有 <b>98.96%</b>（Sensors 2024），換成 15 類、要推廣到新貓，隨機森林只有 <b>70~83%</b>（Sensors 2023，同一批資料類別從 15→7→4，準確率 0.70→0.739→0.83）。爬高／挖砂／互舔的 true positive 是 <b>0</b>，抓癢永遠被判成理毛。貓叫 10 類情緒只有 <b>58~64%</b>，合併 3 類才 76% → 產品講行為趨勢，不講翻譯。</p>
+      <div><span class="tag">1D-CNN 98.9% 的真相</span><span class="tag">跨貓驗證</span><span class="tag">epoch</span><span class="tag">混淆矩陣</span><span class="tag">貓叫 76%</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -448,6 +470,15 @@
       <tr><td>短路在故障點的瓦數</td><td class="k">P = I²·R_short　3.3V/5Ω → 0.66A → 2.2W（集中在一個點）</td></tr>
       <tr><td>抽樣全過機率</td><td class="k">P = (1−p)^n　p=3%、n=5 → 85.9%（等於白抽）</td></tr>
       <tr><td>治具攤提</td><td class="k">(探針數×單價 + 加工) ÷ 台數　12×45+1200 → 30 台 = 58/台</td></tr>
+      <tr><td>NTC 電阻→溫度（Beta）</td><td class="k">T = 1 / (1/T25 + ln(R/R25)/B) − 273.15　T25=298.15K、10k B3950</td></tr>
+      <tr><td>NTC 溫度→電阻</td><td class="k">R = R25 · e^(B(1/T − 1/T25))　用這條反推分壓表，不要手算</td></tr>
+      <tr><td>分壓反推 NTC</td><td class="k">R_ntc = R_fix · V / (Vcc − V)　V 是 ADC 量到的中間電壓</td></tr>
+      <tr><td>NTC 自熱</td><td class="k">ΔT = I²·R ÷ δth　δth≈1mW/K（0603）→ 165µA/10k = 272µW = <b>+0.27°C</b></td></tr>
+      <tr><td>固定電阻怎麼挑</td><td class="k">R_fix ≈ NTC 在「最關心的溫度」的阻值：25°C→10k、38°C→6.5k、60°C→3.6k</td></tr>
+      <tr><td>NTC→ADC 斜率</td><td class="k">10k/10k、3.3V：25°C 附近 <b>−37mV/°C</b>，兩端變鈍（0°C −32、50°C −26）</td></tr>
+      <tr><td>充電溫度門檻（TP4056）</td><td class="k">VTEMP &lt; 45% 或 &gt; 80% Vcc 停充；R_ntc = ratio·R_fix/(1−ratio)　10k/10k → <b>−7~+30°C</b></td></tr>
+      <tr><td>行為分類 baseline</td><td class="k">全猜最多數類的準確率 = 該類佔比　「睡」佔 28~53% → 先打敗這個才算有做事</td></tr>
+      <tr><td>準確率的兩個乘數</td><td class="k">同批貓訓練/測試虛胖 <b>10~20 個百分點</b>；類別 4→15 類掉 <b>13 個百分點</b>（Smit 2023）</td></tr>
     </tbody>
   </table>
 
@@ -576,6 +607,15 @@
       <tr><td>Boost 3.7V→5V @0.5A</td><td class="k">輸入 <b>0.79A</b> ＝ 500mAh 電池的 <b>1.6C</b>；撐不到 30 分鐘</td></tr>
       <tr><td>MT3608 實話</td><td class="k">標 2A，實際 <b>1A 內</b>；1.2MHz、Vfb 0.6V、<b>沒有 EN 腳</b>（永遠關不掉）</td></tr>
       <tr><td>Boost 何時別用</td><td class="k">D &gt; 80%、Vin 會跨過 Vout（要 buck-boost）、要能完全斷電</td></tr>
+      <tr><td>NTC 10k/10k 分壓（3.3V）</td><td class="k">25°C <b>1650mV</b>／0°C 2544mV／50°C 871mV；斜率 <b>−37mV/°C</b>；165µA、自熱 <b>+0.27°C</b></td></tr>
+      <tr><td>NTC 現實精度</td><td class="k">1% 料：電阻容差 ±0.23°C＋B 值容差 ±0.16°C@40°C＋自熱 0.27°C → <b>±0.5~0.7°C、單向偏高</b></td></tr>
+      <tr><td>NTC 電流上限</td><td class="k">Vishay：量測功率 ≤ 散熱係數 5%（&lt;0.05°C）；TDK 1.0×0.5mm 容許 <b>0.03~0.21mA</b></td></tr>
+      <tr><td>TP4056 充電溫度窗</td><td class="k">10k 固定＋10k NTC：B3435 → <b>−7.0~+30.3°C</b>；B3950 → −3.2~+29.6°C（本機實算）</td></tr>
+      <tr><td>溫度感測器選擇</td><td class="k">NTC ±0.5~0.7°C／DS18B20 ±0.5°C（−10~85）／TMP117 ±0.1°C（−20~50）／SHT40 ±0.2°C＋±1.8%RH</td></tr>
+      <tr><td>貓體溫</td><td class="k"><b>38.1~39.2°C</b>（100.5~102.5°F，Merck）— 項圈量不到核心體溫，量環境溫濕度</td></tr>
+      <tr><td>貓行為辨識準確率</td><td class="k">5 類 100Hz 1D-CNN <b>98.96%</b>（Sensors 2024）；15 類 RF <b>70%</b>、4 類 83%（Sensors 2023）</td></tr>
+      <tr><td>貓叫情緒分類</td><td class="k">10 類 <b>58~64%</b>；合併 3 類 <b>76%</b>；年齡 3 類 74%、2 類 95%（Sci Rep 2025）</td></tr>
+      <tr><td>行為資料量</td><td class="k">26Hz 原始 <b>13.5MB/天</b>；5 秒特徵 0.55MB/天；只傳 1 byte/5s = <b>16.9KB/天</b></td></tr>
     </tbody>
   </table>
 
@@ -611,7 +651,15 @@ python3 meter_calc.py short --rail 3.3 --ohm 5 --limit 1.0
 # 量產：治具攤提、抽樣抓不到的機率
 cd ~/.hermes/profiles/wechat/skills/engineering/production-test-points/scripts
 python3 fixture_cost.py --probes 12 --probe-price 45 --fab 1200 --units 30
-python3 fixture_cost.py --defect 0.03 --sample 5</code></pre>
+python3 fixture_cost.py --defect 0.03 --sample 5
+
+# 溫度感測：NTC 分壓表、自熱、容差、TP4056 溫度窗
+cd ~/.hermes/profiles/wechat/skills/engineering/temperature-sensing-ntc/scripts
+python3 ntc_calc.py
+
+# 貓行為：資料量、續航、標註工作量
+cd ~/.hermes/profiles/wechat/skills/engineering/cat-behavior-classification/scripts
+python3 data_budget.py</code></pre>
   <p class="hint">實測：<code>PI 無抗飽和 → 超調 23.7%</code>　<code>加上抗飽和 → 3.2%</code>（目標 150 rad/s、電流上限 2A、取樣 1 ms）</p>
 
   <!-- 6 書 -->
@@ -631,7 +679,7 @@ python3 fixture_cost.py --defect 0.03 --sample 5</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-16 · 三十三本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-17 · 三十五本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

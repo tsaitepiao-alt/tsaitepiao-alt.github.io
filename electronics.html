@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 三十五本手冊 · 速查索引</title>
+<title>電子／機電 三十七本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -58,8 +58,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-17</div>
-  <h1>電子電路與機電：三十五本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-18</div>
+  <h1>電子電路與機電：三十七本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -92,6 +92,12 @@
       <tr><td>RC 濾波截止頻率怎麼算、訊號被吃掉</td><td class="k"><a class="jump" href="#sk-rc">rc-filter-cutoff</a></td></tr>
       <tr><td>取樣率要多少、波形看起來怪（混疊）</td><td class="k"><a class="jump" href="#sk-adc">adc-sampling-and-aliasing</a></td></tr>
       <tr><td>要把聲音變成模型看得懂的數字（MFCC）</td><td class="k"><a class="jump" href="#sk-mfcc">audio-features-mfcc</a></td></tr>
+      <tr><td>按一下跳好幾下、比較器輸出亂抖（chatter）</td><td class="k"><a class="jump" href="#sk-schmitt">schmitt-trigger-hysteresis</a></td></tr>
+      <tr><td>計數器多算、光遮斷器邊緣毛毛的</td><td class="k"><a class="jump" href="#sk-schmitt">schmitt-trigger-hysteresis</a></td></tr>
+      <tr><td>低電量通知在門檻附近一直跳</td><td class="k"><a class="jump" href="#sk-schmitt">schmitt-trigger-hysteresis</a></td></tr>
+      <tr><td>想知道訊號裡有什麼頻率（呼嚕／異音／漣波）</td><td class="k"><a class="jump" href="#sk-fft">fft-spectrum-basics</a></td></tr>
+      <tr><td>頻譜一團糊、旁邊長出一片草原</td><td class="k"><a class="jump" href="#sk-fft">fft-spectrum-basics</a></td></tr>
+      <tr><td>FFT 該取幾個點、要不要加窗</td><td class="k"><a class="jump" href="#sk-fft">fft-spectrum-basics</a></td></tr>
       <tr><td>電量顯示亂跳、重開機就變少</td><td class="k"><a class="jump" href="#sk-soc">battery-soc-estimation</a></td></tr>
       <tr><td>剩 30% 就關機、或 60% 卻一下沒電</td><td class="k"><a class="jump" href="#sk-soc">battery-soc-estimation</a></td></tr>
       <tr><td>要做電量百分比、選電量計 IC</td><td class="k"><a class="jump" href="#sk-soc">battery-soc-estimation</a></td></tr>
@@ -169,8 +175,8 @@
     </tbody>
   </table>
 
-  <!-- 2 三十五本 -->
-  <h2 id="skills">② 三十五本手冊</h2>
+  <!-- 2 三十七本 -->
+  <h2 id="skills">② 三十七本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -231,6 +237,18 @@
       <h3>audio-features-mfcc</h3>
       <p>聲音怎麼變 13 個數字：32ms/10ms 切框、Hamming 旁瓣 -42.7dB、mel 刻度、為什麼丟 c0、5 個驗證法（1kHz→bin 32）、9 個常見錯誤。</p>
       <div><span class="tag">FFT 512</span><span class="tag">26 mel</span><span class="tag">librosa 對照</span></div>
+    </div>
+    <div class="card" id="sk-schmitt">
+      <div class="sub">COMPARATOR</div>
+      <h3>schmitt-trigger-hysteresis</h3>
+      <p>比較器只有<b>一個門檻</b>，雜訊把訊號在門檻附近推來推去，輸出就抖成一片（chatter）；史密特給<b>兩個門檻</b>，中間那段是死區。SN74HC14 @4.5V 遲滯是 <b>0.4~2.1V</b>（不是精準值），而比較器內建的只有 <b>1.2mV（TLV3202）／6mV（TLV3501）</b>——等於沒有，所以幾乎都要自己加正回饋。實算：R1=10k、R2=47k 得 702mV 遲滯，R2=1M 只剩 33mV；<b>R1=R2 會把門檻推到 0V／Vcc</b>（最常見的錯）。</p>
+      <div><span class="tag">chatter</span><span class="tag">VT+ / VT−</span><span class="tag">軟體遲滯</span></div>
+    </div>
+    <div class="card" id="sk-fft">
+      <div class="sub">SPECTRUM</div>
+      <h3>fft-spectrum-basics</h3>
+      <p>FFT 是「時間軸 → 成分表」。三個數字互相綁死：<b>解析度 = fs/N</b>、<b>窗長 = N/fs</b>、<b>最高 = fs/2</b>，只能挑兩個。貓叫 F0 約 <b>525Hz</b>（AABS 2024），16k/1024 有 33 格很夠；但貓呼嚕 <b>只有 21~27Hz</b>，16k/1024 的 25Hz 只落在 <b>第 1.6 格</b>→ 直接看不到，要降到 1kHz 取樣。ESP32-S3 跑 1024 點 FFT：float <b>97,847 cycles（0.41ms）</b>、16-bit 定點 15,623 cycles——CPU 從來不是瓶頸，參數才是。</p>
+      <div><span class="tag">洩漏 leakage</span><span class="tag">Hamming</span><span class="tag">esp-dsp</span></div>
     </div>
     <div class="card" id="sk-tree">
       <div class="sub">POWER TREE</div>
@@ -398,6 +416,10 @@
       <tr><td>Nyquist</td><td class="k">fs &gt; 2·fmax</td></tr>
       <tr><td>混疊</td><td class="k">f_alias = |f_in − n·fs|（落在 0~fs/2）</td></tr>
       <tr><td>FFT 頻率解析</td><td class="k">Δf = fs / N（16k/512 = 31.25Hz）</td></tr>
+      <tr><td>FFT 窗長</td><td class="k">T = N / fs（16k/1024 = 64ms）；窗內至少 5 個週期才量得到</td></tr>
+      <tr><td>史密特門檻（非反相）</td><td class="k">VT+ = Vref·(R1+R2)/R2　VT− = VT+ − Vcc·R1/R2</td></tr>
+      <tr><td>遲滯</td><td class="k">ΔVT = Vcc·R1/R2　→ 要小遲滯，R2 ≫ R1</td></tr>
+      <tr><td>軟體遲滯</td><td class="k">觸發 = 門檻+N、解除 = 門檻−N（12-bit 3.3V → 1LSB = 0.806mV）</td></tr>
       <tr><td>感抗／容抗</td><td class="k">XL = 2πfL　XC = 1/(2πfC)</td></tr>
       <tr><td>LC 諧振</td><td class="k">f0 = 1/(2π√(LC))</td></tr>
       <tr><td>電池壽命（粗估）</td><td class="k">t = C[Ah]·0.8 / I[A]</td></tr>
@@ -616,6 +638,14 @@
       <tr><td>貓行為辨識準確率</td><td class="k">5 類 100Hz 1D-CNN <b>98.96%</b>（Sensors 2024）；15 類 RF <b>70%</b>、4 類 83%（Sensors 2023）</td></tr>
       <tr><td>貓叫情緒分類</td><td class="k">10 類 <b>58~64%</b>；合併 3 類 <b>76%</b>；年齡 3 類 74%、2 類 95%（Sci Rep 2025）</td></tr>
       <tr><td>行為資料量</td><td class="k">26Hz 原始 <b>13.5MB/天</b>；5 秒特徵 0.55MB/天；只傳 1 byte/5s = <b>16.9KB/天</b></td></tr>
+      <tr><td>SN74HC14 遲滯</td><td class="k">@4.5V：VT+ 1.55~3.13V／VT− 0.9~2.45V／ΔVT <b>0.4~2.1V</b>（TI Rev K，非精準值）</td></tr>
+      <tr><td>比較器內建遲滯</td><td class="k">TLV3202 <b>1.2mV</b>／TLV3501 <b>6mV</b>（TI）→ 有雜訊就等於沒有</td></tr>
+      <tr><td>MCU 輸入遲滯</td><td class="k">STM32F411 <b>10% VDD</b>（3.3V → 330mV，typ）；ESP32 datasheet <b>沒給</b>數字，別當設計依據</td></tr>
+      <tr><td>遲滯設計實算（Vref 1.65／3.3V／R1 10k）</td><td class="k">R2 47k→<b>702mV</b>／100k→330m／220k→150m／470k→70m／1M→33m／2.2M→15m</td></tr>
+      <tr><td>貓叫 F0 與長度</td><td class="k">平均 <b>208~1000Hz</b>、典型 525Hz；長度 530~3161ms（AABS 270, 2024，888 個 meow）</td></tr>
+      <tr><td>貓呼嚕 F0</td><td class="k">吸氣 23.0~26.1Hz／呼氣 20.9~27.2Hz；最低 17.1、最高 30.5Hz（J Vet Sci 2020）</td></tr>
+      <tr><td>FFT 耗時（1024 點）</td><td class="k">ESP32-S3 float <b>97,847 cycles（0.41ms）</b>／16-bit 定點 15,623（0.065ms）（Espressif benchmark）</td></tr>
+      <tr><td>12-bit 理想 SNR</td><td class="k">6.02N+1.76 = <b>74.0dB</b>；ESP32 內建 ADC 實際只有 9~10 bit 水準（推估）</td></tr>
     </tbody>
   </table>
 
@@ -679,7 +709,7 @@ python3 data_budget.py</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-17 · 三十五本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-18 · 三十七本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

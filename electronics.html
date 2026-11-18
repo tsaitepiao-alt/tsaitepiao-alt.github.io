@@ -409,7 +409,7 @@
     <div class="card" id="sk-stackup">
       <div class="sub">STACKUP / VIA</div>
       <h3>pcb-stackup-and-vias</h3>
-      <p>「幾層」不是錢的問題，是<b>有沒有完整的地當回流車道</b>：JLCPCB 4 層 5 片 100×100 也是 <b>$2</b>（2026-10-23 官網），跟 2 層同價 → 有 WiFi／I2S／SPI 就別省。而教科書那個「訊號/地/電源/訊號」在 1.6mm 板上，地與電源中間隔<b>將近 1mm 的 core</b>，高頻等於沒有耦合（Phil's Lab #56, 2022）→ 低速板改「<b>訊號/地/地/訊號</b>」。via 電流：0.3mm／孔壁 25µm 只有 <b>1.9A</b> @10°C（IPC-2221），而且孔壁銅是 20µm（Class 2）<b>不是</b>外層 35µm。換層時地 via 放 <b>35mil（0.9mm）</b>內（Altium）／<b>200mil</b> 內（TI SPRAAR7）。</p>
+      <p>「幾層」不是錢的問題，是<b>有沒有完整的地當回流車道</b>：JLCPCB 4 層 5 片 100×100 也是 <b>$2</b>（JLCPCB 官網活動頁 2026-11-19 查），跟 2 層同價 → 有 WiFi／I2S／SPI 就別省。而教科書那個「訊號/地/電源/訊號」在 1.6mm 板上，地與電源中間隔<b>將近 1mm 的 core</b>，高頻等於沒有耦合（Phil's Lab #56, 2022）→ 低速板改「<b>訊號/地/地/訊號</b>」。via 電流：0.3mm／孔壁 25µm 只有 <b>1.9A</b> @10°C（IPC-2221），而且孔壁銅是 20µm（Class 2）<b>不是</b>外層 35µm。換層時地 via 放 <b>35mil（0.9mm）</b>內（Altium）／<b>200mil</b> 內（TI SPRAAR7）。</p>
       <div><span class="tag">4 層 $2</span><span class="tag">訊號/地/地/訊號</span><span class="tag">via 1.9A</span><span class="tag">縫合 via 0.9mm</span><span class="tag">孔壁 vs 外層銅</span></div>
     </div>
     <div class="card" id="sk-breadboard">
@@ -669,7 +669,7 @@
       <tr><td>貓呼嚕 F0</td><td class="k">吸氣 23.0~26.1Hz／呼氣 20.9~27.2Hz；最低 17.1、最高 30.5Hz（J Vet Sci 2020）</td></tr>
       <tr><td>FFT 耗時（1024 點）</td><td class="k">ESP32-S3 float <b>97,847 cycles（0.41ms）</b>／16-bit 定點 15,623（0.065ms）（Espressif benchmark）</td></tr>
       <tr><td>12-bit 理想 SNR</td><td class="k">6.02N+1.76 = <b>74.0dB</b>；ESP32 內建 ADC 實際只有 9~10 bit 水準（推估）</td></tr>
-      <tr><td>4 層板報價</td><td class="k">JLCPCB 4 層 5 片 100×100mm <b>$2</b>，與 2 層同價（2026-10-23 官網）→ 沒有理由為省錢用 2 層</td></tr>
+      <tr><td>4 層板報價</td><td class="k">JLCPCB 4 層 5 片 100×100mm <b>$2</b>，與 2 層同價（JLCPCB 官網活動頁 2026-11-19 查）→ 沒有理由為省錢用 2 層</td></tr>
       <tr><td>幾層才夠（四條任一）</td><td class="k">邊緣 <b>&lt;5ns</b>／介面 <b>&gt;50MHz</b>／BGA 逃線／要過 EMC → 上 4 層（AtlasPCB 2026）</td></tr>
       <tr><td>4 層 vs 2 層輻射</td><td class="k">約差 <b>20dB</b>（All About Circuits 技術文，年份未標）</td></tr>
       <tr><td>標準 4 層的致命處</td><td class="k">1.6mm 板「訊號/地/電源/訊號」：<b>L2–L3 core 將近 1mm</b> → 地與電源幾乎無耦合（Phil's Lab #56, 2022）</td></tr>

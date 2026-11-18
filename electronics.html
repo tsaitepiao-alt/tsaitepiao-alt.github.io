@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 三十七本手冊 · 速查索引</title>
+<title>電子／機電 三十九本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -58,8 +58,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-18</div>
-  <h1>電子電路與機電：三十七本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-19</div>
+  <h1>電子電路與機電：三十九本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -95,6 +95,12 @@
       <tr><td>按一下跳好幾下、比較器輸出亂抖（chatter）</td><td class="k"><a class="jump" href="#sk-schmitt">schmitt-trigger-hysteresis</a></td></tr>
       <tr><td>計數器多算、光遮斷器邊緣毛毛的</td><td class="k"><a class="jump" href="#sk-schmitt">schmitt-trigger-hysteresis</a></td></tr>
       <tr><td>低電量通知在門檻附近一直跳</td><td class="k"><a class="jump" href="#sk-schmitt">schmitt-trigger-hysteresis</a></td></tr>
+      <tr><td>要不要 2 層還是 4 層、4 層多少錢</td><td class="k"><a class="jump" href="#sk-stackup">pcb-stackup-and-vias</a></td></tr>
+      <tr><td>4 層板地要放哪一層、訊號層怎麼排</td><td class="k"><a class="jump" href="#sk-stackup">pcb-stackup-and-vias</a></td></tr>
+      <tr><td>訊號換層要不要加地 via、加幾顆多近</td><td class="k"><a class="jump" href="#sk-stackup">pcb-stackup-and-vias</a></td></tr>
+      <tr><td>一顆 via 撐不撐得住這個電流</td><td class="k"><a class="jump" href="#sk-stackup">pcb-stackup-and-vias</a></td></tr>
+      <tr><td>麵包板電路時好時壞、敲一下才好</td><td class="k"><a class="jump" href="#sk-breadboard">breadboard-contact-issues</a></td></tr>
+      <tr><td>該不該繼續用麵包板、什麼時候上洞洞板</td><td class="k"><a class="jump" href="#sk-breadboard">breadboard-contact-issues</a></td></tr>
       <tr><td>想知道訊號裡有什麼頻率（呼嚕／異音／漣波）</td><td class="k"><a class="jump" href="#sk-fft">fft-spectrum-basics</a></td></tr>
       <tr><td>頻譜一團糊、旁邊長出一片草原</td><td class="k"><a class="jump" href="#sk-fft">fft-spectrum-basics</a></td></tr>
       <tr><td>FFT 該取幾個點、要不要加窗</td><td class="k"><a class="jump" href="#sk-fft">fft-spectrum-basics</a></td></tr>
@@ -175,8 +181,8 @@
     </tbody>
   </table>
 
-  <!-- 2 三十七本 -->
-  <h2 id="skills">② 三十七本手冊</h2>
+  <!-- 2 三十九本 -->
+  <h2 id="skills">② 三十九本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -400,6 +406,18 @@
       <p>準確率不是模型的功勞，是<b>類別數 × 同不同批貓 × 掛法</b>決定的：同一批 10 隻貓、5 類、100Hz 的 1D-CNN 有 <b>98.96%</b>（Sensors 2024），換成 15 類、要推廣到新貓，隨機森林只有 <b>70~83%</b>（Sensors 2023，同一批資料類別從 15→7→4，準確率 0.70→0.739→0.83）。爬高／挖砂／互舔的 true positive 是 <b>0</b>，抓癢永遠被判成理毛。貓叫 10 類情緒只有 <b>58~64%</b>，合併 3 類才 76% → 產品講行為趨勢，不講翻譯。</p>
       <div><span class="tag">1D-CNN 98.9% 的真相</span><span class="tag">跨貓驗證</span><span class="tag">epoch</span><span class="tag">混淆矩陣</span><span class="tag">貓叫 76%</span></div>
     </div>
+    <div class="card" id="sk-stackup">
+      <div class="sub">STACKUP / VIA</div>
+      <h3>pcb-stackup-and-vias</h3>
+      <p>「幾層」不是錢的問題，是<b>有沒有完整的地當回流車道</b>：JLCPCB 4 層 5 片 100×100 也是 <b>$2</b>（2026-10-23 官網），跟 2 層同價 → 有 WiFi／I2S／SPI 就別省。而教科書那個「訊號/地/電源/訊號」在 1.6mm 板上，地與電源中間隔<b>將近 1mm 的 core</b>，高頻等於沒有耦合（Phil's Lab #56, 2022）→ 低速板改「<b>訊號/地/地/訊號</b>」。via 電流：0.3mm／孔壁 25µm 只有 <b>1.9A</b> @10°C（IPC-2221），而且孔壁銅是 20µm（Class 2）<b>不是</b>外層 35µm。換層時地 via 放 <b>35mil（0.9mm）</b>內（Altium）／<b>200mil</b> 內（TI SPRAAR7）。</p>
+      <div><span class="tag">4 層 $2</span><span class="tag">訊號/地/地/訊號</span><span class="tag">via 1.9A</span><span class="tag">縫合 via 0.9mm</span><span class="tag">孔壁 vs 外層銅</span></div>
+    </div>
+    <div class="card" id="sk-breadboard">
+      <div class="sub">PROTOTYPING</div>
+      <h3>breadboard-contact-issues</h3>
+      <p>麵包板的問題不是不專業，是<b>看不見的接觸電阻</b>。夾片新品 10~50mΩ，鬆掉／氧化可到 5~10Ω，而便宜電表逼逼檔門檻 10~30Ω —— <b>15Ω 也照樣逼</b>，所以你永遠不懷疑它。只能用 <b>22AWG 0.64mm</b> 單芯（24AWG 0.51mm 夾不住、20AWG 會撐壞夾片）。實測同一塊便宜板，粗腳電阻 1 分鐘 <b>0 次</b>跳動，換細腳變 <b>750 次</b>，插拔 20 次後 <b>14,000 次</b>（Great Scott）。相鄰排 2pF、官方限制 <b>&lt;10MHz</b> → I2S／SPI 不要在麵包板上跑。</p>
+      <div><span class="tag">22AWG</span><span class="tag">&gt;2Ω 換洞</span><span class="tag">2pF 串音</span><span class="tag">14,000 次跳動</span><span class="tag">洞洞板時機</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -457,8 +475,13 @@
       <tr><td>走線載流（IPC-2221）</td><td class="k">I = k·ΔT^0.44·A^0.725　A 用 mil²，k=0.048 外／0.024 內</td></tr>
       <tr><td>走線電阻</td><td class="k">R = ρ·L/(W·t)　ρ=1.72e-8；0.25mm/100mm/1oz = 197mΩ</td></tr>
       <tr><td>走線壓降</td><td class="k">V = I·R　3A × 197mΩ = 0.59V（去程＋回程要各算一次）</td></tr>
-      <tr><td>via 銅環截面</td><td class="k">A = π(d+t)·t　0.3mm/25µm → 39.6 mil²（≈0.7mm 走線）</td></tr>
-      <tr><td>via 顆數</td><td class="k">0.3mm ≈1A／顆：3A → 3~4 顆；5A → 6 顆</td></tr>
+      <tr><td>via 銅環截面</td><td class="k">A = π(d+t)·t　0.3mm/20µm → 31.2 mil²＝<b>1.60A</b>；25µm → 39.6 mil²＝<b>1.90A</b>（IPC-2221, ΔT=10°C）</td></tr>
+      <tr><td>via 顆數</td><td class="k">0.3mm/20µm 單顆 1.6A：3A → 2 顆夠、實務打 <b>3~4 顆</b>；5A → 4 顆起。孔壁銅用 <b>20µm</b> 算，不是外層 35µm</td></tr>
+      <tr><td>via 熱阻</td><td class="k">0.3mm/25µm 貫穿 1.6mm ＝ <b>163 K/W</b>；散熱墊下打 9 顆 → 18 K/W</td></tr>
+      <tr><td>換層縫合 via</td><td class="k">同電壓平面 → 距訊號 via <b>≤0.9mm</b>（Altium）／≤5mm 越近越好（TI）／≤2.5×介質厚</td></tr>
+      <tr><td>via stub</td><td class="k">&lt;15 mil（0.38mm）（TI SPRAAR7 Rev.J）；更長就要 back-drill</td></tr>
+      <tr><td>麵包板接點</td><td class="k">新品 10~50mΩ；<b>&gt;2Ω 換洞</b>；逼逼檔門檻 10~30Ω（逼了不代表好）</td></tr>
+      <tr><td>麵包板電流／頻率</td><td class="k">datasheet 2A 上限；1A@5V／0.333A@15V（5W）；相鄰排 2pF、<b>&lt;10MHz</b></td></tr>
       <tr><td>銅箔橫向熱阻</td><td class="k">≈74 K/W 每平方（1oz）；2oz 減半；R_th = L/(k·A)</td></tr>
       <tr><td>溫升估算</td><td class="k">ΔT = P × R_th　1W × 53 = +53°C（1 in² 1oz）</td></tr>
       <tr><td>thermal spoke 熱阻</td><td class="k">4 支 0.3×0.5mm ≈31 K/W（solid 約 74 K/W 起）</td></tr>
@@ -646,6 +669,19 @@
       <tr><td>貓呼嚕 F0</td><td class="k">吸氣 23.0~26.1Hz／呼氣 20.9~27.2Hz；最低 17.1、最高 30.5Hz（J Vet Sci 2020）</td></tr>
       <tr><td>FFT 耗時（1024 點）</td><td class="k">ESP32-S3 float <b>97,847 cycles（0.41ms）</b>／16-bit 定點 15,623（0.065ms）（Espressif benchmark）</td></tr>
       <tr><td>12-bit 理想 SNR</td><td class="k">6.02N+1.76 = <b>74.0dB</b>；ESP32 內建 ADC 實際只有 9~10 bit 水準（推估）</td></tr>
+      <tr><td>4 層板報價</td><td class="k">JLCPCB 4 層 5 片 100×100mm <b>$2</b>，與 2 層同價（2026-10-23 官網）→ 沒有理由為省錢用 2 層</td></tr>
+      <tr><td>幾層才夠（四條任一）</td><td class="k">邊緣 <b>&lt;5ns</b>／介面 <b>&gt;50MHz</b>／BGA 逃線／要過 EMC → 上 4 層（AtlasPCB 2026）</td></tr>
+      <tr><td>4 層 vs 2 層輻射</td><td class="k">約差 <b>20dB</b>（All About Circuits 技術文，年份未標）</td></tr>
+      <tr><td>標準 4 層的致命處</td><td class="k">1.6mm 板「訊號/地/電源/訊號」：<b>L2–L3 core 將近 1mm</b> → 地與電源幾乎無耦合（Phil's Lab #56, 2022）</td></tr>
+      <tr><td>訊號到參考平面距離</td><td class="k">4 層板 <b>&lt;0.2mm</b> → 回流幾乎完全貼在正下方（Aivon）</td></tr>
+      <tr><td>去耦電容失效頻率</td><td class="k"><b>200~300MHz</b> 以上靠平面間電容，不是靠電容（All About Circuits）</td></tr>
+      <tr><td>via 實際容量（0.3mm）</td><td class="k">孔壁 20µm <b>1.60A</b>／25µm <b>1.90A</b> @10°C；NextPCB 保守給 <b>1.5A</b>（1oz）</td></tr>
+      <tr><td>孔壁銅 ≠ 外層銅</td><td class="k">IPC-6012 Class 2 平均 <b>20µm</b>／Class 3 <b>25µm</b>；外層 1oz 是 35µm → 用 35µm 算高估 <b>30%</b></td></tr>
+      <tr><td>0.3mm via 換算走線</td><td class="k">25µm 孔壁 → 25µm 厚時 <b>1.02mm 寬</b>（≈0.026mm² 銅）</td></tr>
+      <tr><td>麵包板可用線徑</td><td class="k"><b>22AWG 0.64mm 單芯</b>；24AWG 0.51mm 夾不住；20AWG 會永久撐壞夾片</td></tr>
+      <tr><td>麵包板接觸電阻</td><td class="k">新品 <b>10~50mΩ</b>；健康 0.1~0.5Ω；<b>&gt;2Ω 換洞</b>；氧化鬆脫 5~10Ω</td></tr>
+      <tr><td>麵包板震動實測</td><td class="k">便宜板＋細腳電阻：1 分鐘 <b>750 次</b>跳動 → 插拔 20 次後 <b>14,000 次</b>；粗腳/好板 0 次（Great Scott）</td></tr>
+      <tr><td>麵包板寄生電容</td><td class="k">相鄰排 <b>2pF</b>（貴板約 3pF，LCR 實測）→ 官方限制 <b>&lt;10MHz</b></td></tr>
     </tbody>
   </table>
 
@@ -689,7 +725,11 @@ python3 ntc_calc.py
 
 # 貓行為：資料量、續航、標註工作量
 cd ~/.hermes/profiles/wechat/skills/engineering/cat-behavior-classification/scripts
-python3 data_budget.py</code></pre>
+python3 data_budget.py
+
+# PCB：via 能過多少電流、要幾顆併聯（孔徑mm 孔壁µm 電流A）
+cd ~/.hermes/profiles/wechat/skills/engineering/pcb-stackup-and-vias/scripts
+python3 via_current.py 0.3 20 2.5</code></pre>
   <p class="hint">實測：<code>PI 無抗飽和 → 超調 23.7%</code>　<code>加上抗飽和 → 3.2%</code>（目標 150 rad/s、電流上限 2A、取樣 1 ms）</p>
 
   <!-- 6 書 -->
@@ -709,7 +749,7 @@ python3 data_budget.py</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-18 · 三十七本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-19 · 三十九本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

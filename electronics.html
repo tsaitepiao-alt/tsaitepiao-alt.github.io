@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 三十九本手冊 · 速查索引</title>
+<title>電子／機電 四十本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -58,8 +58,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-19</div>
-  <h1>電子電路與機電：三十九本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-20</div>
+  <h1>電子電路與機電：四十本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -113,6 +113,11 @@
       <tr><td>輸出短路就燒、想關卻關不掉</td><td class="k"><a class="jump" href="#sk-boost">boost-converter-basics</a></td></tr>
       <tr><td>低溫／大電流為什麼續航大打折</td><td class="k"><a class="jump" href="#sk-batt">battery-life-budget</a></td></tr>
       <tr><td>深睡了還是吃幾百 µA、量不到 5µA</td><td class="k"><a class="jump" href="#sk-sleep">sleep-current-measurement</a></td></tr>
+      <tr><td>待機幾百 µA，找不出哪一顆在吃電</td><td class="k"><a class="jump" href="#sk-leak">standby-leakage-audit</a></td></tr>
+      <tr><td>續航算三年、實測三個月就沒電</td><td class="k"><a class="jump" href="#sk-leak">standby-leakage-audit</a></td></tr>
+      <tr><td>LDO 的 Iq（靜態電流）會不會把電池吃乾</td><td class="k"><a class="jump" href="#sk-leak">standby-leakage-audit</a></td></tr>
+      <tr><td>量電池的分壓電阻一直漏電怎麼辦</td><td class="k"><a class="jump" href="#sk-leak">standby-leakage-audit</a></td></tr>
+      <tr><td>電源指示燈到底吃掉多少電</td><td class="k"><a class="jump" href="#sk-leak">standby-leakage-audit</a></td></tr>
       <tr><td>電表一接上去板子就重開</td><td class="k"><a class="jump" href="#sk-sleep">sleep-current-measurement</a></td></tr>
       <tr><td>斷電了那條軌還有 2.6V</td><td class="k"><a class="jump" href="#sk-gating">peripheral-power-gating</a></td></tr>
       <tr><td>加一顆感測器，待機電流翻十倍</td><td class="k"><a class="jump" href="#sk-gating">peripheral-power-gating</a></td></tr>
@@ -181,8 +186,8 @@
     </tbody>
   </table>
 
-  <!-- 2 三十九本 -->
-  <h2 id="skills">② 三十九本手冊</h2>
+  <!-- 2 四十本 -->
+  <h2 id="skills">② 四十本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -418,6 +423,12 @@
       <p>麵包板的問題不是不專業，是<b>看不見的接觸電阻</b>。夾片新品 10~50mΩ，鬆掉／氧化可到 5~10Ω，而便宜電表逼逼檔門檻 10~30Ω —— <b>15Ω 也照樣逼</b>，所以你永遠不懷疑它。只能用 <b>22AWG 0.64mm</b> 單芯（24AWG 0.51mm 夾不住、20AWG 會撐壞夾片）。實測同一塊便宜板，粗腳電阻 1 分鐘 <b>0 次</b>跳動，換細腳變 <b>750 次</b>，插拔 20 次後 <b>14,000 次</b>（Great Scott）。相鄰排 2pF、官方限制 <b>&lt;10MHz</b> → I2S／SPI 不要在麵包板上跑。</p>
       <div><span class="tag">22AWG</span><span class="tag">&gt;2Ω 換洞</span><span class="tag">2pF 串音</span><span class="tag">14,000 次跳動</span><span class="tag">洞洞板時機</span></div>
     </div>
+    <div class="card" id="sk-leak">
+      <div class="sub">LOW POWER / STANDBY</div>
+      <h3>standby-leakage-audit</h3>
+      <p>待機 300µA 裡 MCU 只佔 <b>7µA</b>，剩下全是<b>「沒有關掉這個動作」</b>的東西。實算：電源燈 1.3mA ＝ <b>936 mAh/月</b>（比 MCU 貴 190 倍）、AMS1117 的 Iq 2〜5mA 讓 2000mAh 只撐 <b>16 天</b>、分壓 100k+100k 一年吃掉 <b>184mAh</b>、USB 橋接 CP2102N 待機 195µA＋pull-up 200µA、5V stand-off 的 TVS 漏電可到 <b>500µA</b>。同一塊板、同一份韌體，拆燈／不焊橋接／分壓改 1M／換 HT7333：<b>1726µA → 17µA</b>。反直覺：閒著開 ULP 協處理器，待機從 7µA 變 <b>190µA</b>（ESP32-S3 datasheet v2.2）。</p>
+      <div><span class="tag">µA×720＝mAh/月</span><span class="tag">LED 936mAh/月</span><span class="tag">1117 Iq 5mA</span><span class="tag">CP2102N 395µA</span><span class="tag">ULP 190µA</span><span class="tag">rtc_gpio_isolate</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -429,6 +440,7 @@
       <tr><td>功率</td><td class="k">P = V·I = I²R = V²/R</td></tr>
       <tr><td>分壓</td><td class="k">Vout = Vin·R2/(R1+R2)</td></tr>
       <tr><td>LED 限流</td><td class="k">R = (Vs − Vf) / If</td></tr>
+      <tr><td>待機月消耗</td><td class="k">mAh/月 = µA × 0.72（×720h÷1000）</td></tr>
       <tr><td>RC 截止</td><td class="k">fc = 1/(2πRC)　速算 R[kΩ]×C[nF] = 159/fc[kHz]</td></tr>
       <tr><td>RC 兩級串接</td><td class="k">-3dB 點 ×0.64（有 buffer）</td></tr>
       <tr><td>Nyquist</td><td class="k">fs &gt; 2·fmax</td></tr>
@@ -624,6 +636,10 @@
       <tr><td>負載開關規格</td><td class="k">TPS22916：ON 0.5µA／OFF <b>10nA</b>／60mΩ@5V；AO3401A：60mΩ@−4.5V、85mΩ@−2.5V、Vth −0.5〜−1.3V</td></tr>
       <tr><td>back-powering 判斷</td><td class="k">斷電軌 ≈ IO 電壓 −0.5〜0.7V（一個二極體壓降）＝中了；TI SLAAG89B：GPIO &gt;0.3V 就可能反向供電</td></tr>
       <tr><td>沒在用時的耗電</td><td class="k">AMS1117 5mA／LED 1.5mA／MPU6050 5µA／ICS-43434 12µA／SPH0645 3µA／SD idle 0.1–2mA</td></tr>
+      <tr><td>待機漏電換算</td><td class="k">µA × 720h ＝ mAh/月；21µA＝15mAh/月、1.3mA＝<b>936 mAh/月</b>、5mA＝3,600mAh/月</td></tr>
+      <tr><td>LDO 靜態電流</td><td class="k">AMS1117 <b>2〜5mA</b>（2000mAh 只 16 天）／HT7333 4µA／XC6206 3µA／TPS7A02 <b>25nA</b></td></tr>
+      <tr><td>電池分壓常漏</td><td class="k">@4.2V：100k+100k <b>21µA</b>／220k+220k 9.5µA／1M+1M <b>2.1µA</b>（KEMI）；10k+10k＝210µA</td></tr>
+      <tr><td>待機雜項</td><td class="k">CP2102N suspend 195µA＋USB pull-up 200µA／DW01A 3µA／ESD 0.05〜2.5µA／5V TVS 約 500µA</td></tr>
       <tr><td>貓項圈續航階梯</td><td class="k">醒5s/10分 <b>53天</b> → 醒4s/10分 67天 → 醒5s/20分 105天 → 兩者都做 <b>131天</b>（1000mAh×0.65）</td></tr>
       <tr><td>歐姆檔自己送多少電壓</td><td class="k">同一台 Fluke 各檔位 <b>2.8／7.3／3.5／5.6V</b>（EEVblog 1622, 2024）→ 半導體 0.6V 就通</td></tr>
       <tr><td>87V 各檔內阻</td><td class="k">V 10MΩ／mA 1.8mV/mA（1.8Ω）／µA 100µV/µA（<b>100Ω</b>）／10A 0.03V/A（30mΩ；Fluke 應用書 0.01Ω）</td></tr>
@@ -729,7 +745,12 @@ python3 data_budget.py
 
 # PCB：via 能過多少電流、要幾顆併聯（孔徑mm 孔壁µm 電流A）
 cd ~/.hermes/profiles/wechat/skills/engineering/pcb-stackup-and-vias/scripts
-python3 via_current.py 0.3 20 2.5</code></pre>
+python3 via_current.py 0.3 20 2.5
+
+# 待機漏電預算：誰在偷吃電、換成月/年 mAh、實際續航
+cd ~/.hermes/profiles/wechat/skills/engineering/standby-leakage-audit/scripts
+python3 leak_budget.py
+python3 leak_budget.py --list</code></pre>
   <p class="hint">實測：<code>PI 無抗飽和 → 超調 23.7%</code>　<code>加上抗飽和 → 3.2%</code>（目標 150 rad/s、電流上限 2A、取樣 1 ms）</p>
 
   <!-- 6 書 -->
@@ -749,7 +770,7 @@ python3 via_current.py 0.3 20 2.5</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-19 · 三十九本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-20 · 四十本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

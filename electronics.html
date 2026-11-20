@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 四十本手冊 · 速查索引</title>
+<title>電子／機電 四十二本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -58,8 +58,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-20</div>
-  <h1>電子電路與機電：四十本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-21</div>
+  <h1>電子電路與機電：四十二本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -173,6 +173,14 @@
       <tr><td>30 台要怎麼一台一台驗、要不要抽樣</td><td class="k"><a class="jump" href="#sk-testpoint">production-test-points</a></td></tr>
       <tr><td>要自己做 pogo 治具／bed-of-nails</td><td class="k"><a class="jump" href="#sk-testpoint">production-test-points</a></td></tr>
       <tr><td>客人回報壞掉，查不到出廠數據</td><td class="k"><a class="jump" href="#sk-testpoint">production-test-points</a></td></tr>
+      <tr><td>板子不開機／沒反應，不知道從哪查</td><td class="k"><a class="jump" href="#sk-triage">dead-board-triage</a></td></tr>
+      <tr><td>客人退回說不開機、時好時壞</td><td class="k"><a class="jump" href="#sk-triage">dead-board-triage</a></td></tr>
+      <tr><td>某條軌對地量到 0.000，要找短路</td><td class="k"><a class="jump" href="#sk-triage">dead-board-triage</a></td></tr>
+      <tr><td>板子吃電比好板多好幾倍</td><td class="k"><a class="jump" href="#sk-triage">dead-board-triage</a></td></tr>
+      <tr><td>有電壓但不開機、要查復位／時鐘</td><td class="k"><a class="jump" href="#sk-triage">dead-board-triage</a></td></tr>
+      <tr><td>拆板／換模組怕靜電打死元件</td><td class="k"><a class="jump" href="#sk-esd">esd-protection-basics</a></td></tr>
+      <tr><td>東西換了又壞、同一位置一直壞</td><td class="k"><a class="jump" href="#sk-esd">esd-protection-basics</a></td></tr>
+      <tr><td>粉紅袋能不能裝板子、無線腕帶有用嗎</td><td class="k"><a class="jump" href="#sk-esd">esd-protection-basics</a></td></tr>
       <tr><td>溫度讀值不對、一直偏高 0.3~0.7°C</td><td class="k"><a class="jump" href="#sk-temp">temperature-sensing-ntc</a></td></tr>
       <tr><td>NTC 要配幾歐姆、B 值 3435 還是 3950</td><td class="k"><a class="jump" href="#sk-temp">temperature-sensing-ntc</a></td></tr>
       <tr><td>充電 IC 的 TS／TEMP 腳要接什麼</td><td class="k"><a class="jump" href="#sk-temp">temperature-sensing-ntc</a></td></tr>
@@ -186,8 +194,8 @@
     </tbody>
   </table>
 
-  <!-- 2 四十本 -->
-  <h2 id="skills">② 四十本手冊</h2>
+  <!-- 2 四十二本 -->
+  <h2 id="skills">② 四十二本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -429,6 +437,18 @@
       <p>待機 300µA 裡 MCU 只佔 <b>7µA</b>，剩下全是<b>「沒有關掉這個動作」</b>的東西。實算：電源燈 1.3mA ＝ <b>936 mAh/月</b>（比 MCU 貴 190 倍）、AMS1117 的 Iq 2〜5mA 讓 2000mAh 只撐 <b>16 天</b>、分壓 100k+100k 一年吃掉 <b>184mAh</b>、USB 橋接 CP2102N 待機 195µA＋pull-up 200µA、5V stand-off 的 TVS 漏電可到 <b>500µA</b>。同一塊板、同一份韌體，拆燈／不焊橋接／分壓改 1M／換 HT7333：<b>1726µA → 17µA</b>。反直覺：閒著開 ULP 協處理器，待機從 7µA 變 <b>190µA</b>（ESP32-S3 datasheet v2.2）。</p>
       <div><span class="tag">µA×720＝mAh/月</span><span class="tag">LED 936mAh/月</span><span class="tag">1117 Iq 5mA</span><span class="tag">CP2102N 395µA</span><span class="tag">ULP 190µA</span><span class="tag">rtc_gpio_isolate</span></div>
     </div>
+    <div class="card" id="sk-esd">
+      <div class="sub">PRODUCTION / HANDLING</div>
+      <h3>esd-protection-basics</h3>
+      <p>靜電不是「電到人」，是<b>你身上 1,500～35,000V 沖一張幾奈米厚的衛生紙</b>。走過地毯乾冷 <b>35kV</b>、潮濕 1.5kV（ESD Association Table 1）→ 濕度是隱形開關，冬天密閉房間是旺季。最可怕的不是燒掉（約 <b>10%</b>），是<b>內傷（約 90%）</b>：出廠測試全過、兩週後客人退貨。防護是<b>順序</b>：戴腕帶（線 1MΩ、系統 <b>&lt;35MΩ</b>）→ 夾接地點（<b>&lt;1Ω</b>）→ 才拿板。粉紅袋只防自己起電（不屏蔽），銀袋才是法拉第籠，而且要封口。無線腕帶實測<b>完全無效</b>（EEVblog #768, 2015）。</p>
+      <div><span class="tag">地毯 35kV</span><span class="tag">內傷 90%</span><span class="tag">腕帶 &lt;35MΩ</span><span class="tag">粉紅≠銀</span><span class="tag">無線腕帶沒用</span><span class="tag">MOSFET 10V 就掛</span></div>
+    </div>
+    <div class="card" id="sk-triage">
+      <div class="sub">REPAIR / TRIAGE</div>
+      <h3>dead-board-triage</h3>
+      <p>不開機<b>九成在前三關就找到</b>：目視 30 秒 → 斷電量對地（二極體檔：正常 <b>0.35～0.70</b>、硬短路 <b>&lt;0.10</b>、跟好板差 30% 就要查）→ 限流上電看吃多少（<b>0mA</b>＝沒通、頂到限流＝短路、比好板多 2 倍＝漏電）。找短路三招：IPA 先乾的那顆、限流注入（<b>不超過軌電壓</b>、1–1.5A）、拆磁珠/0Ω <b>切一半</b>。附 <code>rail_triage.py</code> 把好板/壞板讀值算成比值並排嚴重度。反面教材：直接插原廠變壓器查短路，會把多層板內層銅燒穿。</p>
+      <div><span class="tag">diode 0.35–0.70</span><span class="tag">切一半</span><span class="tag">IPA 找熱點</span><span class="tag">1V/1.5A 注入</span><span class="tag">先量好板</span><span class="tag">別用蜂鳴檔</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -525,6 +545,9 @@
       <tr><td>op-amp 可用頻寬</td><td class="k">f = GBW / 增益　1MHz/11 = 91kHz</td></tr>
       <tr><td>電表 burden 壓降</td><td class="k">V_drop = I × 1.8mV/mA（mA 檔）／µA 檔 ×100mV/mA　500mA → 0.9V</td></tr>
       <tr><td>短路在故障點的瓦數</td><td class="k">P = I²·R_short　3.3V/5Ω → 0.66A → 2.2W（集中在一個點）</td></tr>
+      <tr><td>短路電流（決定限流值）</td><td class="k">I = V / R_short　3.3V / 5Ω = <b>660mA</b> → 限流設 1A 就抓得到</td></tr>
+      <tr><td>對地讀值比對</td><td class="k">比值 = 壞板 ÷ 好板　<b>&lt;0.10</b> 硬短路、<b>&lt;0.70</b> 可疑、<b>&gt;1.6</b> 開路（同點同方向量）</td></tr>
+      <tr><td>注入找短路的功率</td><td class="k">P = V_inj × I_limit　1.0V × 1.5A = <b>1.5W</b>（只夠加熱，不會燒板）</td></tr>
       <tr><td>抽樣全過機率</td><td class="k">P = (1−p)^n　p=3%、n=5 → 85.9%（等於白抽）</td></tr>
       <tr><td>治具攤提</td><td class="k">(探針數×單價 + 加工) ÷ 台數　12×45+1200 → 30 台 = 58/台</td></tr>
       <tr><td>NTC 電阻→溫度（Beta）</td><td class="k">T = 1 / (1/T25 + ln(R/R25)/B) − 273.15　T25=298.15K、10k B3950</td></tr>
@@ -534,6 +557,15 @@
       <tr><td>固定電阻怎麼挑</td><td class="k">R_fix ≈ NTC 在「最關心的溫度」的阻值：25°C→10k、38°C→6.5k、60°C→3.6k</td></tr>
       <tr><td>NTC→ADC 斜率</td><td class="k">10k/10k、3.3V：25°C 附近 <b>−37mV/°C</b>，兩端變鈍（0°C −32、50°C −26）</td></tr>
       <tr><td>充電溫度門檻（TP4056）</td><td class="k">VTEMP &lt; 45% 或 &gt; 80% Vcc 停充；R_ntc = ratio·R_fix/(1−ratio)　10k/10k → <b>−7~+30°C</b></td></tr>
+      <tr><td>人體靜電（乾冷 10–25%RH）</td><td class="k">走地毯 <b>35,000V</b>／地磚 12,000V／桌邊 6,000V／拿塑膠袋 20,000V（ESDA Table 1）</td></tr>
+      <tr><td>人體靜電（潮濕 65–90%RH）</td><td class="k">地毯 1,500V／桌邊 <b>100V</b> → 濕度是隱形開關</td></tr>
+      <tr><td>元件耐靜電（HBM）</td><td class="k">MOSFET <b>10–100V</b>；CMOS 100–3,000V；蕭特基 300–2,500V（TI slop409）</td></tr>
+      <tr><td>靜電損傷型態</td><td class="k">立刻死約 <b>10%</b>、內傷約 <b>90%</b>（ESD Association 研究，二手引用）</td></tr>
+      <tr><td>靜電防護數字</td><td class="k">腕帶線 0.8–1.2MΩ、系統 <b>&lt;35MΩ</b>、桌墊 &lt;10⁹Ω、接地 <b>&lt;1Ω</b>（S20.20 / S1.1 / S6.1）</td></tr>
+      <tr><td>袋子</td><td class="k">粉紅 antistatic &lt;10¹¹Ω <b>不屏蔽</b>；銀色 shielding 才是法拉第籠（要封口）；一般塑膠袋 &gt;10,000V</td></tr>
+      <tr><td>對地二極體讀值</td><td class="k">正常 <b>0.35–0.70</b>；<b>&lt;0.10</b> 硬短路；1.x＝開路；一定要跟好板同點比</td></tr>
+      <tr><td>短路／開路門檻</td><td class="k">軌對地 <b>&lt;20–30Ω</b> 當短路；蜂鳴檔門檻 10–30Ω → 不可靠，用二極體檔</td></tr>
+      <tr><td>注入查短路</td><td class="k">電壓 ≤ 軌標稱（芯軌 0.8–1.0V）、限流 1–1.5A；熱風拆件 380–400°C</td></tr>
       <tr><td>行為分類 baseline</td><td class="k">全猜最多數類的準確率 = 該類佔比　「睡」佔 28~53% → 先打敗這個才算有做事</td></tr>
       <tr><td>準確率的兩個乘數</td><td class="k">同批貓訓練/測試虛胖 <b>10~20 個百分點</b>；類別 4→15 類掉 <b>13 個百分點</b>（Smit 2023）</td></tr>
     </tbody>
@@ -750,7 +782,12 @@ python3 via_current.py 0.3 20 2.5
 # 待機漏電預算：誰在偷吃電、換成月/年 mAh、實際續航
 cd ~/.hermes/profiles/wechat/skills/engineering/standby-leakage-audit/scripts
 python3 leak_budget.py
-python3 leak_budget.py --list</code></pre>
+python3 leak_budget.py --list
+
+# 維修：好板/壞板對地讀值比對（自動排序＋給下一步）
+cd ~/.hermes/profiles/wechat/skills/engineering/dead-board-triage/scripts
+python3 rail_triage.py --demo
+python3 rail_triage.py --csv readings.csv --tol 0.3</code></pre>
   <p class="hint">實測：<code>PI 無抗飽和 → 超調 23.7%</code>　<code>加上抗飽和 → 3.2%</code>（目標 150 rad/s、電流上限 2A、取樣 1 ms）</p>
 
   <!-- 6 書 -->
@@ -770,7 +807,7 @@ python3 leak_budget.py --list</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-20 · 四十本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-21 · 四十二本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

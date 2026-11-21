@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 四十二本手冊 · 速查索引</title>
-<meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統 — 一句話找到該用哪本手冊，附公式速查與常用數字">
+<title>電子／機電 四十四本手冊 · 速查索引</title>
+<meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統、成本與通路 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
   *{margin:0;padding:0;box-sizing:border-box}
@@ -59,7 +59,7 @@
 <body>
 <div class="wrap">
   <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-21</div>
-  <h1>電子電路與機電：四十二本手冊</h1>
+  <h1>電子電路與機電：四十四本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -141,6 +141,12 @@
       <tr><td>打件要多少錢、5 片還是 50 片</td><td class="k"><a class="jump" href="#sk-pcba">pcba-small-batch-cost</a></td></tr>
       <tr><td>只有 10 片，自己焊還是送打件</td><td class="k"><a class="jump" href="#sk-pcba">pcba-small-batch-cost</a></td></tr>
       <tr><td>報價單的工程費、鋼網、上料費看不懂</td><td class="k"><a class="jump" href="#sk-pcba">pcba-small-batch-cost</a></td></tr>
+      <tr><td>這台賣 1,490 我到底賺多少</td><td class="k"><a class="jump" href="#sk-takerate">hardware-selling-take-rate</a></td></tr>
+      <tr><td>要上蝦皮還是自己做網站</td><td class="k"><a class="jump" href="#sk-takerate">hardware-selling-take-rate</a></td></tr>
+      <tr><td>嘖嘖抽 8% 貴不貴、蝦皮抽多少</td><td class="k"><a class="jump" href="#sk-takerate">hardware-selling-take-rate</a></td></tr>
+      <tr><td>第一批要做幾台、單價便宜的量大不大</td><td class="k"><a class="jump" href="#sk-firstbatch">first-batch-inventory-sizing</a></td></tr>
+      <tr><td>貨賣完了錢還沒回來、第二批沒錢下</td><td class="k"><a class="jump" href="#sk-firstbatch">first-batch-inventory-sizing</a></td></tr>
+      <tr><td>要賣幾台才真的回本</td><td class="k"><a class="jump" href="#sk-firstbatch">first-batch-inventory-sizing</a></td></tr>
       <tr><td>電池充一整天燈都不熄、充不飽</td><td class="k"><a class="jump" href="#sk-charge">li-ion-charging-and-power-path</a></td></tr>
       <tr><td>邊充邊用、插著電電量還是掉</td><td class="k"><a class="jump" href="#sk-charge">li-ion-charging-and-power-path</a></td></tr>
       <tr><td>充電 IC 好燙、1A 充不到</td><td class="k"><a class="jump" href="#sk-charge">li-ion-charging-and-power-path</a></td></tr>
@@ -194,8 +200,8 @@
     </tbody>
   </table>
 
-  <!-- 2 四十二本 -->
-  <h2 id="skills">② 四十二本手冊</h2>
+  <!-- 2 四十四本 -->
+  <h2 id="skills">② 四十四本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -328,6 +334,18 @@
       <h3>pcba-small-batch-cost</h3>
       <p>打件的錢 63% 是元件、18% 是一次性（工程 $8.18＋鋼網 $1.53＋手焊 $3.58＋上料 $3.07/種擴展料），焊點費 $0.0016/點等於免費。實算 5／10／50／100 片（NT$545→290/片）、三個切換點、省錢六順序、進口 NT$2,000 免稅但半年 6 次的坑、推翻「月銷&lt;100 台不要自製 PCBA」。</p>
       <div><span class="tag">setup fee</span><span class="tag">擴展料</span><span class="tag">CPL 對位</span></div>
+    </div>
+    <div class="card" id="sk-takerate">
+      <div class="sub">TAKE RATE / 到手價</div>
+      <h3>hardware-selling-take-rate</h3>
+      <p>售價不是收入：蝦皮全餐抽 21.5%（成交 8.5＋活動 6.5＋金流 2.5＋蝦幣 4，2026-12-11 生效）、嘖嘖 8%、綠界 2.89%、經銷 55 折。同一台 NT$1,490 項圈：自有網站淨賺 557、嘖嘖 489、蝦皮全餐 282。營業稅 5% 可扣進項＝只吃毛利 4.76%。附 take_rate.py 實跑五通路對照＋回本台數。</p>
+      <div><span class="tag">抽成</span><span class="tag">營業稅扣抵</span><span class="tag">回本台數</span></div>
+    </div>
+    <div class="card" id="sk-firstbatch">
+      <div class="sub">FIRST BATCH / 現金流</div>
+      <h3>first-batch-inventory-sizing</h3>
+      <p>第一批台數＝「全報廢也不倒」的金額÷落地成本，不是「預估會賣多少」。50 台是單價轉平點（NT$305/片，100 片只再省 5% 卻多壓 1.4 萬），50 台實際可賣 43 台（不良 2＋刮傷 1＋備品 4）。真正要備 20 萬不是 3.3 萬；第二批上限 ×2.5、售出率 ≥25% 才下。</p>
+      <div><span class="tag">MOQ 階梯</span><span class="tag">備品</span><span class="tag">lead time</span></div>
     </div>
     <div class="card" id="sk-charge">
       <div class="sub">CHARGING / POWER PATH</div>
@@ -522,6 +540,12 @@
       <tr><td>平面 spreading</td><td class="k">≈100 pH/平方（4mil 介質）；平方數 = 長/寬</td></tr>
       <tr><td>接頭壓降</td><td class="k">V_drop = I × R_contact × 2（PH 10mΩ×2、2A → 40mV）</td></tr>
       <tr><td>焊點合格判定</td><td class="k">濕潤角 ≤90°、通孔填充 ≥75%（IPC-A-610 Class 2/3）</td></tr>
+      <tr><td>到手價</td><td class="k">售價 − 通路抽成×售價 − 營業稅（銷項−進項）</td></tr>
+      <tr><td>淨利/台</td><td class="k">到手 − 落地成本 − 廣告/單 − 退貨損失</td></tr>
+      <tr><td>反推定價</td><td class="k">成本 ÷ (1 − 抽成 − 稅 − 目標淨利 − 廣告率)</td></tr>
+      <tr><td>回本台數</td><td class="k">固定成本 ÷ 淨利/台（嘖嘖 245 台／蝦皮全餐 425 台）</td></tr>
+      <tr><td>第一批台數</td><td class="k">min(全報廢也不倒的金額 ÷ 落地成本, 驗證量 50, 單價轉平點)</td></tr>
+      <tr><td>需備現金</td><td class="k">貨款 + 模具認證 + 3 個月固定支出 + 第二批訂金</td></tr>
       <tr><td>烙鐵設定</td><td class="k">熔點 + 130~180°C：有鉛 183→315–343°C；無鉛 217→371–400°C</td></tr>
       <tr><td>打件總價</td><td class="k">板費 + 工程 + 鋼網 + 手焊 + 上料×料種 + 焊點費×點×片 + 元件×片 + 運費 + 稅</td></tr>
       <tr><td>一次性攤提</td><td class="k">US$22.5 ÷ 片數（5片→NT$148／10片→74／50片→15／100片→7）</td></tr>
@@ -628,6 +652,12 @@
       <tr><td>返修次數上限</td><td class="k">IPC-7711/7721 <b>沒有規定</b>（網路常寫「3 次」是錯的）；限制來自 Tg/Td</td></tr>
       <tr><td>JST 家族</td><td class="k">SH 1.0mm/1A｜GH 1.25/1A 30mΩ｜PH 2.0/2A 10mΩ｜XH 2.5/3A 250V</td></tr>
       <tr><td>接頭插拔壽命</td><td class="k">PH 原廠<b>未標</b>；PicoBlade 53047 原廠 30 次（每天換電池一年 365 次）</td></tr>
+      <tr><td>蝦皮全餐抽成</td><td class="k"><b>~21.5%</b>＝成交 8.5＋活動 6.5＋金流 2.5＋蝦幣 4（2026-12-11 生效）</td></tr>
+      <tr><td>其他通路抽成</td><td class="k">嘖嘖 <b>8%</b>（失敗不收）｜綠界 2.75% 未稅→實 2.89%｜經銷 55 折＝抽 45%</td></tr>
+      <tr><td>營業稅實質負擔</td><td class="k">可扣進項 → 只吃<b>毛利的 4.76%</b>；小規模 &lt;20 萬/月＝1% 查定</td></tr>
+      <tr><td>開發票門檻</td><td class="k">月銷售 <b>20 萬</b>；起徵點 貨物 10 萬／勞務 5 萬（2025-01-01 起）</td></tr>
+      <tr><td>進口免稅</td><td class="k">NT$<b>2,000</b>（含運費保險）但<b>半年 6 次</b>上限（關務署）</td></tr>
+      <tr><td>第一批 50 台實況</td><td class="k">訂 50 → 可賣 <b>43</b>（不良2＋刮傷1＋備品4）；單價 305 已近底</td></tr>
       <tr><td>打件固定費（經濟型）</td><td class="k">工程 <b>$8.18</b>＋鋼網 <b>$1.53</b>＋手焊 <b>$3.58</b>＝$13.29/單（JLCPCB 2026-10-22）</td></tr>
       <tr><td>擴展料上料費</td><td class="k"><b>$3.07/種</b>；9 種料 3 種擴展＝$9.21（比 10 片板費還貴）</td></tr>
       <tr><td>焊點費</td><td class="k">SMT <b>$0.0016/點</b>（60 點×10 片＝$0.96）；pre-reflow 另列 $0.016/點（<b>差 10 倍</b>）</td></tr>
@@ -807,7 +837,7 @@ python3 rail_triage.py --csv readings.csv --tol 0.3</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-21 · 四十二本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-22 · 四十四本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

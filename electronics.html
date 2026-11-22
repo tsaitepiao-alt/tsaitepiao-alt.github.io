@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 四十四本手冊 · 速查索引</title>
+<title>電子／機電 四十六本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統、成本與通路 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -58,8 +58,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-21</div>
-  <h1>電子電路與機電：四十四本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-23</div>
+  <h1>電子電路與機電：四十六本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -197,11 +197,17 @@
       <tr><td>行為分類要分幾類、epoch 多長</td><td class="k"><a class="jump" href="#sk-behavior">cat-behavior-classification</a></td></tr>
       <tr><td>貓叫情緒／翻譯貓語可不可行</td><td class="k"><a class="jump" href="#sk-behavior">cat-behavior-classification</a></td></tr>
       <tr><td>模型很準但換一隻貓就爛掉</td><td class="k"><a class="jump" href="#sk-behavior">cat-behavior-classification</a></td></tr>
+      <tr><td>插反燒掉了、怕使用者接反電源</td><td class="k"><a class="jump" href="#sk-protect">power-input-protection</a></td></tr>
+      <tr><td>為什麼要加二極體、TVS 跟齊納差在哪</td><td class="k"><a class="jump" href="#sk-protect">power-input-protection</a></td></tr>
+      <tr><td>保險絲要選幾安培、PTC 會不會夏天亂跳</td><td class="k"><a class="jump" href="#sk-protect">power-input-protection</a></td></tr>
+      <tr><td>繼電器／馬達斷電把電晶體打死</td><td class="k"><a class="jump" href="#sk-protect">power-input-protection</a></td></tr>
+      <tr><td>電池充飽能用、快沒電一動就斷電</td><td class="k"><a class="jump" href="#sk-bms">battery-protection-board-bms</a></td></tr>
+      <tr><td>要不要平衡、2S 保護板是不是 BMS</td><td class="k"><a class="jump" href="#sk-bms">battery-protection-board-bms</a></td></tr>
     </tbody>
   </table>
 
-  <!-- 2 四十四本 -->
-  <h2 id="skills">② 四十四本手冊</h2>
+  <!-- 2 四十六本 -->
+  <h2 id="skills">② 四十六本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -280,6 +286,18 @@
       <h3>power-tree-design</h3>
       <p>一顆電池怎麼分軌：四格表、三條硬規則、峰值靠電容、USB＋電池雙電源切換、上電順序、功耗預算範本。</p>
       <div><span class="tag">brownout</span><span class="tag">load switch</span><span class="tag">反灌</span></div>
+    </div>
+    <div class="card" id="sk-protect">
+      <div class="sub">INPUT PROTECTION</div>
+      <h3>power-input-protection</h3>
+      <p>入口三件套各擋一種災難：保險絲擋火（額定 = 工作電流 ÷ 0.75，Littelfuse 2021）、防反接擋插錯、TVS 擋被打到。防反接三選一：並聯二極體（一定要配保險絲，否則二極體燒成短路）、串蕭特基（2A 掉 0.42V = 0.84W、47°C）、P-MOS（IRF5305 0.06Ω → 0.24W，但低電壓 Rds 上升、電池端要用閘極電阻變形版）。TVS 三個電壓：Vstandoff &gt; 工作×1.2、Vclamp &lt; 晶片絕對最大值（SMBJ5.0A：5V／6.4~7.07V／9.2V@65.2A）。續流二極體並在線圈，不在入口。</p>
+      <div><span class="tag">保險絲 ÷0.75</span><span class="tag">P-MOS 防反接</span><span class="tag">TVS 三電壓</span><span class="tag">續流</span></div>
+    </div>
+    <div class="card" id="sk-bms">
+      <div class="sub">BATTERY PCM</div>
+      <h3>battery-protection-board-bms</h3>
+      <p>保護板只是「開關」：過充 4.28V、過放 <b>2.4V</b>（韌體要自己在 3.2V 關機）、過流靠量 MOS 壓降 0.15V → 8205A 兩顆串 50mΩ ＝ <b>3.0A</b> 跳，電池剩 3.0V 時變 <b>2.34A</b>，這就是「充飽能用、快沒電一動就斷」。它不會平衡（2S 也多半不會）、不會擋反接、不會充電。PCM vs BMS 差異表＋驗收四步。</p>
+      <div><span class="tag">DW01</span><span class="tag">8205A</span><span class="tag">跳脫電流實算</span><span class="tag">PCM≠BMS</span></div>
     </div>
     <div class="card" id="sk-decoup">
       <div class="sub">DECOUPLING</div>
@@ -592,6 +610,12 @@
       <tr><td>注入查短路</td><td class="k">電壓 ≤ 軌標稱（芯軌 0.8–1.0V）、限流 1–1.5A；熱風拆件 380–400°C</td></tr>
       <tr><td>行為分類 baseline</td><td class="k">全猜最多數類的準確率 = 該類佔比　「睡」佔 28~53% → 先打敗這個才算有做事</td></tr>
       <tr><td>準確率的兩個乘數</td><td class="k">同批貓訓練/測試虛胖 <b>10~20 個百分點</b>；類別 4→15 類掉 <b>13 個百分點</b>（Smit 2023）</td></tr>
+      <tr><td>保險絲額定</td><td class="k">I_rated = I_工作 ÷ <b>0.75</b>（25°C，Littelfuse Fuseology 2021）；2.25A → 3A</td></tr>
+      <tr><td>PTC 溫度降額</td><td class="k">Ihold 在 +80°C 只剩 <b>50%</b>、−20°C 變 130%（Eaton TN 11055）；Itrip ≈ 2×Ihold</td></tr>
+      <tr><td>TVS 選法</td><td class="k">Vstandoff &gt; 最高電壓×1.2；Vclamp &lt; 晶片絕對最大值（SMBJ5.0A：9.2V@65.2A、600W）</td></tr>
+      <tr><td>防反接損耗</td><td class="k">串蕭特基 0.42V×2A = <b>0.84W</b>；P-MOS 0.06Ω×2A² = <b>0.24W</b>；3.7V 系統掉 0.42V = 11%</td></tr>
+      <tr><td>續流尖峰</td><td class="k">V = L·di/dt　100mH、100mA、1µs → 10,000V（計算值，實測受寄生電容限制）</td></tr>
+      <tr><td>保護板跳脫電流</td><td class="k">I_trip = 0.15V ÷ (2×Rds_on)　50mΩ → <b>3.0A</b>；Vgs 掉到 2.5V（64mΩ）→ 2.34A</td></tr>
     </tbody>
   </table>
 
@@ -628,6 +652,9 @@
       <tr><td>量測儀器撐峰值</td><td class="k">並 100µF → 20mA 可撐 1.5ms（掉 0.3V）</td></tr>
       <tr><td>峰值電容（1ms 掉 0.3V）</td><td class="k">100µF→30mA　470µF→141mA　1000µF→300mA</td></tr>
       <tr><td>馬達／繼電器</td><td class="k">獨立 100µF + 飛輪二極體</td></tr>
+      <tr><td>TVS 反應 vs 其他</td><td class="k">TVS ps 級（首選）／齊納快但功率小（不是突波保護）／MOV ns 級但會老化（常串溫度保險絲）／GDT 太慢、只給高壓</td></tr>
+      <tr><td>P-MOS 防反接門檻</td><td class="k">Vgs 上限 ±20V；電源 &gt;12V 要加電阻＋齊納；電池端不能用「電源版」電路（實測會一直跳保險絲）</td></tr>
+      <tr><td>電池保護板數字</td><td class="k">過充 4.28V／釋放 4.08V；過放 2.40V／釋放 3.00V；過流 0.15V；短路 1.30V；自耗 3µA（DW01）</td></tr>
       <tr><td>PWM 頻率</td><td class="k">&gt; 20kHz（避開人耳）</td></tr>
       <tr><td>取樣率</td><td class="k">電流 10–20kHz／速度 1–2kHz／位置 100–500Hz</td></tr>
       <tr><td>編碼器</td><td class="k">360 CPR × 4 = 1440 counts/rev ≈ 0.25°</td></tr>
@@ -837,7 +864,7 @@ python3 rail_triage.py --csv readings.csv --tol 0.3</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-22 · 四十四本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-23 · 四十六本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

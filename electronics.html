@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 四十六本手冊 · 速查索引</title>
+<title>電子／機電 四十八本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統、成本與通路 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -59,7 +59,7 @@
 <body>
 <div class="wrap">
   <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-23</div>
-  <h1>電子電路與機電：四十六本手冊</h1>
+  <h1>電子電路與機電：四十八本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -161,6 +161,11 @@
       <tr><td>量到的電壓比算出來低、接上去就掉</td><td class="k"><a class="jump" href="#sk-imped">signal-impedance-and-loading</a></td></tr>
       <tr><td>探棒一碰波形變小、變慢、電路就當</td><td class="k"><a class="jump" href="#sk-imped">signal-impedance-and-loading</a></td></tr>
       <tr><td>分壓給 ADC 讀值偏低、串到隔壁通道</td><td class="k"><a class="jump" href="#sk-imped">signal-impedance-and-loading</a></td></tr>
+      <tr><td>I2S 麥克風沒聲音、讀到全是 0 或 −1</td><td class="k"><a class="jump" href="#sk-mic">mems-microphone-i2s</a></td></tr>
+      <tr><td>麥克風很小聲／有嗡嗡聲／波形被切平</td><td class="k"><a class="jump" href="#sk-mic">mems-microphone-i2s</a></td></tr>
+      <tr><td>麥克風要選哪一顆（SNR／AOP／dBFS 看不懂）</td><td class="k"><a class="jump" href="#sk-mic">mems-microphone-i2s</a></td></tr>
+      <tr><td>秤重數字一直跳、換個位置就差幾十克</td><td class="k"><a class="jump" href="#sk-loadcell">load-cell-weight-sensing</a></td></tr>
+      <tr><td>貓體重／貓砂盆／飼料桶要量重量</td><td class="k"><a class="jump" href="#sk-loadcell">load-cell-weight-sensing</a></td></tr>
       <tr><td>感測器阻抗高，要不要加 buffer</td><td class="k"><a class="jump" href="#sk-opamp">opamp-buffer-basics</a></td></tr>
       <tr><td>LM358 能不能用、op-amp 怎麼挑</td><td class="k"><a class="jump" href="#sk-opamp">opamp-buffer-basics</a></td></tr>
       <tr><td>加了 op-amp 反而振盪、輸出撞邊</td><td class="k"><a class="jump" href="#sk-opamp">opamp-buffer-basics</a></td></tr>
@@ -206,8 +211,8 @@
     </tbody>
   </table>
 
-  <!-- 2 四十六本 -->
-  <h2 id="skills">② 四十六本手冊</h2>
+  <!-- 2 四十八本 -->
+  <h2 id="skills">② 四十八本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -268,6 +273,18 @@
       <h3>audio-features-mfcc</h3>
       <p>聲音怎麼變 13 個數字：32ms/10ms 切框、Hamming 旁瓣 -42.7dB、mel 刻度、為什麼丟 c0、5 個驗證法（1kHz→bin 32）、9 個常見錯誤。</p>
       <div><span class="tag">FFT 512</span><span class="tag">26 mel</span><span class="tag">librosa 對照</span></div>
+    </div>
+    <div class="card" id="sk-mic">
+      <div class="sub">MICROPHONE</div>
+      <h3>mems-microphone-i2s</h3>
+      <p>麥克風不是零件，是整條收音鏈壓在一顆 3mm 晶片裡。<b>dB SPL = dBFS + 94 − 靈敏度</b>（−26dBFS → +120）：正常講話 1 公尺只有 <b>33 階</b>、貓在項圈旁約 580 階、0dBFS 就是 120dB SPL 爆音。INMP441／SPH0645／ICS-43434 <b>三顆全部停產或 NRND</b>，量產要換 PDM（IM69D130：SNR 69、AOP 130）。16-bit 不是瓶頸——量化雜訊 98dB 遠低於麥克風 SNR 61dB，理論 10-bit 就夠。呼嚕 21–30Hz 被 45–60Hz 低頻截止切掉，特徵別取 F0。</p>
+      <div><span class="tag">I2S / PDM</span><span class="tag">停產清單</span><span class="tag">dBFS→dB SPL</span><span class="tag">幽靈供電</span></div>
+    </div>
+    <div class="card" id="sk-loadcell">
+      <div class="sub">WEIGHT</div>
+      <h3>load-cell-weight-sensing</h3>
+      <p>秤重是量「金屬被壓彎幾微米」：5kg cell 配 4.3V 激勵，滿刻度只有 <b>4.3mV</b>（AA 電池的 1/300），所以一定要 128 倍 + 24-bit。HX711 雜訊 50nV（10SPS）→ 訊號/雜訊 86,000 → <b>0.06g</b> 是電路極限。會飄不是電路的錯：溫漂 <b>0.2%FS/10°C = 10g</b>、蠕變 0.05%FS/3min、四角 0.1%FS 全在同一個量級 → 貓砂盆事件偵測只能靠基線追蹤。3.3V 供電激勵只剩 3.0V，解析度砍 30%。</p>
+      <div><span class="tag">HX711</span><span class="tag">溫漂 vs 事件</span><span class="tag">基線追蹤</span></div>
     </div>
     <div class="card" id="sk-schmitt">
       <div class="sub">COMPARATOR</div>
@@ -583,6 +600,10 @@
       <tr><td>10 倍規則的誤差</td><td class="k">Rin=10×Rout → −9.1%；100× → −1.0%（不是 0）</td></tr>
       <tr><td>分壓的源阻抗</td><td class="k">Rth = R1 ∥ R2（不是 R1+R2）</td></tr>
       <tr><td>ADC 取樣建立</td><td class="k">t_ACQ ≥ k·τ　τ=Rth·C_sample；12-bit k≈9（TI 用 11 留餘裕）</td></tr>
+      <tr><td>麥克風音量換算</td><td class="k">dB SPL = dBFS + 94 − 靈敏度　（−26dBFS → +120；−36dBFS → +130）</td></tr>
+      <tr><td>位元數夠不夠</td><td class="k">量化雜訊 ≈ 6.02N + 1.76dB；N ≥ (SNR − 1.76)/6.02　SNR 61 → 10 bit 就夠</td></tr>
+      <tr><td>HX711 滿刻度</td><td class="k">±0.5 × AVDD ÷ 增益　5V / 128 → <b>±20mV</b></td></tr>
+      <tr><td>秤重換算公克</td><td class="k">重量 = (raw − raw0) × k　k = 砝碼重 / (raw1 − raw0)</td></tr>
       <tr><td>偏壓電流造成的誤差</td><td class="k">V_err = Ib × Rsource　250nA×1MΩ = 250mV</td></tr>
       <tr><td>op-amp 可用頻寬</td><td class="k">f = GBW / 增益　1MHz/11 = 91kHz</td></tr>
       <tr><td>電表 burden 壓降</td><td class="k">V_drop = I × 1.8mV/mA（mA 檔）／µA 檔 ×100mV/mA　500mA → 0.9V</td></tr>
@@ -772,6 +793,13 @@
       <tr><td>遲滯設計實算（Vref 1.65／3.3V／R1 10k）</td><td class="k">R2 47k→<b>702mV</b>／100k→330m／220k→150m／470k→70m／1M→33m／2.2M→15m</td></tr>
       <tr><td>貓叫 F0 與長度</td><td class="k">平均 <b>208~1000Hz</b>、典型 525Hz；長度 530~3161ms（AABS 270, 2024，888 個 meow）</td></tr>
       <tr><td>貓呼嚕 F0</td><td class="k">吸氣 23.0~26.1Hz／呼氣 20.9~27.2Hz；最低 17.1、最高 30.5Hz（J Vet Sci 2020）</td></tr>
+      <tr><td>MEMS 麥克風四顆</td><td class="k">INMP441 <b>61dBA</b>／AOP120／2.2mA·<b>NRND</b>；ICS-43434 65／120／490µA·<b>EOL</b>；SPH0645 65／120／600µA·<b>EOL</b>；IM69D130 <b>69</b>／<b>130</b>／980µA·量產中</td></tr>
+      <tr><td>麥克風靈敏度 → 爆音點</td><td class="k">−26dBFS → 0dBFS = <b>120dB SPL</b>；−36dBFS → 0dBFS = <b>130dB SPL</b>（AOP）</td></tr>
+      <tr><td>麥克風實際位準（16-bit）</td><td class="k">講話 1m（60dB SPL）= −60dBFS = <b>33 階</b>；貓在項圈旁（約 85dB SPL）= −35dBFS = <b>580 階</b></td></tr>
+      <tr><td>麥克風低頻截止</td><td class="k">INMP441 60Hz／SPH0645 45Hz／ICS-43434 60Hz → 呼嚕 17~30Hz 的 <b>F0 全部錄不到</b></td></tr>
+      <tr><td>5kg 秤重傳感器滿刻度</td><td class="k">1mV/V × 4.3V 激勵 = <b>4.3mV</b>；HX711 量 ±20mV → 只用掉 <b>21%</b> 動態範圍</td></tr>
+      <tr><td>秤重雜訊極限</td><td class="k">50nV rms ÷ 4.3mV = 86,000 倍（16.4 bit）→ 5kg 上 <b>0.06g</b></td></tr>
+      <tr><td>便宜 load cell 三個殺手</td><td class="k">溫漂 <b>0.2%FS/10°C</b>（5kg→10g）／蠕變 0.05%FS/3min／四角誤差 0.1%FS</td></tr>
       <tr><td>FFT 耗時（1024 點）</td><td class="k">ESP32-S3 float <b>97,847 cycles（0.41ms）</b>／16-bit 定點 15,623（0.065ms）（Espressif benchmark）</td></tr>
       <tr><td>12-bit 理想 SNR</td><td class="k">6.02N+1.76 = <b>74.0dB</b>；ESP32 內建 ADC 實際只有 9~10 bit 水準（推估）</td></tr>
       <tr><td>4 層板報價</td><td class="k">JLCPCB 4 層 5 片 100×100mm <b>$2</b>，與 2 層同價（JLCPCB 官網活動頁 2026-11-19 查）→ 沒有理由為省錢用 2 層</td></tr>
@@ -864,7 +892,7 @@ python3 rail_triage.py --csv readings.csv --tol 0.3</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-23 · 四十六本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-24 · 四十八本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

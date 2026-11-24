@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 四十八本手冊 · 速查索引</title>
+<title>電子／機電 五十本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統、成本與通路 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -58,8 +58,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-23</div>
-  <h1>電子電路與機電：四十八本手冊</h1>
+  <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-25</div>
+  <h1>電子電路與機電：五十本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -164,6 +164,12 @@
       <tr><td>I2S 麥克風沒聲音、讀到全是 0 或 −1</td><td class="k"><a class="jump" href="#sk-mic">mems-microphone-i2s</a></td></tr>
       <tr><td>麥克風很小聲／有嗡嗡聲／波形被切平</td><td class="k"><a class="jump" href="#sk-mic">mems-microphone-i2s</a></td></tr>
       <tr><td>麥克風要選哪一顆（SNR／AOP／dBFS 看不懂）</td><td class="k"><a class="jump" href="#sk-mic">mems-microphone-i2s</a></td></tr>
+      <tr><td>要調 LED 亮度／馬達轉速，PWM 參數不知填多少</td><td class="k"><a class="jump" href="#sk-pwm">pwm-basics-and-duty-cycle</a></td></tr>
+      <tr><td>LED 會閃、馬達尖叫、相機拍到黑條紋</td><td class="k"><a class="jump" href="#sk-pwm">pwm-basics-and-duty-cycle</a></td></tr>
+      <tr><td>設 50% 量起來不是 50%、亮度會跳格</td><td class="k"><a class="jump" href="#sk-pwm">pwm-basics-and-duty-cycle</a></td></tr>
+      <tr><td>datasheet 的 dBFS／dBm／SNR 看不懂哪個大</td><td class="k"><a class="jump" href="#sk-db">decibel-db-basics</a></td></tr>
+      <tr><td>算藍牙／Wi-Fi 距離夠不夠、天線 2dBi 是什麼</td><td class="k"><a class="jump" href="#sk-db">decibel-db-basics</a></td></tr>
+      <tr><td>想用分貝 App 量貓叫多大聲，數字可信嗎</td><td class="k"><a class="jump" href="#sk-db">decibel-db-basics</a></td></tr>
       <tr><td>秤重數字一直跳、換個位置就差幾十克</td><td class="k"><a class="jump" href="#sk-loadcell">load-cell-weight-sensing</a></td></tr>
       <tr><td>貓體重／貓砂盆／飼料桶要量重量</td><td class="k"><a class="jump" href="#sk-loadcell">load-cell-weight-sensing</a></td></tr>
       <tr><td>感測器阻抗高，要不要加 buffer</td><td class="k"><a class="jump" href="#sk-opamp">opamp-buffer-basics</a></td></tr>
@@ -211,8 +217,8 @@
     </tbody>
   </table>
 
-  <!-- 2 四十八本 -->
-  <h2 id="skills">② 四十八本手冊</h2>
+  <!-- 2 五十本 -->
+  <h2 id="skills">② 五十本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -285,6 +291,18 @@
       <h3>load-cell-weight-sensing</h3>
       <p>秤重是量「金屬被壓彎幾微米」：5kg cell 配 4.3V 激勵，滿刻度只有 <b>4.3mV</b>（AA 電池的 1/300），所以一定要 128 倍 + 24-bit。HX711 雜訊 50nV（10SPS）→ 訊號/雜訊 86,000 → <b>0.06g</b> 是電路極限。會飄不是電路的錯：溫漂 <b>0.2%FS/10°C = 10g</b>、蠕變 0.05%FS/3min、四角 0.1%FS 全在同一個量級 → 貓砂盆事件偵測只能靠基線追蹤。3.3V 供電激勵只剩 3.0V，解析度砍 30%。</p>
       <div><span class="tag">HX711</span><span class="tag">溫漂 vs 事件</span><span class="tag">基線追蹤</span></div>
+    </div>
+    <div class="card" id="sk-pwm">
+      <div class="sub">PWM</div>
+      <h3>pwm-basics-and-duty-cycle</h3>
+      <p>PWM 不是把電壓壓小，是<b>把開關快速連開連關</b>：全開時不發熱，靠時間比例降壓。三條公式（Vavg = D·Vcc、Vrms = Vcc·√D、發熱要用 RMS）。頻率表：LED &gt;200Hz、要上鏡頭 &gt;1.25kHz（<b>IEEE 1789-2015</b>）、馬達 &gt;20kHz、4-pin 風扇 <b>25kHz</b>（Intel 2005）、伺服 50Hz＋1–2ms。ESP32 的頻率與解析度是同一塊餅：80MHz APB 下 25kHz 只能 <b>11-bit</b>、20kHz 12-bit、1kHz 16-bit（<b>S3 只到 14-bit</b>）。PWM→類比：ΔV ≈ Vcc·D(1−D)/(fRC)，3.3V/20kHz/1k/1µF = 41mVpp。</p>
+      <div><span class="tag">duty cycle</span><span class="tag">LEDC</span><span class="tag">IEEE 1789</span><span class="tag">PWM→DAC</span></div>
+    </div>
+    <div class="card" id="sk-db">
+      <div class="sub">dB</div>
+      <h3>decibel-db-basics</h3>
+      <p>dB 不是單位，是<b>倍數壓縮</b>——看到 dB 先問「相對於什麼」。三關鍵：<b>+3dB＝功率×2、+6dB＝電壓×2、+10dB ≈ 聽感×2</b>（1dB 是人耳最小可辨）。基準表：dBm＝1mW（0dBm = 0.224V@50Ω）、dBu＝0.775V、dBV＝1V、dB SPL＝20µPa（<b>94dB = 1Pa</b>）、dBFS＝滿刻度、dBi/dBd 差 2.15dB。距離加倍 <b>−6dB</b>、兩台同級噪音相加 <b>+3dB</b>、平均 N 次只降 10logN。藍牙 Class 2 = +4dBm、規格靈敏度 −70／−82dBm。</p>
+      <div><span class="tag">dBm</span><span class="tag">dB SPL</span><span class="tag">dBFS</span><span class="tag">鏈路預算</span></div>
     </div>
     <div class="card" id="sk-schmitt">
       <div class="sub">COMPARATOR</div>
@@ -525,6 +543,17 @@
       <tr><td>軟體遲滯</td><td class="k">觸發 = 門檻+N、解除 = 門檻−N（12-bit 3.3V → 1LSB = 0.806mV）</td></tr>
       <tr><td>感抗／容抗</td><td class="k">XL = 2πfL　XC = 1/(2πfC)</td></tr>
       <tr><td>LC 諧振</td><td class="k">f0 = 1/(2π√(LC))</td></tr>
+      <tr><td>PWM 平均電壓</td><td class="k">Vavg = D·Vcc　（30% × 3.3V = 0.99V）</td></tr>
+      <tr><td>PWM 有效值／發熱</td><td class="k">Vrms = Vcc·√D　（D=50% → 0.707·Vcc，不是 0.5）</td></tr>
+      <tr><td>PWM 解析度上限</td><td class="k">freq × 2^bits ≤ 時鐘　ESP32 80MHz：25kHz→11bit、20kHz→12bit、1kHz→16bit</td></tr>
+      <tr><td>PWM 濾成類比</td><td class="k">ΔV ≈ Vcc·D(1−D)/(f·R·C)　D=0.5 最差；3.3V/20kHz/1k/1µF → 41mVpp</td></tr>
+      <tr><td>dB（功率）</td><td class="k">dB = 10·log10(P2/P1)　+3dB = ×2、+10dB = ×10</td></tr>
+      <tr><td>dB（振幅）</td><td class="k">dB = 20·log10(V2/V1)　+6dB = ×2、+20dB = ×10</td></tr>
+      <tr><td>dBm → 電壓</td><td class="k">Vrms = √(P·R)；0dBm = 1mW = 0.224V@50Ω</td></tr>
+      <tr><td>dB SPL ↔ 聲壓</td><td class="k">94dB SPL = 1Pa；p = 20µPa·10^(L/20)</td></tr>
+      <tr><td>距離衰減（自由場）</td><td class="k">距離×2 → −6dB；×10 → −20dB（20·log10(d2/d1)）</td></tr>
+      <tr><td>雜訊平均</td><td class="k">降 10·log10(N) dB → 4 次 −6dB、100 次 −20dB</td></tr>
+      <tr><td>鏈路預算</td><td class="k">Tx − Rx靈敏度 = 餘裕；BLE +4dBm 到 −82dBm = 86dB</td></tr>
       <tr><td>電池壽命（粗估）</td><td class="k">t = C[Ah]·0.8 / I[A]</td></tr>
       <tr><td>電池壽命（準）</td><td class="k">t = 可用mAh ÷ I_avg　可用 ≈ 標稱×0.65</td></tr>
       <tr><td>平台區斜率</td><td class="k">mV/1% = (V_hi − V_lo) ÷ (SoC_hi − SoC_lo)　4.00→3.60 跨 70% = <b>5.7mV/1%</b></td></tr>
@@ -676,7 +705,14 @@
       <tr><td>TVS 反應 vs 其他</td><td class="k">TVS ps 級（首選）／齊納快但功率小（不是突波保護）／MOV ns 級但會老化（常串溫度保險絲）／GDT 太慢、只給高壓</td></tr>
       <tr><td>P-MOS 防反接門檻</td><td class="k">Vgs 上限 ±20V；電源 &gt;12V 要加電阻＋齊納；電池端不能用「電源版」電路（實測會一直跳保險絲）</td></tr>
       <tr><td>電池保護板數字</td><td class="k">過充 4.28V／釋放 4.08V；過放 2.40V／釋放 3.00V；過流 0.15V；短路 1.30V；自耗 3µA（DW01）</td></tr>
-      <tr><td>PWM 頻率</td><td class="k">&gt; 20kHz（避開人耳）</td></tr>
+      <tr><td>PWM 頻率</td><td class="k">LED &gt;200Hz（要上鏡頭 &gt;1.25kHz，IEEE 1789-2015）／馬達 &gt;20kHz／4-pin 風扇 25kHz（21–28kHz，Intel 2005）／伺服 50Hz＋1–2ms 脈寬</td></tr>
+      <tr><td>ESP32 PWM 解析度</td><td class="k">80MHz APB：8bit→312kHz、10bit→78kHz、12bit→19.5kHz、14bit→4.9kHz、16bit→1.2kHz、20bit→76Hz（S3 只到 14bit）</td></tr>
+      <tr><td>GPIO 驅動能力</td><td class="k">ESP32 預設 20mA、絕對最大 40mA（datasheet）→ 馬達/蜂鳴器一律走 MOSFET</td></tr>
+      <tr><td>dB 三關鍵</td><td class="k">+3dB＝功率×2／+6dB＝電壓×2／+10dB ≈ 聽感×2；1dB 是人耳最小可辨（1kHz）</td></tr>
+      <tr><td>dBm 對照</td><td class="k">+20＝100mW／0＝1mW／−30＝1µW／−70＝0.1nW／−82＝63pW</td></tr>
+      <tr><td>dB SPL 對照</td><td class="k">0 聽覺閾／60 對話／85 每日 8h 上限／94＝1Pa（校正點）／120–130 痛</td></tr>
+      <tr><td>dBu vs dBV</td><td class="k">0dBu＝0.775Vrms、0dBV＝1Vrms；+4dBu 比 −10dBV 高 11.8dB</td></tr>
+      <tr><td>藍牙發射等級</td><td class="k">Class1 +20dBm／Class1.5 +10／Class2 +4（2.5mW）／Class3 0dBm；規格靈敏度 −70（未編碼）／−82（Coded S=8）</td></tr>
       <tr><td>取樣率</td><td class="k">電流 10–20kHz／速度 1–2kHz／位置 100–500Hz</td></tr>
       <tr><td>編碼器</td><td class="k">360 CPR × 4 = 1440 counts/rev ≈ 0.25°</td></tr>
       <tr><td>3.3V 選 74 系列</td><td class="k">74HCT 或 74LVC（不要 74HC）</td></tr>
@@ -892,7 +928,7 @@ python3 rail_triage.py --csv readings.csv --tol 0.3</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-24 · 四十八本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-25 · 五十本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

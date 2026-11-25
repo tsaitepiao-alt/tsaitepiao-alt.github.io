@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 五十本手冊 · 速查索引</title>
+<title>電子／機電 五十二本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統、成本與通路 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -59,7 +59,7 @@
 <body>
 <div class="wrap">
   <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-25</div>
-  <h1>電子電路與機電：五十本手冊</h1>
+  <h1>電子電路與機電：五十二本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -214,11 +214,19 @@
       <tr><td>繼電器／馬達斷電把電晶體打死</td><td class="k"><a class="jump" href="#sk-protect">power-input-protection</a></td></tr>
       <tr><td>電池充飽能用、快沒電一動就斷電</td><td class="k"><a class="jump" href="#sk-bms">battery-protection-board-bms</a></td></tr>
       <tr><td>要不要平衡、2S 保護板是不是 BMS</td><td class="k"><a class="jump" href="#sk-bms">battery-protection-board-bms</a></td></tr>
+      <tr><td>要買 0603 還是 0805、手焊好不好焊</td><td class="k"><a class="jump" href="#sk-footprint">pcb-footprint-and-package</a></td></tr>
+      <tr><td>買回來的料放不上去、焊盤對不上</td><td class="k"><a class="jump" href="#sk-footprint">pcb-footprint-and-package</a></td></tr>
+      <tr><td>貼片回來立碑、偏移、整批不良</td><td class="k"><a class="jump" href="#sk-footprint">pcb-footprint-and-package</a></td></tr>
+      <tr><td>焊盤要多大、courtyard 留多少</td><td class="k"><a class="jump" href="#sk-footprint">pcb-footprint-and-package</a></td></tr>
+      <tr><td>第一次下單打樣、每個欄位在問什麼</td><td class="k"><a class="jump" href="#sk-order">pcb-order-specs</a></td></tr>
+      <tr><td>板子卡不進外殼、螺絲孔對不上</td><td class="k"><a class="jump" href="#sk-order">pcb-order-specs</a></td></tr>
+      <tr><td>細間距要用 HASL 還是 ENIG</td><td class="k"><a class="jump" href="#sk-order">pcb-order-specs</a></td></tr>
+      <tr><td>要拼板／V-cut／郵票孔怎麼設</td><td class="k"><a class="jump" href="#sk-order">pcb-order-specs</a></td></tr>
     </tbody>
   </table>
 
-  <!-- 2 五十本 -->
-  <h2 id="skills">② 五十本手冊</h2>
+  <!-- 2 五十二本 -->
+  <h2 id="skills">② 五十二本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -520,6 +528,18 @@
       <p>不開機<b>九成在前三關就找到</b>：目視 30 秒 → 斷電量對地（二極體檔：正常 <b>0.35～0.70</b>、硬短路 <b>&lt;0.10</b>、跟好板差 30% 就要查）→ 限流上電看吃多少（<b>0mA</b>＝沒通、頂到限流＝短路、比好板多 2 倍＝漏電）。找短路三招：IPA 先乾的那顆、限流注入（<b>不超過軌電壓</b>、1–1.5A）、拆磁珠/0Ω <b>切一半</b>。附 <code>rail_triage.py</code> 把好板/壞板讀值算成比值並排嚴重度。反面教材：直接插原廠變壓器查短路，會把多層板內層銅燒穿。</p>
       <div><span class="tag">diode 0.35–0.70</span><span class="tag">切一半</span><span class="tag">IPA 找熱點</span><span class="tag">1V/1.5A 注入</span><span class="tag">先量好板</span><span class="tag">別用蜂鳴檔</span></div>
     </div>
+    <div class="card" id="sk-footprint">
+      <div class="sub">FOOTPRINT / 封裝</div>
+      <h3>pcb-footprint-and-package</h3>
+      <p>封裝是零件的<b>鞋號</b>：畫錯不是醜，是焊不上、貼歪、整批報廢。最致命的不是畫，是<b>名字</b> —— EIA 0603 = 1.6×0.8mm，公制 0603 = <b>0.6×0.3mm</b>（差 2.6 倍）。手焊建議停在 <b>0603（1608）</b>；0402 可以但 17 顆會後悔；LGA/QFN 0.5mm 腳距<b>只能回焊</b>。焊盤別自己發明：IPC-7351B（2010）三級＝courtyard <b>0.5/0.25/0.1mm</b>、toe <b>0.55/0.35/0.15mm</b>，KiCad 內建庫是 B 級；鋼網 area ratio ≥<b>0.66</b>、aspect ≥1.5（IPC-7525B）。實測我們的項圈板：32 顆裡 <b>17 顆 0402</b>＋LGA P0.5mm → 手焊不可能，只能送打件。</p>
+      <div><span class="tag">EIA vs 公制</span><span class="tag">IPC-7351 三級</span><span class="tag">courtyard 0.25</span><span class="tag">立碑</span><span class="tag">1:1 印出來驗</span></div>
+    </div>
+    <div class="card" id="sk-order">
+      <div class="sub">FAB ORDER / 公差</div>
+      <h3>pcb-order-specs</h3>
+      <p>下單每個欄位都在問「你能接受多大誤差」：板厚 1.6mm 公差 <b>±10%</b>（實際 1.44～1.76，外殼卡槽要做 1.85）、線寬 <b>±20%</b>（畫 0.10 → 實際 0.08）、外形 V-cut <b>±0.4mm</b> vs CNC 精密 ±0.1。表面處理是重點：0.5mm 腳距／BGA／測試點<b>一定要 ENIG</b>，HASL 的錫瘤直接連錫。拼板：V-cut 只能直線、0.4mm 板不能用、元件離切線 ≥3mm（MLCC 3.18mm 且長邊平行）。小於 70×70 要拼板＋工藝邊，fiducial 離板邊 ≥3.85mm。</p>
+      <div><span class="tag">板厚 ±10%</span><span class="tag">ENIG vs HASL</span><span class="tag">V-cut ±0.4</span><span class="tag">郵票孔</span><span class="tag">工藝邊</span></div>
+    </div>
   </div>
 
   <!-- 3 公式 -->
@@ -666,6 +686,11 @@
       <tr><td>防反接損耗</td><td class="k">串蕭特基 0.42V×2A = <b>0.84W</b>；P-MOS 0.06Ω×2A² = <b>0.24W</b>；3.7V 系統掉 0.42V = 11%</td></tr>
       <tr><td>續流尖峰</td><td class="k">V = L·di/dt　100mH、100mA、1µs → 10,000V（計算值，實測受寄生電容限制）</td></tr>
       <tr><td>保護板跳脫電流</td><td class="k">I_trip = 0.15V ÷ (2×Rds_on)　50mΩ → <b>3.0A</b>；Vgs 掉到 2.5V（64mΩ）→ 2.34A</td></tr>
+      <tr><td>鋼網面積比</td><td class="k">AR = L·W / (2(L+W)·T) ≥ <b>0.66</b>　0402 焊盤 0.5×0.6、T=0.12 → 1.14 ✓</td></tr>
+      <tr><td>鋼網長寬比</td><td class="k">aspect = W / T ≥ <b>1.5</b>（太厚＝錫印不出來）</td></tr>
+      <tr><td>焊盤外伸／地盤</td><td class="k">IPC-7351B：toe <b>0.55/0.35/0.15mm</b>、courtyard <b>0.5/0.25/0.1mm</b>（A/B/C；0402 為 0.20/0.15/0.10）</td></tr>
+      <tr><td>板厚最壞值</td><td class="k">標稱 ×(1±10%)　1.6 → <b>1.44～1.76</b>（&lt;1.0mm 改 ±0.1mm）</td></tr>
+      <tr><td>線寬最壞值</td><td class="k">設計 ×(1±20%)　0.10 → <b>0.08～0.12mm</b>；設計在極限＝實際更細</td></tr>
     </tbody>
   </table>
 
@@ -675,6 +700,11 @@
     <thead><tr><th>項目</th><th>數值</th></tr></thead>
     <tbody>
       <tr><td>螺絲間隙孔（3D 列印）</td><td class="k">M1.6→1.8　M2→2.2　M3→3.2　M4→4.3　M5→5.3</td></tr>
+      <tr><td>貼片封裝尺寸（EIA）</td><td class="k">0402=1.0×0.5　0603=1.6×0.8　0805=2.0×1.25　1206=3.2×1.6 mm（公制 1005/1608/2012/3216）</td></tr>
+      <tr><td>手焊門檻</td><td class="k">0805 輕鬆、0603 可以、0402 硬（顯微/尖鑷）、QFN/LGA 0.5mm <b>只能回焊</b></td></tr>
+      <tr><td>PCB 下單公差</td><td class="k">板厚 ±10%、線寬 ±20%、CNC ±0.1（精密）/±0.2、<b>V-cut ±0.4</b>（JLC 2025）</td></tr>
+      <tr><td>拼板數字</td><td class="k">V-cut 銅離線 ≥0.4（建議 1.0）、元件 ≥3、郵票孔 0.6mm×5~8 孔、板距 1.6~2、最小拼板 70×70</td></tr>
+      <tr><td>鋼網厚度</td><td class="k">標準 0.10~0.20mm（0402 用 0.10~0.12）；JLC 可到 0.03~0.5 特規</td></tr>
       <tr><td>攻牙鑽孔</td><td class="k">M1.6→1.25　M3→2.5　M4→3.3　M5→4.2</td></tr>
       <tr><td>去耦</td><td class="k">100nF 貼腳 + 10µF 入口（bulk ≥ local 總和 ×10）</td></tr>
       <tr><td>焊盤+ESL（0603）</td><td class="k">約 3 nH → 100nF 實際只護到 <b>9MHz</b></td></tr>
@@ -928,7 +958,7 @@ python3 rail_triage.py --csv readings.csv --tol 0.3</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-25 · 五十本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-26 · 五十二本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>

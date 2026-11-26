@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>電子／機電 五十二本手冊 · 速查索引</title>
+<title>電子／機電 五十三本手冊 · 速查索引</title>
 <meta name="description" content="電子電路、數位邏輯、馬達選型、控制系統、成本與通路 — 一句話找到該用哪本手冊，附公式速查與常用數字">
 <style>
   :root{--bg:#0f1116;--card:#161a21;--line:#242a33;--acc:#e8734a;--lime:#cbf24c;--fg:#eef2f7;--dim:#98a2b3;--mono:ui-monospace,Menlo,monospace}
@@ -59,7 +59,7 @@
 <body>
 <div class="wrap">
   <div class="eb">ELECTRONICS / MECHATRONICS · 2026-11-25</div>
-  <h1>電子電路與機電：五十二本手冊</h1>
+  <h1>電子電路與機電：五十三本手冊</h1>
   <p class="lead">先查「症狀」，再翻手冊。全部是 agent 會自動載入的 skill，<b>問一句就會用</b>。</p>
 
   <input id="q" placeholder="搜尋：發燙 / PID / I²C / 扭矩 / 74HC …">
@@ -124,6 +124,9 @@
       <tr><td>週邊電源要切：P-MOS 還是負載開關</td><td class="k"><a class="jump" href="#sk-gating">peripheral-power-gating</a></td></tr>
       <tr><td>deep 還是 light sleep、醒來划不划算</td><td class="k"><a class="jump" href="#sk-sleepmode">sleep-mode-selection</a></td></tr>
       <tr><td>每 10 秒醒一次，電池幾天就沒</td><td class="k"><a class="jump" href="#sk-sleepmode">sleep-mode-selection</a></td></tr>
+      <tr><td>藍牙開著，待機從 10µA 變 30mA</td><td class="k"><a class="jump" href="#sk-ble">ble-power-tuning</a></td></tr>
+      <tr><td>常時廣播、保持連線、還是醒來才傳</td><td class="k"><a class="jump" href="#sk-ble">ble-power-tuning</a></td></tr>
+      <tr><td>手機連上後耗電暴增（參數被改掉）</td><td class="k"><a class="jump" href="#sk-ble">ble-power-tuning</a></td></tr>
       <tr><td>穩壓輸出抖、電容換了就振盪</td><td class="k"><a class="jump" href="#sk-power">ldo-vs-buck-which-to-use</a></td></tr>
       <tr><td>馬達一動 MCU 就重啟</td><td class="k"><a class="jump" href="#sk-tree">power-tree-design</a></td></tr>
       <tr><td>USB 插著電池還掉電</td><td class="k"><a class="jump" href="#sk-tree">power-tree-design</a></td></tr>
@@ -225,8 +228,8 @@
     </tbody>
   </table>
 
-  <!-- 2 五十二本 -->
-  <h2 id="skills">② 五十二本手冊</h2>
+  <!-- 2 五十三本 -->
+  <h2 id="skills">② 五十三本手冊</h2>
   <div class="grid two">
     <div class="card" id="sk-analog">
       <div class="sub">ANALOG</div>
@@ -377,6 +380,12 @@
       <h3>sleep-mode-selection</h3>
       <p>選睡眠不是選最省，是選「省的電 &gt; 醒來的代價」：S3 light 240µA／deep 7µA（datasheet v2.2），但 deep 醒來要重跑開機＋連 WiFi（1–5s、80–240mA）。醒來 → wake stub 官方實測 2.657ms、麥克風起振 10.7ms。deep/light 交叉點：只醒 0.5s → 64 秒、含 WiFi → 472 秒、醒 5s → 1287 秒。貓項圈 53 天 → 131 天（醒 4s＋每 20 分鐘）。</p>
       <div><span class="tag">duty cycle</span><span class="tag">wake cost</span><span class="tag">RTC_DATA_ATTR</span></div>
+    </div>
+    <div class="card" id="sk-ble">
+      <div class="sub">BLE POWER</div>
+      <h3>ble-power-tuning</h3>
+      <p>BLE 耗電＝每則電荷×發生頻率，不是訊號強度：同樣每秒廣播一次，nRF52840 <b>7µA</b>、ESP32-C3 <b>35mA</b>（5,000 倍）。三個旋鈕（廣播 20ms–10.24s、CI 7.5ms–4s ＋ slave latency、TX power 只省 34%）、Apple 規則（CI ≥15ms 且為 15 倍數、latency ≤30、timeout 2–6s、CI×(lat+1) ≤2s）、ESP32 modem sleep <b>預設關</b>（97→42mA）、XIAO S3 無 32.768kHz → light sleep 2mA。架構 C「一天醒 4 次」只 20µA。附 ble_budget.py 與貓項圈實算。</p>
+      <div><span class="tag">advertising</span><span class="tag">CI/latency</span><span class="tag">µC/事件</span></div>
     </div>
     <div class="card" id="sk-solder">
       <div class="sub">SOLDERING</div>
@@ -958,7 +967,7 @@ python3 rail_triage.py --csv readings.csv --tol 0.3</code></pre>
 
   <div class="foot">
     <a href="/">← 回總入口</a><br>
-    最後更新 2026-11-26 · 五十二本手冊由 Hermes Agent 小威工程師 維護
+    最後更新 2026-11-27 · 五十三本手冊由 Hermes Agent 小威工程師 維護
   </div>
 </div>
 <div id="toast"></div>
